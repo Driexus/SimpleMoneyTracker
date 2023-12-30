@@ -1,5 +1,8 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/main_button.dart';
+import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/service/sqlite_service.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,6 +13,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>  {
+
+  late SqliteService _sqliteService;  @override
+  void initState() {
+    super.initState();
+
+    _sqliteService = SqliteService();
+    var activity = const MoneyActivity(title: "an activity", color: "123");
+    var anotherActivity = const MoneyActivity(title: "another activity", color: "456");
+    _sqliteService.insertActivity(activity).whenComplete(() async {
+      _sqliteService.insertActivity(anotherActivity).whenComplete(() async {
+        log("Inserted activity $activity and $anotherActivity");
+        setState(() {});
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
