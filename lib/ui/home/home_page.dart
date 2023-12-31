@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/main_button_containter.dart';
+import 'package:simplemoneytracker/ui/home/main_button_container.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>  {
+class _HomePageState extends State<HomePage> {
 
   static const MoneyActivityRepo _activityRepo = MoneyActivityRepo();
   List<MoneyActivity> activities = List.empty();
@@ -30,23 +30,18 @@ class _HomePageState extends State<HomePage>  {
       });
     });*/
 
-    _activityRepo.retrieveAll().then((value) => {
-      setState(() {
-        log(value.toString());
-        activities = value;
-      })
-    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       children: [
         Positioned(
           left: 0,
           right: 0,
           top: 120,
-          child: MainButtonContainer(activities: activities)
+          child: MainButtonContainer()
         ),
         /*Positioned(
           left: 0,

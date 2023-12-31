@@ -45,9 +45,9 @@ class MainButton extends StatelessWidget {
                 ),
                 child:  Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: <Widget>[ // TODO: Use positioned icon
                     icon,
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Flexible(
                       child: FittedBox(
                         fit: BoxFit.contain,
@@ -56,7 +56,7 @@ class MainButton extends StatelessWidget {
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 30,
+                            fontSize: 16,
                             color: Colors.white,
                           ),
                         ),
