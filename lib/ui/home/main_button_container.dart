@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/ui/home/add_button.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
@@ -9,28 +11,20 @@ import '../../repos/money_activity_repo.dart';
 class MainButtonContainer extends StatefulWidget {
   const MainButtonContainer({super.key});
 
-  static final _addButton = AddButton();
-
   @override
   State<StatefulWidget> createState() => _MainButtonContainerState();
 }
 
 class _MainButtonContainerState extends State<MainButtonContainer> {
   static const MoneyActivityRepo _activityRepo = MoneyActivityRepo();
-  List<MoneyActivity> activities = List.empty();
+  List<MoneyActivity> _activities = List.empty();
 
-  @override
-  void initState() {
-    super.initState();
-    _activityRepo.retrieveAll().then((value) => {
-      setState(() {
-        activities = value;
-      })
-    });
-  }
+  // The AddButton must be recreated in every build in order pass the correct BuildContext
+  late AddButton _addButton;
+
 
   /// Slice the buttons into chunks, add spacing between them, and return them as a list of rows with spacing between them
-  List<Widget> getRows() {
+  List<Widget> _buildRows() {
     return _getButtons().slices(5).map((slicedButtons) {
       List<Widget> buttons = List.from(slicedButtons);
       buttons.addHorizontalSpacing(10);
@@ -44,20 +38,28 @@ class _MainButtonContainerState extends State<MainButtonContainer> {
 
   /// Create new buttons from the activities and add an AddButton at the end.
   List<Widget> _getButtons() {
-    List<Widget> buttons = activities.map((activity) => MainButton(
+    List<Widget> buttons = _activities.map((activity) => MainButton(
         image: Icons.settings,
         description: activity.title
     )).toList();
 
-    buttons.add(MainButtonContainer._addButton);
+    buttons.add(_addButton);
     return buttons;
+  }
+
+  List<Widget> _getRows(List<MoneyActivity> activities) {
+    _activities = activities;
+    return _buildRows();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    _addButton = AddButton(context: context);
+    return BlocBuilder<ActivitiesCubit, List<MoneyActivity>>(
+      builder: (context, activities) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: getRows()
+        children: _getRows(activities),
+      )
     );
   }
 }
