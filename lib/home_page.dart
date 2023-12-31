@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/main_button.dart';
+import 'package:simplemoneytracker/main_button_containter.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/service/sqlite_service.dart';
+import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,18 +14,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>  {
 
-  late SqliteService _sqliteService;  @override
+  static const MoneyActivityRepo _activityRepo = MoneyActivityRepo();
+  List<MoneyActivity> activities = List.empty();
+
+  @override
   void initState() {
     super.initState();
-
-    _sqliteService = SqliteService();
+/*
     var activity = const MoneyActivity(title: "an activity", color: "123");
     var anotherActivity = const MoneyActivity(title: "another activity", color: "456");
-    _sqliteService.insertActivity(activity).whenComplete(() async {
-      _sqliteService.insertActivity(anotherActivity).whenComplete(() async {
+    _activityRepo.create(activity).whenComplete(() async {
+      _activityRepo.create(anotherActivity).whenComplete(() async {
         log("Inserted activity $activity and $anotherActivity");
         setState(() {});
       });
+    });*/
+
+    _activityRepo.retrieveAll().then((value) => {
+      setState(() {
+        log(value.toString());
+        activities = value;
+      })
     });
   }
 
@@ -36,12 +45,12 @@ class _HomePageState extends State<HomePage>  {
         Positioned(
           left: 0,
           right: 0,
-          top: 0,
-          child: MainButton(image: Icons.settings, description: "Settings")
+          top: 120,
+          child: MainButtonContainer(activities: activities)
         ),
-        Positioned(
+        /*Positioned(
           left: 0,
-          top: 80,
+          top: 200,
           right: 0,
           bottom: 0,
           child: SfDateRangePicker(
@@ -50,7 +59,7 @@ class _HomePageState extends State<HomePage>  {
                 DateTime.now().subtract(const Duration(days: 4)),
                 DateTime.now().add(const Duration(days: 3))),
           ),
-        )
+        )*/
       ],
     );
   }

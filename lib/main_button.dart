@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
@@ -13,19 +14,10 @@ class MainButton extends StatelessWidget {
       size: 45
   );
 
-  late final text = Text(
-      description,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 18,
-        color: Colors.white,
-      )
-  );
-
   get borderRadius => BorderRadius.circular(8.0);
 
   void onTap() {
-    log("Clicked on ${text.data!}");
+    log("Clicked on $description");
   }
 
   // TODO: Border radius everywhere?
@@ -38,8 +30,8 @@ class MainButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            height: 100.0,
-            width: 75.0,
+            height: 80.0,
+            width: 60.0,
             decoration: BoxDecoration(
               borderRadius: borderRadius,
             ),
@@ -56,7 +48,20 @@ class MainButton extends StatelessWidget {
                   children: <Widget>[
                     icon,
                     const SizedBox(height: 10),
-                    text,
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: AutoSizeText(
+                          description,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 )
               );
