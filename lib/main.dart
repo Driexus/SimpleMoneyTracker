@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
+import 'package:simplemoneytracker/ui/home/all_icons_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +55,7 @@ class _MainPageState extends State<MainPage> {
               create: (_) => ActivitiesCubit(),
               child: const HomePage(),
             ),
-            const Icon(Icons.directions_transit),
+            const AllIconsList(),
             const Icon(Icons.directions_bike),
           ],
         )
