@@ -54,6 +54,40 @@ class _AddActivityPageState extends State<AddActivityPage> {
               )
           ),
           Positioned(
+              left: 0,
+              right: 0,
+              top: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Color"),
+                          Icon(Icons.expand_more)
+                        ],
+                      ),
+                      onPressed: () {  },
+                    ),
+                  ),
+                  Expanded(
+                    child: OutlinedButton(
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Icon"),
+                          Icon(Icons.expand_more)
+                        ],
+                      ),
+                      onPressed: () {  },
+                    )
+                  )
+                ],
+              )
+          ),
+          Positioned(
             left: 7,
             right: 7,
             bottom: 7,

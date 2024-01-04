@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
+import 'package:simplemoneytracker/ui/home/colors_list.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
 import 'package:simplemoneytracker/ui/home/all_icons_list.dart';
 
@@ -56,7 +57,7 @@ class _MainPageState extends State<MainPage> {
               child: const HomePage(),
             ),
             const AllIconsList(),
-            const Icon(Icons.directions_bike),
+            const ColorsList(),
           ],
         )
       )

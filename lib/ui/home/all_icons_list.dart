@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/square_icon.dart';
+import 'package:simplemoneytracker/ui/home/square_button.dart';
 import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
 class AllIconsList extends StatelessWidget {
@@ -22,7 +22,7 @@ class AllIconsList extends StatelessWidget {
           crossAxisCount: 6,
         ),
         itemBuilder: (BuildContext context, int index) {
-          return SquareIcon(imageKey: IconsHelper.iconKeyList[index], color: Colors.deepOrange);
+          return SquareButton(imageKey: IconsHelper.iconKeyList[index], color: Colors.deepOrange);
         },
       )
     );

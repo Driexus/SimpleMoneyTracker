@@ -2,22 +2,22 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
-class SquareIcon extends StatelessWidget {
-  SquareIcon({super.key, required this.imageKey, required this.color});
+class SquareButton extends StatelessWidget {
+  SquareButton({super.key, this.imageKey, required this.color});
 
-  final String imageKey;
+  final String? imageKey;
   final Color color;
 
-  late final icon = Icon(
-      IconsHelper.getIcon(imageKey),
+  late final Icon? icon = imageKey != null ? Icon(
+      IconsHelper.getIcon(imageKey!),
       color: Colors.white,
       size: 35
-  );
+  ) : null;
 
   get borderRadius => BorderRadius.circular(8.0);
 
   void onTap() {
-    log("Clicked on $imageKey");
+    log("Clicked on square button with color: $color and imageKey: $imageKey");
   }
 
   // TODO: Border radius everywhere?
