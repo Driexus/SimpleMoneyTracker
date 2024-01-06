@@ -24,6 +24,7 @@ class MoneyActivityRepo {
       return MoneyActivity(
         title: maps[i]['title'] as String,
         color: maps[i]['color'] as int,
+        imageKey: maps[i]['imageKey'] as String
       );
     });
   }

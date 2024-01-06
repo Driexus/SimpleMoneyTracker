@@ -37,7 +37,7 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
   /// Create new buttons from the activities and add an AddButton at the end.
   List<Widget> _getButtons() {
     List<Widget> buttons = _activities.map((activity) => RectangularButton(
-        imageKey: 'settings',
+        imageKey: activity.imageKey,
         description: activity.title,
         color: Color(activity.color),
     )).toList();

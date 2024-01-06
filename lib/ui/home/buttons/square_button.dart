@@ -1,30 +1,23 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
 class SquareButton extends StatelessWidget {
-  SquareButton({super.key, this.imageKey, required this.color});
+  SquareButton({super.key, required this.color, this.child});
 
-  final String? imageKey;
+  final Widget? child;
   final Color color;
-
-  late final Icon? icon = imageKey != null ? Icon(
-      IconsHelper.getIcon(imageKey!),
-      color: Colors.white,
-      size: 35
-  ) : null;
 
   final BorderRadius borderRadius = BorderRadius.circular(8.0);
 
   void onTap() {
-    log("Clicked on square button with color: $color and imageKey: $imageKey");
+    log("Clicked on square button with color: $color");
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Material(
-        elevation: 6,
+        elevation: 3,
         borderRadius: borderRadius,
         child: InkWell(
           onTap: onTap,
@@ -42,7 +35,7 @@ class SquareButton extends StatelessWidget {
                     color: color,
                     borderRadius: borderRadius,
                   ),
-                  child: icon
+                  child: child
               );
             }),
           ),

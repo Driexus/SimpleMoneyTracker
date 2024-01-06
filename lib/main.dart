@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
               create: (_) => ActivitiesCubit(),
               child: const HomePage(),
             ),
-            const AllIconsList(),
+            const AllIconsList(color: Colors.deepPurple),
             const ColorsList(),
           ],
         )

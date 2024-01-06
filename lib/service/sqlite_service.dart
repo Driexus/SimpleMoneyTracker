@@ -26,7 +26,7 @@ class SqliteService {
       join(await getDatabasesPath(), 'simple_money_tracker.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE money_activities(id INTEGER PRIMARY KEY, title TEXT, color INTEGER)',
+          'CREATE TABLE money_activities(id INTEGER PRIMARY KEY, title TEXT, color INTEGER, imageKey TEXT)',
         );
       },
       version: 1,

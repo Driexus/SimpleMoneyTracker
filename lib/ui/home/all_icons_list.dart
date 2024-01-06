@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/buttons/square_button.dart';
+import 'package:simplemoneytracker/ui/home/buttons/icon_square_button.dart';
 import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
 class AllIconsList extends StatelessWidget {
-  const AllIconsList({super.key});
+  const AllIconsList({super.key, this.onIcon = _onIconDefault, required this.color});
+
+  final Color color;
+
+  final ValueChanged<String> onIcon;
+  static void _onIconDefault(String iconKey) {}
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class AllIconsList extends StatelessWidget {
       },
       child: GridView.builder(
         itemCount: IconsHelper.iconKeyList.length,
-        shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const ClampingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 10,
@@ -23,7 +28,11 @@ class AllIconsList extends StatelessWidget {
           crossAxisCount: 6,
         ),
         itemBuilder: (BuildContext context, int index) {
-          return SquareButton(imageKey: IconsHelper.iconKeyList[index], color: Colors.deepOrange);
+          return IconSquareButton(
+            imageKey: IconsHelper.iconKeyList[index],
+            color: color,
+            onIconTap: onIcon
+          );
         },
       )
     );
