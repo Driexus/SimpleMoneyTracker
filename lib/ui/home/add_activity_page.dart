@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
+import 'package:simplemoneytracker/ui/home/colors_list.dart';
 
 class AddActivityPage extends StatefulWidget {
   const AddActivityPage({super.key});
@@ -11,14 +13,33 @@ class AddActivityPage extends StatefulWidget {
 }
 
 class _AddActivityPageState extends State<AddActivityPage> {
-  String? _title;
+
   static final cubit = ActivitiesCubit();
+  String _title = "";
+  Color _color = Colors.deepPurple;
+  String _imageKey = "";
+
+  void _updateTitle(String value) {
+    setState(() {
+      _title = value;
+    });
+  }
+
+  void _updateColor(Color color) {
+    setState(() {
+      _color = color;
+    });
+  }
+
+  void _updateIcon() {
+
+  }
 
   void _submit(BuildContext context) {
     cubit.addActivity(
       MoneyActivity(
-        title: _title!,
-        color: "color"
+        title: _title,
+        color: _color.value
       )
     );
     Navigator.pop(context);
@@ -37,60 +58,65 @@ class _AddActivityPageState extends State<AddActivityPage> {
       body: Stack(
         children: [
           Positioned(
-              left: 0,
-              right: 0,
-              top: 120,
-              child: SizedBox(
-                width: 250,
-                child: TextField(
+            top: 60,
+            right: 10,
+            left: 10,
+            child: Column(
+              children: [
+                RectangularButton(
+                  imageKey: 'ac_unit',
+                  description: _title,
+                  color: _color
+                ),
+                const SizedBox(height: 30),
+                TextField(
+                  maxLines: 1,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Title',
                   ),
-                  onChanged: (text) => {
-                    _title = text
-                  },
+                  onChanged: _updateTitle
                 ),
-              )
-          ),
-          Positioned(
-              left: 0,
-              right: 0,
-              top: 200,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Color"),
-                          Icon(Icons.expand_more)
-                        ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Color"),
+                            Icon(Icons.expand_more)
+                          ],
+                        ),
+                        onPressed: () {  },
                       ),
-                      onPressed: () {  },
                     ),
-                  ),
-                  Expanded(
-                    child: OutlinedButton(
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Icon"),
-                          Icon(Icons.expand_more)
-                        ],
-                      ),
-                      onPressed: () {  },
+                    Expanded(
+                        child: OutlinedButton(
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Icon"),
+                              Icon(Icons.expand_more)
+                            ],
+                          ),
+                          onPressed: () {  },
+                        )
                     )
-                  )
-                ],
-              )
+                  ],
+                ),
+                const SizedBox(height: 30),
+                ColorsList(
+                  onColor: _updateColor,
+                )
+              ]
+            )
           ),
           Positioned(
-            left: 7,
-            right: 7,
             bottom: 7,
+            right: 7,
+            left: 7,
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.black87,
@@ -99,7 +125,7 @@ class _AddActivityPageState extends State<AddActivityPage> {
               ),
               onPressed: () => _submit(context),
               child: const Text('SAVE'),
-            )
+            ),
           )
         ]
       )

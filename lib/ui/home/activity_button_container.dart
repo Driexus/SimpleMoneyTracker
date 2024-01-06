@@ -3,20 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/ui/home/add_button.dart';
+import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
-import 'package:simplemoneytracker/ui/home/main_button.dart';
-import '../../repos/money_activity_repo.dart';
+import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 
-class MainButtonContainer extends StatefulWidget {
-  const MainButtonContainer({super.key});
+class ActivityButtonContainer extends StatefulWidget {
+  const ActivityButtonContainer({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MainButtonContainerState();
+  State<StatefulWidget> createState() => _ActivityButtonContainerState();
 }
 
-class _MainButtonContainerState extends State<MainButtonContainer> {
-  static const MoneyActivityRepo _activityRepo = MoneyActivityRepo();
+class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
   List<MoneyActivity> _activities = List.empty();
 
   // The AddButton must be recreated in every build in order pass the correct BuildContext
@@ -38,9 +36,10 @@ class _MainButtonContainerState extends State<MainButtonContainer> {
 
   /// Create new buttons from the activities and add an AddButton at the end.
   List<Widget> _getButtons() {
-    List<Widget> buttons = _activities.map((activity) => MainButton(
-        image: Icons.settings,
-        description: activity.title
+    List<Widget> buttons = _activities.map((activity) => RectangularButton(
+        imageKey: 'settings',
+        description: activity.title,
+        color: Color(activity.color),
     )).toList();
 
     buttons.add(_addButton);

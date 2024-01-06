@@ -23,7 +23,7 @@ class MoneyActivityRepo {
     return List.generate(maps.length, (i) {
       return MoneyActivity(
         title: maps[i]['title'] as String,
-        color: maps[i]['color'] as String,
+        color: maps[i]['color'] as int,
       );
     });
   }

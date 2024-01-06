@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/add_activity_page.dart';
-import 'package:simplemoneytracker/ui/home/main_button.dart';
+import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 
-class AddButton extends MainButton {
-  AddButton({super.key, required this.context}) : super(image: Icons.add, description: "Add") ;
+class AddButton extends RectangularButton {
+  AddButton({super.key, required this.context}) : super(imageKey: 'add', description: "Add", color: Colors.deepPurple) ;
 
   final BuildContext context;
 

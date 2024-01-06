@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/main_button_container.dart';
+import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
           left: 0,
           right: 0,
           top: 120,
-          child: MainButtonContainer()
+          child: ActivityButtonContainer()
         )
       ],
     );

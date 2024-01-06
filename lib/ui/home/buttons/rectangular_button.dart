@@ -1,26 +1,27 @@
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
-class MainButton extends StatelessWidget {
-  MainButton({super.key, required this.image, required this.description});
+class RectangularButton extends StatelessWidget {
+  RectangularButton({super.key, this.imageKey, required this.description, required this.color});
 
-  final IconData image;
+  final String? imageKey;
   final String description;
+  final Color color;
 
-  late final icon = Icon(
-      image,
+  late final Icon? icon = imageKey != null ? Icon(
+      IconsHelper.getIcon(imageKey!),
       color: Colors.white,
       size: 45
-  );
+  ) : null;
 
-  get borderRadius => BorderRadius.circular(8.0);
+  final BorderRadius borderRadius = BorderRadius.circular(8.0);
 
   void onTap() {
     log("Clicked on $description");
   }
 
-  // TODO: Border radius everywhere?
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -40,26 +41,23 @@ class MainButton extends StatelessWidget {
                 height: constraints.maxHeight,
                 width: constraints.maxHeight,
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: color,
                   borderRadius: borderRadius,
                 ),
-                child:  Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[ // TODO: Use positioned icon
-                    icon,
+                    Container(
+                      child: icon,
+                    ),
                     const SizedBox(height: 5),
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: AutoSizeText(
-                          description,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
+                    AutoSizeText(
+                      description,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
                       ),
                     ),
                   ],

@@ -1,6 +1,6 @@
 class MoneyActivity {
   final String title;
-  final String color;
+  final int color;
 
   const MoneyActivity({
     required this.title,

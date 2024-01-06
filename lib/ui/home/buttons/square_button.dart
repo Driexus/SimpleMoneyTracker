@@ -14,13 +14,12 @@ class SquareButton extends StatelessWidget {
       size: 35
   ) : null;
 
-  get borderRadius => BorderRadius.circular(8.0);
+  final BorderRadius borderRadius = BorderRadius.circular(8.0);
 
   void onTap() {
     log("Clicked on square button with color: $color and imageKey: $imageKey");
   }
 
-  // TODO: Border radius everywhere?
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/square_button.dart';
+import 'package:simplemoneytracker/ui/home/buttons/square_button.dart';
 import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
 
 class AllIconsList extends StatelessWidget {
@@ -15,6 +15,7 @@ class AllIconsList extends StatelessWidget {
       },
       child: GridView.builder(
         itemCount: IconsHelper.iconKeyList.length,
+        shrinkWrap: true,
         physics: const ClampingScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 10,
