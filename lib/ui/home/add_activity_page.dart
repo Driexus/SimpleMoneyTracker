@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/ui/home/all_icons_list.dart';
 import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 import 'package:simplemoneytracker/ui/home/colors_list.dart';
+import 'package:simplemoneytracker/utils/toast_helper.dart';
 
 class AddActivityPage extends StatefulWidget {
   const AddActivityPage({super.key});
@@ -15,71 +15,84 @@ class AddActivityPage extends StatefulWidget {
 
 class _AddActivityPageState extends State<AddActivityPage> {
 
+  //region Main State Handling
+
   static final cubit = ActivitiesCubit();
 
-  // TODO: Collapse list
-  Widget _activeList = const SizedBox();
+  String _title = "";
+  Color _color = Colors.black87;
+  String? _imageKey;
 
-  // TODO: Change Icon colors
-  late final AllIconsList _iconsList = AllIconsList(
-    color: _color,
-    onIcon: _updateIcon,
-  );
+  void _updateTitle(String value) => setState(() {
+    _title = value;
+  });
+
+  void _updateColor(Color color) => setState(() {
+    _color = color;
+  });
+
+  void _updateIcon(String value) => setState(() {
+    _imageKey = value;
+  });
+
+  void _submit(BuildContext context) {
+    if (_title == "") {
+      ToastHelper.showToast("Cannot save activity without a title");
+      return;
+    }
+
+    if (_imageKey == null) {
+      ToastHelper.showToast("Cannot save activity without an icon");
+      return;
+    }
+
+    cubit.addActivity(
+        MoneyActivity(
+            title: _title,
+            color: _color.value,
+            imageKey: _imageKey!
+        )
+    );
+    Navigator.pop(context);
+    ToastHelper.showToast("New activity created");
+  }
+
+  //endregion
+
+  //region List Handling
+
+  ButtonType? _activeListType;
+
   late final _colorsList = ColorsList(
     onColor: _updateColor,
   );
 
-  String _title = "";
-  Color _color = Colors.deepPurple;
-  String? _imageKey;
+  AllIconsList get _iconsList => AllIconsList(
+    color: _color,
+    onIcon: _updateIcon,
+  );
 
-  void _updateTitle(String value) {
-    setState(() {
-      _title = value;
-    });
+  Widget get _activeList {
+    switch (_activeListType) {
+      case ButtonType.color:  return _colorsList;
+      case ButtonType.icon:   return _iconsList;
+      case null:              return const SizedBox();
+    }
   }
 
-  void _updateColor(Color color) {
-    setState(() {
-      _color = color;
-    });
+  void _onListButtonTap(ButtonType buttonType) => setState(() {
+    _activeListType = _activeListType == buttonType ?
+        null : buttonType;
+  });
+
+  Icon _getButtonIcon(ButtonType buttonType) {
+    IconData iconData = _activeListType == buttonType ?
+      Icons.expand_less : Icons.expand_more;
+
+    return Icon(iconData);
   }
 
-  void _updateIcon(String value) {
-    setState(() {
-      _imageKey = value;
-    });
-  }
-
-  void _showIcons() {
-    setState(() {
-      _activeList = _iconsList;
-    });
-  }
-
-  void _showColors() {
-    setState(() {
-      _activeList = _colorsList;
-    });
-  }
-
-  void _submit(BuildContext context) {
-    cubit.addActivity(
-      MoneyActivity(
-        title: _title,
-        color: _color.value,
-        imageKey: _imageKey! // TODO: Add check before saving
-      )
-    );
-    Navigator.pop(context);
-    Fluttertoast.showToast(
-        msg: "New activity created",
-        toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Colors.black38,
-        textColor: Colors.white,
-        fontSize: 16
-    );
-  }
+  //endregion
 
   @override
   Widget build(BuildContext context) {
@@ -109,24 +122,24 @@ class _AddActivityPageState extends State<AddActivityPage> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: _showColors,
-                      child: const Row(
+                      onPressed: () => _onListButtonTap(ButtonType.color),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Color"),
-                          Icon(Icons.expand_more)
+                          const Text("Color"),
+                          _getButtonIcon(ButtonType.color)
                         ],
                       ),
                     ),
                   ),
                   Expanded(
                       child: OutlinedButton(
-                        onPressed: _showIcons,
-                        child: const Row(
+                        onPressed: () => _onListButtonTap(ButtonType.icon),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Icon"),
-                            Icon(Icons.expand_more)
+                            const Text("Icon"),
+                            _getButtonIcon(ButtonType.icon)
                           ],
                         ),
                       )
@@ -136,7 +149,7 @@ class _AddActivityPageState extends State<AddActivityPage> {
             ]
           ),
           Positioned(
-            bottom: 80, // TODO: Add padding instead because of empty area above save button
+            bottom: 55,
             top: 310,
             right: 0,
             left: 0,
@@ -162,3 +175,5 @@ class _AddActivityPageState extends State<AddActivityPage> {
     );
   }
 }
+
+enum ButtonType { icon, color }
