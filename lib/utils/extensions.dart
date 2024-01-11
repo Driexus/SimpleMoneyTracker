@@ -16,3 +16,9 @@ extension WidgetSpacing on List<Widget> {
     return this;
   }
 }
+
+extension StringAmount on int? {
+  String parseAmount() {
+    return this == null ? "" : toString();
+  }
+}
