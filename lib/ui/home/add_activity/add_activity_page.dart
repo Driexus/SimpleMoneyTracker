@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/ui/home/all_icons_list.dart';
+import 'package:simplemoneytracker/ui/home/add_activity/all_icons_list.dart';
 import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
-import 'package:simplemoneytracker/ui/home/colors_list.dart';
+import 'package:simplemoneytracker/ui/home/add_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 
 class AddActivityPage extends StatefulWidget {

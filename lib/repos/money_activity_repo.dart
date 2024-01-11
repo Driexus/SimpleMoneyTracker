@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
-import 'package:sqflite/sqflite.dart';
 
 class MoneyActivityRepo {
   const MoneyActivityRepo();
@@ -13,7 +12,6 @@ class MoneyActivityRepo {
     await db.insert(
       'money_activities',
       activity.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 

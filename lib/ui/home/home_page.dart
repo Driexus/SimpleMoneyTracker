@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
+import 'package:simplemoneytracker/ui/home/add_activity/activity_button_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

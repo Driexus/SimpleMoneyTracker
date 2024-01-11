@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/buttons/square_button.dart';
-import '../../shared/IconsHelper.dart';
+import '../../shared/icons_helper.dart';
 
 class IconSquareButton extends SquareButton {
   IconSquareButton({

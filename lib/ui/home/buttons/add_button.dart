@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/add_activity_page.dart';
+import 'package:simplemoneytracker/ui/home/add_activity/add_activity_page.dart';
 import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 
 class AddButton extends RectangularButton {

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
+import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
   RectangularButton({super.key, this.imageKey, required this.description, required this.color});

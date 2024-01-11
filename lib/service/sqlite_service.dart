@@ -24,9 +24,20 @@ class SqliteService {
     // Open db if it is not cached
     return openDatabase(
       join(await getDatabasesPath(), 'simple_money_tracker.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE money_activities(id INTEGER PRIMARY KEY, title TEXT, color INTEGER, imageKey TEXT)',
+      onCreate: (db, version) async {
+        await db.execute('CREATE TABLE money_activities('
+            'id INTEGER PRIMARY KEY,'
+            'title TEXT,'
+            'color INTEGER,'
+            'imageKey TEXT)'
+        );
+        await db.execute('CREATE TABLE money_entries('
+            'id INTEGER PRIMARY KEY,'
+            'createdAt INTEGER'
+            'amount INTEGER'
+            'type TEXT'
+            'currencyId INTEGER'
+            'comment TEXT)'
         );
       },
       version: 1,
