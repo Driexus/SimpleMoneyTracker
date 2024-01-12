@@ -31,8 +31,8 @@ class RectangularButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            height: 80.0,
-            width: 60.0,
+            height: 85.0,
+            width: 65.0,
             decoration: BoxDecoration(
               borderRadius: borderRadius,
             ),

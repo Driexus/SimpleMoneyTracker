@@ -33,10 +33,10 @@ class SqliteService {
         );
         await db.execute('CREATE TABLE money_entries('
             'id INTEGER PRIMARY KEY,'
-            'createdAt INTEGER'
-            'amount INTEGER'
-            'type TEXT'
-            'currencyId INTEGER'
+            'createdAt INTEGER,'
+            'amount INTEGER,'
+            'type TEXT,'
+            'currencyId INTEGER,'
             'comment TEXT)'
         );
       },

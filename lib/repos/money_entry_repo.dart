@@ -10,14 +10,14 @@ class MoneyEntryRepo {
   Future<void> create(MoneyEntry moneyEntry) async {
     final db = await _service.getDB();
     await db.insert(
-      'money_activities',
+      'money_entries',
       moneyEntry.toDBMap(),
     );
   }
 
   Future<List<MoneyEntry>> retrieveAll() async {
     final db = await _service.getDB();
-    final List<Map<String, dynamic>> maps = await db.query('money_activities');
+    final List<Map<String, dynamic>> maps = await db.query('money_entries');
     return List.generate(maps.length, (i) {
       return MoneyEntry.fromDBMap(maps[i]);
     });

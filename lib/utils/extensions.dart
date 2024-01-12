@@ -18,7 +18,19 @@ extension WidgetSpacing on List<Widget> {
 }
 
 extension StringAmount on int? {
-  String parseAmount() {
+  String toStringAmount() {
     return this == null ? "" : toString();
+  }
+}
+
+extension StringOrEmpty on int? {
+  String toStringOrEmpty() {
+    return this == null ? "" : toString();
+  }
+}
+
+extension DateString on DateTime {
+  String toSimpleDate() {
+    return "$day/$month/$year";
   }
 }
