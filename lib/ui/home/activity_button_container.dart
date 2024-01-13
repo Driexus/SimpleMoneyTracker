@@ -7,7 +7,7 @@ import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
-import '../buttons/rectangular_button.dart';
+import 'buttons/rectangular_button.dart';
 
 class ActivityButtonContainer extends StatefulWidget {
   const ActivityButtonContainer({super.key, required this.onActivity});
@@ -21,7 +21,6 @@ class ActivityButtonContainer extends StatefulWidget {
 class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
   List<MoneyActivity> _activities = List.empty();
 
-  // The AddButton must be recreated in every build in order pass the correct BuildContext
   late AddButton _addButton;
 
   /// Slice the buttons into chunks, add spacing between them, and return them as a list of rows with spacing between them
@@ -33,7 +32,7 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: buttons,
-      );
+      ); // TODO: Move casting to extension if keep
     }).cast<Widget>().toList().addVerticalSpacing(10); // casting weird error: https://stackoverflow.com/questions/54943770/type-is-not-a-subtype-of-type-widget
   }
 
@@ -57,6 +56,7 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
 
   @override
   Widget build(BuildContext context) {
+    // The AddButton must be recreated in every build in order pass the correct BuildContext
     _addButton = AddButton(context: context);
     return BlocBuilder<ActivitiesCubit, List<MoneyActivity>>(
       builder: (context, activities) => Column(

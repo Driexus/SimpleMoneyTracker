@@ -5,14 +5,22 @@ import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyEntryBar extends StatelessWidget {
-  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyEntryType});
+  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType});
+
+  MoneyEntryBar.fromEntry(MoneyEntry entry, {Key? key}) : this(
+      key: key,
+      color: Colors.cyan, // TODO (image key and descr too)
+      amount: entry.getStringAmount(),
+      date: entry.createdAt,
+      moneyType: entry.type
+  );
 
   final String? imageKey;
   final String? description;
   final Color color;
   final String amount;
   final DateTime date;
-  final MoneyEntryType? moneyEntryType;
+  final MoneyType? moneyType;
 
   late final Icon? icon = imageKey != null ? Icon(
       IconsHelper.getIcon(imageKey!),
@@ -65,7 +73,7 @@ class MoneyEntryBar extends StatelessWidget {
             Expanded(
               flex: 1,
               child: AutoSizeText(
-                moneyEntryType == null ? "" : moneyEntryType.toString(),
+                moneyType?.displayName ?? "",
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: const TextStyle(

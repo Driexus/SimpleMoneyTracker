@@ -17,8 +17,14 @@ class EntriesCubit extends Cubit<List<MoneyEntry>> {
 
   static const MoneyEntryRepo _repo = MoneyEntryRepo();
 
+  MoneyEntryFilters? _filters;
+  void setFilters(MoneyEntryFilters? filters) {
+    _filters = filters;
+    updateEntries();
+  }
+
   void updateEntries() {
-    _repo.retrieveAll().then((value) => {
+    _repo.retrieveSome(filters: _filters).then((value) => {
       emit(value)
     });
   }

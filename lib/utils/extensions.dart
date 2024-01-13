@@ -17,12 +17,6 @@ extension WidgetSpacing on List<Widget> {
   }
 }
 
-extension StringAmount on int? {
-  String toStringAmount() {
-    return this == null ? "" : toString();
-  }
-}
-
 extension StringOrEmpty on int? {
   String toStringOrEmpty() {
     return this == null ? "" : toString();

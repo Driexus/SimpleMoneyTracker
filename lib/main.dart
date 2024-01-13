@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
+import 'package:simplemoneytracker/cubits/entries_cubit.dart';
 import 'package:simplemoneytracker/ui/home/add_activity/colors_list.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
-import 'package:simplemoneytracker/ui/home/add_activity/all_icons_list.dart';
+import 'package:simplemoneytracker/ui/timeline/timeline_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +57,10 @@ class _MainPageState extends State<MainPage> {
               create: (_) => ActivitiesCubit(),
               child: const HomePage(),
             ),
-            const AllIconsList(color: Colors.deepPurple),
+            BlocProvider(
+              create: (_) => EntriesCubit(),
+              child: const TimelinePage(),
+            ),
             const ColorsList(),
           ],
         )

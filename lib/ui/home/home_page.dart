@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
-import 'package:simplemoneytracker/ui/home/add_activity/activity_button_container.dart';
+import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     }
   });
 
-  void _submit(MoneyEntryType moneyEntryType) {
+  void _submit(MoneyType moneyEntryType) {
     HomePage._repo.create(MoneyEntry(
         createdAt: DateTime.now(),
         amount: _getDBAmount(),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         comment: ""
     ));
     _reset();
-    ToastHelper.showToast("${moneyEntryType.name} entry added");
+    ToastHelper.showToast("${moneyEntryType.displayName} entry added");
   }
 
   int _getDBAmount() {
@@ -136,19 +136,19 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   _SubmitButton(
                     description: "credit",
-                    onPressed: () => _submit(MoneyEntryType.credit),
+                    onPressed: () => _submit(MoneyType.credit),
                   ),
                   _SubmitButton(
                     description: "income",
-                    onPressed: () => _submit(MoneyEntryType.income),
+                    onPressed: () => _submit(MoneyType.income),
                   ),
                   _SubmitButton(
                     description: "expense",
-                    onPressed: () => _submit(MoneyEntryType.expense),
+                    onPressed: () => _submit(MoneyType.expense),
                   ),
                   _SubmitButton(
                     description: "debt",
-                    onPressed: () => _submit(MoneyEntryType.debt),
+                    onPressed: () => _submit(MoneyType.debt),
                   ),
                 ],
               )
