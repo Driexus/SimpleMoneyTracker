@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/add_activity/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
+import 'package:simplemoneytracker/utils/toast_helper.dart';
 import '../../repos/money_entry_repo.dart';
 import 'numpad.dart';
 
@@ -17,19 +19,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  MoneyActivity? _currentActivity;
   bool _isDecimal = false;
   int _currentDecimals = 0;
   int? _amount;
 
-  String stringAmount() {
-    String result = _amount.toStringOrEmpty();
-    if (_isDecimal) {
-      String front = result.substring(0, result.length - _currentDecimals);
-      String back = result.substring(result.length - _currentDecimals, result.length );
-      result = "$front.$back";
-    }
-    return result;
-  }
+  void _reset() => setState(() {
+    _currentActivity = null;
+    _isDecimal = false;
+    _currentDecimals = 0;
+    _amount = null;
+  });
+
+  void _onActivity(MoneyActivity activity) => setState(() {
+    _currentActivity = activity;
+  });
 
   void _onNumber(int number) => setState(() {
     if (_currentDecimals >= 2) {
@@ -70,6 +74,7 @@ class _HomePageState extends State<HomePage> {
         comment: ""
     ));
     _reset();
+    ToastHelper.showToast("${moneyEntryType.name} entry added");
   }
 
   int _getDBAmount() {
@@ -81,11 +86,15 @@ class _HomePageState extends State<HomePage> {
     return int.parse(_amount.toString() + "0" * (2 - _currentDecimals));
   }
 
-  void _reset() => setState(() {
-    _isDecimal = false;
-    _currentDecimals = 0;
-    _amount = null;
-  });
+  String stringAmount() {
+    String result = _amount.toStringOrEmpty();
+    if (_isDecimal) {
+      String front = result.substring(0, result.length - _currentDecimals);
+      String back = result.substring(result.length - _currentDecimals, result.length );
+      result = "$front.$back";
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,18 +105,20 @@ class _HomePageState extends State<HomePage> {
           right: 0,
           top: 20,
           child: MoneyEntryBar(
-            description: 'Test',
+            description: _currentActivity?.title,
             color: Colors.cyan,
-            imageKey: "adb",
+            imageKey: _currentActivity?.imageKey,
             amount: stringAmount(),
             date: DateTime.now(),
           )
         ),
-        const Positioned(
+        Positioned(
           left: 0,
           right: 0,
           top: 100,
-          child: ActivityButtonContainer()
+          child: ActivityButtonContainer(
+            onActivity: _onActivity,
+          )
         ),
         Positioned(
           left: 0,

@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
-import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
+
+import '../buttons/rectangular_button.dart';
 
 class ActivityButtonContainer extends StatefulWidget {
-  const ActivityButtonContainer({super.key});
+  const ActivityButtonContainer({super.key, required this.onActivity});
+
+  final ValueChanged<MoneyActivity> onActivity;
 
   @override
   State<StatefulWidget> createState() => _ActivityButtonContainerState();
@@ -19,7 +23,6 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
 
   // The AddButton must be recreated in every build in order pass the correct BuildContext
   late AddButton _addButton;
-
 
   /// Slice the buttons into chunks, add spacing between them, and return them as a list of rows with spacing between them
   List<Widget> _buildRows() {
@@ -36,11 +39,12 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
 
   /// Create new buttons from the activities and add an AddButton at the end.
   List<Widget> _getButtons() {
-    List<Widget> buttons = _activities.map((activity) => RectangularButton(
-        imageKey: activity.imageKey,
-        description: activity.title,
-        color: Color(activity.color),
-    )).toList();
+    List<Widget> buttons = _activities.map((activity) => ActivityButton(
+      imageKey: activity.imageKey,
+      description: activity.title,
+      color: Color(activity.color),
+      onPressed: () => widget.onActivity(activity),
+    ) as RectangularButton).toList(); // Bad type system - do not remove casting
 
     buttons.add(_addButton);
     return buttons;

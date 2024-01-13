@@ -5,10 +5,10 @@ import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyEntryBar extends StatelessWidget {
-  MoneyEntryBar({super.key, this.imageKey, required this.description, required this.color, required this.amount, required this.date, this.moneyEntryType});
+  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyEntryType});
 
   final String? imageKey;
-  final String description;
+  final String? description;
   final Color color;
   final String amount;
   final DateTime date;
@@ -43,7 +43,7 @@ class MoneyEntryBar extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(description),
+                      Text(description ?? ""),
                       Text(date.toSimpleDate())
                     ],
                   )
