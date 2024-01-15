@@ -1,7 +1,8 @@
 import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/shared/IconsHelper.dart';
+import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatefulWidget {
   RectangularButton({super.key, this.imageKey, required this.description, required this.color});
@@ -15,27 +16,27 @@ class RectangularButton extends StatefulWidget {
 }
 
 class _RectangularButtonState extends State<RectangularButton> {
-  late final Icon? icon = widget.imageKey != null ? Icon(
-    IconsHelper.getIcon(widget.imageKey!),
-    color: Colors.white,
-    size: 45,
-  ) : null;
-
-  late Color currentColor;
-  final borderRadius = BorderRadius.circular(8.0);
+  late Color buttonColor;
 
   @override
   void initState() {
     super.initState();
-    currentColor = widget.color;
+    buttonColor = widget.color;
   }
 
   void onTap() {
     setState(() {
-      // Here you are changing the color to grey when clicked
-      currentColor = Colors.grey; 
+      buttonColor = Colors.grey; // Change color to grey when clicked
     });
+    
     log("Clicked on ${widget.description}");
+
+    // Delay for a short time to visually see the color change
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        buttonColor = widget.color; // Return to original color
+      });
+    });
   }
 
   @override
@@ -43,28 +44,34 @@ class _RectangularButtonState extends State<RectangularButton> {
     return Center(
       child: Material(
         elevation: 6,
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(8.0),
         child: InkWell(
           onTap: onTap,
           child: Container(
-            height: 80.0,
-            width: 60.0,
+            height: 85.0,
+            width: 65.0,
             decoration: BoxDecoration(
-              borderRadius: borderRadius,
+              borderRadius: BorderRadius.circular(8.0),
             ),
             child: LayoutBuilder(builder: (context, constraints) {
               return Container(
                 height: constraints.maxHeight,
                 width: constraints.maxHeight,
                 decoration: BoxDecoration(
-                  color: currentColor,
-                  borderRadius: borderRadius,
+                  color: buttonColor,
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      child: icon,
+                      child: widget.imageKey != null
+                          ? Icon(
+                              IconsHelper.getIcon(widget.imageKey!),
+                              color: Colors.white,
+                              size: 45,
+                            )
+                          : null,
                     ),
                     const SizedBox(height: 5),
                     AutoSizeText(
