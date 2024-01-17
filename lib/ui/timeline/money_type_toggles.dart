@@ -5,7 +5,7 @@ import '../../model/money_entry.dart';
 class MoneyTypeToggles extends StatefulWidget {
   const MoneyTypeToggles({super.key, required this.onToggle, required this.defaultSelected});
 
-  final ValueChanged<Map<MoneyType, bool>> onToggle;
+  final ValueChanged<Map<MoneyType, bool>> onToggle; // TODO: Refactor to List<MoneyType>
   static const List<MoneyType> moneyTypes = [MoneyType.credit, MoneyType.income, MoneyType.expense, MoneyType.debt]; // Correct order of types
   final List<MoneyType> defaultSelected;
 

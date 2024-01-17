@@ -23,6 +23,7 @@ class MoneyEntryRepo {
     });
   }
 
+  // TODO: OrderBy date
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> maps = await db.query(
