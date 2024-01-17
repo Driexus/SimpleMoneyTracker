@@ -10,7 +10,7 @@ At some point in time it is to at least be realeased in the Android AppStore. Th
 
 Anyone is free to contribute to this project. If you are unsure about a design decision, please check the Simple Time Tracker project first and try to imitate it as closely as possible.
 
-# License
+## License
 
 Copyright (C) 2023 Anton Razinkov\
 Modifications Copyright (C) 2024 Dimitrios Tolias
