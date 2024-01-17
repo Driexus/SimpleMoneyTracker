@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
+import 'money_activity.dart';
+
 class MoneyEntry {
   final DateTime createdAt;
   final int amount;
   final MoneyType type;
   final int currencyId;
   final String comment;
-  // TODO: Add foreign key to activity
+  final MoneyActivity activity;
 
   MoneyEntry({
     required this.createdAt,
     required this.amount,
     required this.type,
     required this.currencyId,
-    required this.comment
+    required this.comment,
+    required this.activity
   });
 
   MoneyEntry.fromDBMap(Map<String, dynamic> dbMap) : this.fromDB(
@@ -21,7 +24,8 @@ class MoneyEntry {
     amount: dbMap['amount'] as int,
     typeName: dbMap['type'] as String,
     currencyId: dbMap['currencyId'] as int,
-    comment:dbMap['comment'] as String,
+    comment: dbMap['comment'] as String,
+    activity: MoneyActivity.fromDBMap(dbMap),
   );
 
   MoneyEntry.fromDB({
@@ -29,17 +33,19 @@ class MoneyEntry {
     required this.amount,
     required String typeName,
     required this.currencyId,
-    required this.comment
+    required this.comment,
+    required this.activity
   }) :  createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtMillis),
         type = MoneyType.values.byName(typeName);
-
+  
   Map<String, dynamic> toDBMap() {
     return {
       'createdAt': createdAt.millisecondsSinceEpoch,
       'amount': amount,
       'type': type.name,
       'currencyId': currencyId,
-      'comment': comment
+      'comment': comment,
+      'activityId': activity.id
     };
   }
 
@@ -54,7 +60,7 @@ class MoneyEntry {
 
   @override
   String toString() {
-    return 'MoneyEntry{ createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment }';
+    return 'MoneyEntry{ createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment, activity: $activity }';
   }
 }
 

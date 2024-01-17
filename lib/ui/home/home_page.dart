@@ -66,12 +66,18 @@ class _HomePageState extends State<HomePage> {
   });
 
   void _submit(MoneyType moneyEntryType) {
+    if (_currentActivity == null) {
+      ToastHelper.showToast("Please select an activity before saving an entry");
+      return;
+    }
+
     HomePage._repo.create(MoneyEntry(
         createdAt: DateTime.now(),
         amount: _getDBAmount(),
         type: moneyEntryType,
         currencyId: 1,
-        comment: ""
+        comment: "",
+        activity: _currentActivity!
     ));
     _reset();
     ToastHelper.showToast("${moneyEntryType.displayName} entry added");

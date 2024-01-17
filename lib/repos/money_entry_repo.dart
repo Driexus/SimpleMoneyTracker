@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
 import '../model/money_entry.dart';
 
@@ -9,27 +10,20 @@ class MoneyEntryRepo {
 
   Future<void> create(MoneyEntry moneyEntry) async {
     final db = await _service.getDB();
+    log("Inserting entry: $moneyEntry");
     await db.insert(
       'money_entries',
       moneyEntry.toDBMap(),
     );
   }
 
-  Future<List<MoneyEntry>> retrieveAll() async {
-    final db = await _service.getDB();
-    final List<Map<String, dynamic>> maps = await db.query('money_entries');
-    return List.generate(maps.length, (i) {
-      return MoneyEntry.fromDBMap(maps[i]);
-    });
-  }
-
-  // TODO: OrderBy date
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> maps = await db.query(
-      'money_entries',
+      'money_entries JOIN money_activities ON money_entries.activityId = money_activities.activityId',
       where: filters?.where,
-      whereArgs: filters?.whereArgs
+      whereArgs: filters?.whereArgs,
+      orderBy: 'money_entries.createdAt DESC'
     );
 
     return maps.map((e) => MoneyEntry.fromDBMap(e)).toList();

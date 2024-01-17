@@ -4,11 +4,11 @@ A simple application which tracks your expenses, income, debt and credit. The pr
 
 ## Release
 
-At some point in time it is to at least be realeased in the Android AppStore. This project is and will remain open-source without any ads in the spirit of its parent project.
+At some point in time it is to at least be released in the Android AppStore. This project is and will remain open-source without any ads in the spirit of its parent project.
 
 ## Contributions
 
-Anyone is free to contribute to this project. If you are unsure about a design decision, please check the Simple Time Tracker project first and try to imitate it as closely as possible.
+Anyone is free to contribute to this project. If you are unsure about a design decision, please check the Simple Time Tracker project first and try to imitate it as closely as possible. If you are getting errors during development due to schema changes either delete all app data or reinstall the app. 
 
 ## License
 

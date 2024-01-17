@@ -26,18 +26,22 @@ class SqliteService {
       join(await getDatabasesPath(), 'simple_money_tracker.db'),
       onCreate: (db, version) async {
         await db.execute('CREATE TABLE money_activities('
-            'id INTEGER PRIMARY KEY,'
-            'title TEXT,'
-            'color INTEGER,'
-            'imageKey TEXT)'
+            'activityId INTEGER PRIMARY KEY,'
+            'title TEXT NOT NULL,'
+            'color INTEGER NOT NULL,'
+            'imageKey TEXT NOT NULL'
+            ')'
         );
         await db.execute('CREATE TABLE money_entries('
-            'id INTEGER PRIMARY KEY,'
-            'createdAt INTEGER,'
-            'amount INTEGER,'
-            'type TEXT,'
+            'entryId INTEGER PRIMARY KEY,'
+            'createdAt INTEGER NOT NULL,'
+            'amount INTEGER NOT NULL,'
+            'type TEXT NOT NULL,'
             'currencyId INTEGER,'
-            'comment TEXT)'
+            'comment TEXT,'
+            'activityId INTEGER NOT NULL,'
+            'FOREIGN KEY(activityId) REFERENCES money_activities(activityId)'
+            ')'
         );
       },
       version: 1,

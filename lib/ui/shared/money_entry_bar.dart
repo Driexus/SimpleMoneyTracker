@@ -9,10 +9,12 @@ class MoneyEntryBar extends StatelessWidget {
 
   MoneyEntryBar.fromEntry(MoneyEntry entry, {Key? key}) : this(
       key: key,
-      color: Colors.cyan, // TODO (image key and descr too)
       amount: entry.getStringAmount(),
       date: entry.createdAt,
-      moneyType: entry.type
+      moneyType: entry.type,
+      color: Color(entry.activity.color),
+      imageKey: entry.activity.imageKey,
+      description: entry.activity.title
   );
 
   final String? imageKey;
@@ -51,8 +53,20 @@ class MoneyEntryBar extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(description ?? ""),
-                      Text(date.toSimpleDate())
+                      Text(
+                        description ?? "",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        date.toSimpleDate(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      )
                     ],
                   )
                 ],
