@@ -25,14 +25,7 @@ class _TimelinePageState extends State<TimelinePage> {
     );
   }
 
-  void _onToggle(Map<MoneyType, bool> isSelectedMap) {
-    List<MoneyType> allowedTypes = List.empty(growable: true);
-    isSelectedMap.forEach((key, value) {
-      if (value) {
-        allowedTypes.add(key);
-      }
-    });
-
+  void _onToggle(List<MoneyType> allowedTypes) {
     _cubit.setFilters(MoneyEntryFilters(
       allowedTypes: allowedTypes
     ));

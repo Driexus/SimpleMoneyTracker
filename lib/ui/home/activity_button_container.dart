@@ -27,23 +27,24 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
   List<Widget> _buildRows() {
     return _getButtons().slices(5).map((slicedButtons) {
       List<Widget> buttons = List.from(slicedButtons);
-      buttons.addHorizontalSpacing(10);
+      buttons = buttons.addHorizontalSpacing(10);
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: buttons,
-      ); // TODO: Move casting to extension if keep
-    }).cast<Widget>().toList().addVerticalSpacing(10); // casting weird error: https://stackoverflow.com/questions/54943770/type-is-not-a-subtype-of-type-widget
+      );
+    }).addVerticalSpacing(15);
   }
 
   /// Create new buttons from the activities and add an AddButton at the end.
   List<Widget> _getButtons() {
+    // Bad type system - do not remove casting
     List<Widget> buttons = _activities.map((activity) => ActivityButton(
       imageKey: activity.imageKey,
       description: activity.title,
       color: Color(activity.color),
       onPressed: () => widget.onActivity(activity),
-    ) as RectangularButton).toList(); // Bad type system - do not remove casting
+    ) as RectangularButton).toList();
 
     buttons.add(_addButton);
     return buttons;

@@ -14,7 +14,9 @@ class EntriesContainer extends StatelessWidget {
     return BlocBuilder<EntriesCubit, List<MoneyEntry>>(
         builder: (context, entries) => Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: entries.map((entry) => MoneyEntryBar.fromEntry(entry)).cast<Widget>().toList().addHorizontalSpacing(30)
+            children: entries.map((entry) =>
+                  MoneyEntryBar.fromEntry(entry)
+              ).addVerticalSpacing(15)
         )
     );
   }
