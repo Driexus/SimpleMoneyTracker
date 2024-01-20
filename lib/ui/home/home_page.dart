@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/cubits/entries_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
-import '../../repos/money_entry_repo.dart';
 import 'numpad.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  static const MoneyEntryRepo _repo = MoneyEntryRepo();
+  static final EntriesCubit _cubit = EntriesCubit();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    HomePage._repo.create(MoneyEntry(
+    HomePage._cubit.addEntry(MoneyEntry(
         createdAt: DateTime.now(),
         amount: _getDBAmount(),
         type: moneyEntryType,

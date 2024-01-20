@@ -51,18 +51,22 @@ class _MainPageState extends State<MainPage> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            BlocProvider(
-              create: (_) => ActivitiesCubit(),
-              child: const HomePage(),
-            ),
+        body: MultiBlocProvider(
+          providers: [
             BlocProvider(
               create: (_) => EntriesCubit(),
-              child: const TimelinePage(),
             ),
-            const ColorsList(),
+            BlocProvider(
+              create: (_) => ActivitiesCubit(),
+            ),
           ],
+          child: const TabBarView(
+            children: [
+              HomePage(),
+              TimelinePage(),
+              ColorsList(),
+            ],
+          )
         )
       )
     );

@@ -24,7 +24,7 @@ extension StringOrEmpty on int? {
 }
 
 extension DateString on DateTime {
-  String toSimpleDate() {
-    return "$day/$month/$year";
+  String toDayMonth() {
+    return "$day/$month";
   }
 }

@@ -29,7 +29,7 @@ class EntriesCubit extends Cubit<List<MoneyEntry>> {
     });
   }
 
-  void addEntry(MoneyEntry activity) {
-    _repo.create(activity).then((value) => updateEntries());
+  void addEntry(MoneyEntry entry) {
+    _repo.create(entry).then((value) => updateEntries());
   }
 }

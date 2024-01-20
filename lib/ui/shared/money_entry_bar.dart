@@ -61,7 +61,7 @@ class MoneyEntryBar extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        date.toSimpleDate(),
+                        date.toDayMonth(),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,

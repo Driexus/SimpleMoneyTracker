@@ -17,7 +17,7 @@ class _AddActivityPageState extends State<AddActivityPage> {
 
   //region Main State Handling
 
-  static final cubit = ActivitiesCubit();
+  static final _cubit = ActivitiesCubit();
 
   String _title = "";
   Color _color = Colors.black87;
@@ -46,7 +46,7 @@ class _AddActivityPageState extends State<AddActivityPage> {
       return;
     }
 
-    cubit.addActivity(
+    _cubit.addActivity(
         MoneyActivity(
             title: _title,
             color: _color.value,
