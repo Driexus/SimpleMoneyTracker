@@ -7,6 +7,8 @@ import 'package:simplemoneytracker/utils/extensions.dart';
 class MoneyEntryBar extends StatelessWidget {
   MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType});
 
+  static const double height = 55;
+
   MoneyEntryBar.fromEntry(MoneyEntry entry, {Key? key}) : this(
       key: key,
       amount: entry.getStringAmount(),
@@ -36,7 +38,7 @@ class MoneyEntryBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 55,
+        height: height,
         width: 370,
         decoration: BoxDecoration(
           color: color,

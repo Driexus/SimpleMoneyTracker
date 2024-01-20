@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/buttons/color_button.dart';
 
+import '../../shared/overscroll_notification_listener.dart';
+
 class ColorsList extends StatelessWidget {
   const ColorsList({super.key, this.onColor = _onColorDefault});
 
@@ -11,12 +13,7 @@ class ColorsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (OverscrollIndicatorNotification overscroll) {
-          overscroll.disallowIndicator();
-
-          return true;
-        },
+    return OverscrollNotificationListener(
         child: GridView.builder(
           itemCount: _colors.length,
           padding: EdgeInsets.zero,

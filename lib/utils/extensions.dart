@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 extension WidgetSpacing on Iterable<Widget> {
   List<Widget> addHorizontalSpacing(double space) {
@@ -27,8 +28,15 @@ extension StringOrEmpty on int? {
   }
 }
 
+// Date formats https://www.woolha.com/tutorials/dart-format-datetime-to-string-examples
 extension DateString on DateTime {
   String toDayMonth() {
     return "$day/$month";
+  }
+
+  String toMonthYearFull() {
+    return DateFormat("yMMMM").format(this);
+    // TODO: Testing
+    // return DateFormat("Hms").format(this);
   }
 }
