@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
         Positioned(
           left: 0,
           right: 0,
-          bottom: 20,
+          bottom: 0,
           child: Column(
             children: [
               Numpad(
@@ -138,24 +138,41 @@ class _HomePageState extends State<HomePage> {
                 onBackspace: _onBackspace,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _SubmitButton(
-                    description: "credit",
-                    onPressed: () => _submit(MoneyType.credit),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _SubmitButton(
+                      description: "credit",
+                      moneyType: MoneyType.credit,
+                      onPressed: () => _submit(MoneyType.credit),
+                      color: MoneyType.credit.color,
+                    ),
                   ),
-                  _SubmitButton(
-                    description: "income",
-                    onPressed: () => _submit(MoneyType.income),
+                  Expanded(
+                    child: _SubmitButton(
+                      description: "income",
+                      moneyType: MoneyType.income,
+                      onPressed: () => _submit(MoneyType.income),
+                      color: MoneyType.income.color,
+                    ),
                   ),
-                  _SubmitButton(
-                    description: "expense",
-                    onPressed: () => _submit(MoneyType.expense),
+                  Expanded(
+                    child: _SubmitButton(
+                      description: "expense",
+                      moneyType: MoneyType.expense,
+                      onPressed: () => _submit(MoneyType.expense),
+                      color: MoneyType.expense.color,
+                    ),
                   ),
-                  _SubmitButton(
-                    description: "debt",
-                    onPressed: () => _submit(MoneyType.debt),
+                  Expanded(
+                    child: _SubmitButton(
+                      description: "debt",
+                      moneyType: MoneyType.debt,
+                      onPressed: () => _submit(MoneyType.debt),
+                      color: MoneyType.debt.color,
+                    ),
                   ),
+                  const SizedBox(width: 16),
                 ],
               )
             ],
@@ -166,22 +183,49 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({required this.description, this.onPressed});
+class _SubmitButton extends StatefulWidget {
+  const _SubmitButton({
+    required this.description,
+    required this.moneyType,
+    required this.color,
+    this.onPressed,
+  });
 
   final String description;
+  final MoneyType moneyType;
+  final Color color;
   final VoidCallback? onPressed;
 
   @override
+  _SubmitButtonState createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<_SubmitButton> {
+  bool _isSelected = false;
+
+  @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        foregroundColor: Colors.black38,
-        textStyle: const TextStyle(fontSize: 12),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _isSelected = !_isSelected;
+        });
+        widget.onPressed?.call();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(13),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(1),
+          border: Border.all(
+            color: _isSelected ? widget.color : Colors.grey,
+            width: 0.3,
+          ),
+        ),
+        child: Icon(
+          widget.moneyType.icon,
+          color: widget.color
+        ),
       ),
-      onPressed: onPressed,
-      child: Text(description),
     );
   }
 }
