@@ -36,6 +36,8 @@ class MoneyEntryFilters {
     _populateWhereArgs();
   }
 
+  static final empty = MoneyEntryFilters();
+
   final int? minAmount;
   final int? maxAmount;
   final DateTime? minDate;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/cubits/entries_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
@@ -10,8 +11,6 @@ import 'numpad.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
-  static final EntriesCubit _cubit = EntriesCubit();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -65,20 +64,22 @@ class _HomePageState extends State<HomePage> {
     }
   });
 
-  void _submit(MoneyType moneyEntryType) {
+  void _submit(EntriesBloc entriesBloc, MoneyType moneyEntryType) {
     if (_currentActivity == null) {
       ToastHelper.showToast("Please select an activity before saving an entry");
       return;
     }
 
-    HomePage._cubit.addEntry(MoneyEntry(
-        createdAt: DateTime.now(),
-        amount: _getDBAmount(),
-        type: moneyEntryType,
-        currencyId: 1,
-        comment: "",
-        activity: _currentActivity!
-    ));
+    entriesBloc.add(EntryAdded(
+      MoneyEntry(
+          createdAt: DateTime.now(),
+          amount: _getDBAmount(),
+          type: moneyEntryType,
+          currencyId: 1,
+          comment: "",
+          activity: _currentActivity!
+      ))
+    );
     _reset();
     ToastHelper.showToast("${moneyEntryType.displayName} entry added");
   }
@@ -104,94 +105,94 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 20,
-          child: MoneyEntryBar(
-            description: _currentActivity?.title,
-            color: Colors.cyan,
-            imageKey: _currentActivity?.imageKey,
-            amount: stringAmount(),
-            date: DateTime.now(),
-          )
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 100,
-          child: ActivityButtonContainer(
-            onActivity: _onActivity,
-          )
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Column(
-            children: [
-              Numpad(
-                onNumber: _onNumber,
-                onDecimal: _onDecimal,
-                onBackspace: _onBackspace,
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _SubmitButton(
-                      description: "credit",
-                      moneyType: MoneyType.credit,
-                      onPressed: () => _submit(MoneyType.credit),
-                      color: MoneyType.credit.color,
+    return Builder(
+      builder: (context) {
+        final entriesBloc = context.watch<EntriesBloc>();
+
+        return Stack(
+          children: [
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 20,
+                child: MoneyEntryBar(
+                  description: _currentActivity?.title,
+                  color: Colors.cyan,
+                  imageKey: _currentActivity?.imageKey,
+                  amount: stringAmount(),
+                  date: DateTime.now(),
+                )
+            ),
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 100,
+                child: ActivityButtonContainer(
+                  onActivity: _onActivity,
+                )
+            ),
+            Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Column(
+                  children: [
+                    Numpad(
+                      onNumber: _onNumber,
+                      onDecimal: _onDecimal,
+                      onBackspace: _onBackspace,
                     ),
-                  ),
-                  Expanded(
-                    child: _SubmitButton(
-                      description: "income",
-                      moneyType: MoneyType.income,
-                      onPressed: () => _submit(MoneyType.income),
-                      color: MoneyType.income.color,
-                    ),
-                  ),
-                  Expanded(
-                    child: _SubmitButton(
-                      description: "expense",
-                      moneyType: MoneyType.expense,
-                      onPressed: () => _submit(MoneyType.expense),
-                      color: MoneyType.expense.color,
-                    ),
-                  ),
-                  Expanded(
-                    child: _SubmitButton(
-                      description: "debt",
-                      moneyType: MoneyType.debt,
-                      onPressed: () => _submit(MoneyType.debt),
-                      color: MoneyType.debt.color,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                ],
-              )
-            ],
-          )
-        )
-      ],
+                    Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _SubmitButton(
+                            moneyType: MoneyType.credit,
+                            onPressed: () => _submit(entriesBloc, MoneyType.credit),
+                            color: MoneyType.credit.color,
+                          ),
+                        ),
+                        Expanded(
+                          child: _SubmitButton(
+                            moneyType: MoneyType.income,
+                            onPressed: () => _submit(entriesBloc, MoneyType.income),
+                            color: MoneyType.income.color,
+                          ),
+                        ),
+                        Expanded(
+                          child: _SubmitButton(
+                            moneyType: MoneyType.expense,
+                            onPressed: () => _submit(entriesBloc, MoneyType.expense),
+                            color: MoneyType.expense.color,
+                          ),
+                        ),
+                        Expanded(
+                          child: _SubmitButton(
+                            moneyType: MoneyType.debt,
+                            onPressed: () => _submit(entriesBloc, MoneyType.debt),
+                            color: MoneyType.debt.color,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                      ],
+                    )
+                  ],
+                )
+            )
+          ],
+        );
+      }
     );
   }
 }
 
 class _SubmitButton extends StatefulWidget {
   const _SubmitButton({
-    required this.description,
     required this.moneyType,
     required this.color,
     this.onPressed,
   });
 
-  final String description;
   final MoneyType moneyType;
   final Color color;
   final VoidCallback? onPressed;
