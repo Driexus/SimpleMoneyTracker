@@ -41,12 +41,32 @@ class TimelinePage extends StatelessWidget {
                 bottom: 60,
                 child: Column(
                   children: [
-                    Text(
-                      dateHeader,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Colors.black54,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 70, height: 1,),
+                        const Spacer(),
+                        Text(
+                          dateHeader,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const Spacer(),
+                        Ink(
+                          decoration: const ShapeDecoration(
+                            color: Colors.black12,
+                            shape: CircleBorder(),
+                          ),
+                          child: IconButton(
+                            iconSize: 20,
+                            icon: const Icon(Icons.filter_list),
+                            onPressed: () {  },
+                          ),
+                        ),
+                        const SizedBox(width: 25, height: 1)
+                      ],
                     ),
                     const Divider(
                       height: 26,
@@ -60,7 +80,7 @@ class TimelinePage extends StatelessWidget {
             const Positioned(
                 left: 0,
                 right: 0,
-                top: 75,
+                top: 90,
                 bottom: 60,
                 child: EntriesContainer()
             ),
