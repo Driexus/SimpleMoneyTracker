@@ -44,6 +44,7 @@ dependencies:
   fluttertoast: ^8.2.4
   intl: ^0.18.1
   equatable: ^2.0.5
+  material_symbols_icons: ^4.2718.0
 
 dev_dependencies:
   flutter_test:
