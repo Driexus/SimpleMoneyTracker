@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         splashFactory: InkSplash.splashFactory,
+        sliderTheme: const SliderThemeData(
+          showValueIndicator: ShowValueIndicator.always
+        )
       ),
       home: const MainPage()
     );

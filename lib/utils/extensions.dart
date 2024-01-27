@@ -37,4 +37,8 @@ extension DateString on DateTime {
   String toMonthYearFull() {
     return DateFormat("yMMMM").format(this);
   }
+
+  String toDateFull() {
+    return DateFormat("yMMMMd").format(this);
+  }
 }

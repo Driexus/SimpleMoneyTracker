@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/ui/filter/filter_page.dart';
 import 'package:simplemoneytracker/ui/timeline/entries_container.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import '../../repos/money_entry_repo.dart';
@@ -22,15 +23,15 @@ class TimelinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(
-        builder: (context) {
-          final entriesCubit = context.watch<EntriesBloc>();
+        builder: (blocContext) {
+          final entriesBloc = blocContext.watch<EntriesBloc>();
           late final String dateHeader;
 
-          switch (entriesCubit.state.runtimeType) {
+          switch (entriesBloc.state.runtimeType) {
             case EmptyEntries:
               dateHeader = _defaultDateHeader;
             case ValidEntries:
-              dateHeader = (entriesCubit.state as ValidEntries).firstEntry.createdAt.toMonthYearFull();
+              dateHeader = (entriesBloc.state as ValidEntries).firstEntry.createdAt.toMonthYearFull();
           }
 
           return Stack(
@@ -72,8 +73,15 @@ class TimelinePage extends StatelessWidget {
                   child: MoneyTypeToggles(
                       defaultSelected: const [MoneyType.expense],
                       middleIcon: Symbols.instant_mix,
-                      onToggle: (toggledTypes) => _onToggle(entriesCubit, toggledTypes),
-                      onMiddlePressed: () => (),
+                      onToggle: (toggledTypes) => _onToggle(entriesBloc, toggledTypes),
+                      onMiddlePressed: () => {
+                        showModalBottomSheet<void>(
+                          context: blocContext,
+                          builder: (BuildContext context) {
+                            return FilterPage(entriesBloc: entriesBloc);
+                          }
+                        )
+                      },
                   )
               ),
             ],
