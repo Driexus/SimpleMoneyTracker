@@ -10,6 +10,7 @@ part 'entries_state.dart';
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this.entryRepo) : super(EmptyEntries(MoneyEntryFilters.empty)) {
     on<FiltersUpdated>(_onFiltersUpdated);
+    on<FiltersAdded>(_onFiltersAdded);
     on<FirstEntryUpdated>(_onFirstEntryUpdated);
     on<EntryAdded>(_onEntryAdded);
   }
@@ -23,6 +24,18 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       }
       else {
         emit(ValidEntries(entries.first, entries, event.filters))
+      }
+    });
+  }
+
+  Future<void> _onFiltersAdded(FiltersAdded event, Emitter<EntriesState> emit) async {
+    MoneyEntryFilters filters = MoneyEntryFilters.combine(state.filters, event.filters);
+    await entryRepo.retrieveSome(filters: filters).then((entries) => {
+      if (entries.isEmpty) {
+        emit(EmptyEntries(filters))
+      }
+      else {
+        emit(ValidEntries(entries.first, entries, filters))
       }
     });
   }

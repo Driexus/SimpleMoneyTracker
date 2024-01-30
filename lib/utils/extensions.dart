@@ -39,6 +39,6 @@ extension DateString on DateTime {
   }
 
   String toDateFull() {
-    return DateFormat("yMMMMd").format(this);
+    return DateFormat("yMMMd").format(this);
   }
 }

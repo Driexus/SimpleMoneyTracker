@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MoneyRange extends StatefulWidget {
-  const MoneyRange({super.key, required this.onRange});
+  const MoneyRange({super.key, required this.onRange, this.initialRange});
 
   final ValueChanged<MoneyRangeValues> onRange;
+  final MoneyRangeValues? initialRange;
 
   static const double _maxValue = 4;
   static int _rangeValueToAmount(double rangeValue) => pow(10, rangeValue).round();
@@ -19,9 +20,23 @@ class _MoneyRangeState extends State<MoneyRange> {
 
   RangeValues _currentRangeValues = const RangeValues(0, MoneyRange._maxValue);
 
+  // TODO: log base 10 to find reverse
+  /*@override
+  void initState() {
+    super.initState();
+    if (widget.initialRange == null) {
+      return;
+    }
+
+    _currentRangeValues = RangeValues(
+        widget.initialRange!.minAmount.toDouble(),
+        widget.initialRange!.maxAmount?.toDouble() ?? MoneyRange._maxValue
+    );
+  }*/
+
   void _onChangeEnd(RangeValues rangeValues) => setState(() {
     widget.onRange(
-        MoneyRangeValues(rangeValues)
+        MoneyRangeValues.fromRange(rangeValues)
     );
   });
 
@@ -43,9 +58,12 @@ class _MoneyRangeState extends State<MoneyRange> {
 }
 
 class MoneyRangeValues {
-  MoneyRangeValues(RangeValues rangeValues) :
-      minAmount = MoneyRange._rangeValueToAmount(rangeValues.start) * 100,
-      maxAmount = rangeValues.end == MoneyRange._maxValue ? null : MoneyRange._rangeValueToAmount(rangeValues.end) * 100;
+  MoneyRangeValues.fromRange(RangeValues rangeValues) : this(
+      MoneyRange._rangeValueToAmount(rangeValues.start) * 100,
+      rangeValues.end == MoneyRange._maxValue ? null : MoneyRange._rangeValueToAmount(rangeValues.end) * 100
+  );
+
+  MoneyRangeValues(this.minAmount, this.maxAmount);
 
   final int minAmount;
   final int? maxAmount;

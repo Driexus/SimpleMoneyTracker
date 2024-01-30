@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';
 
@@ -9,14 +10,25 @@ class FilterPage extends StatelessWidget {
 
   final EntriesBloc entriesBloc;
 
-  _updateFilters(MoneyRangeValues values) {
+  _updateAmountFilters(MoneyRangeValues values) {
     entriesBloc.add(
-        FiltersUpdated(
+        FiltersAdded(
           MoneyEntryFilters(
             minAmount: values.minAmount,
             maxAmount: values.maxAmount
           )
         )
+    );
+  }
+
+  _updateDateFilters(PickerDateRange dateRange) {
+    entriesBloc.add(
+      FiltersAdded(
+        MoneyEntryFilters(
+          minDate: dateRange.startDate,
+          maxDate: dateRange.endDate
+        )
+      )
     );
   }
 
@@ -28,11 +40,19 @@ class FilterPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const DatePicker(),
-            MoneyRange(onRange: _updateFilters),
-            ElevatedButton(
-              child: const Text('Close BottomSheet'),
-              onPressed: () => Navigator.pop(context),
+            DatePicker(
+              onRange: _updateDateFilters,
+              initialRange: PickerDateRange(
+                entriesBloc.state.filters.minDate,
+                entriesBloc.state.filters.maxDate
+              )
+            ),
+            MoneyRange(
+              onRange: _updateAmountFilters,
+              initialRange: MoneyRangeValues(
+                entriesBloc.state.filters.minAmount ?? 0,
+                entriesBloc.state.filters.maxAmount
+              ),
             ),
           ],
         ),

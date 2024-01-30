@@ -19,6 +19,15 @@ final class FiltersUpdated extends EntriesEvent {
   List<Object> get props => [filters];
 }
 
+final class FiltersAdded extends EntriesEvent {
+  const FiltersAdded(this.filters);
+
+  final MoneyEntryFilters filters;
+
+  @override
+  List<Object> get props => [filters];
+}
+
 final class FirstEntryUpdated extends EntriesEvent {
   const FirstEntryUpdated(this.firstEntry);
 

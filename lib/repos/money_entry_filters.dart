@@ -1,6 +1,5 @@
 part of 'money_entry_repo.dart';
 
-// TODO: Implement date filters
 class MoneyEntryFilters {
   MoneyEntryFilters(
       {this.minAmount, this.maxAmount, this.minDate, this.maxDate, this.allowedTypes}) {
@@ -46,8 +45,55 @@ class MoneyEntryFilters {
       whereArgsBuilder.addInt(maxAmount!);
     }
 
+    // Dates
+    if (minDate != null) {
+      whereBuilder.add(
+          _WhereCondition()..and('createdAt >= ?')
+      );
+      whereArgsBuilder.addInt(minDate!.millisecondsSinceEpoch);
+    }
+    if (maxDate != null) {
+      whereBuilder.add(
+          _WhereCondition()..and('createdAt <= ?')
+      );
+      whereArgsBuilder.addInt(maxDate!.millisecondsSinceEpoch);
+    }
+
     where = whereBuilder.build();
     whereArgs = whereArgsBuilder.build();
+  }
+
+  static MoneyEntryFilters combine(MoneyEntryFilters initialFilters, MoneyEntryFilters newFilters) {
+
+    int? minAmount = initialFilters.minAmount;
+    int? maxAmount = initialFilters.maxAmount;
+    DateTime? minDate = initialFilters.minDate;
+    DateTime? maxDate = initialFilters.maxDate;
+    List<MoneyType>? allowedTypes = initialFilters.allowedTypes;
+
+    if (newFilters.minAmount != null) {
+      minAmount = newFilters.minAmount;
+    }
+    if (newFilters.maxAmount != null) {
+      maxAmount = newFilters.maxAmount;
+    }
+    if (newFilters.minDate != null) {
+      minDate = newFilters.minDate;
+    }
+    if (newFilters.maxDate != null) {
+      maxDate = newFilters.maxDate;
+    }
+    if (newFilters.allowedTypes != null) {
+      allowedTypes = newFilters.allowedTypes;
+    }
+
+    return MoneyEntryFilters(
+        minAmount: minAmount,
+        maxAmount: maxAmount,
+        minDate: minDate,
+        maxDate: maxDate,
+        allowedTypes: allowedTypes
+    );
   }
 }
 
