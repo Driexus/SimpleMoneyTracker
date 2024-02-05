@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyRange extends StatefulWidget {
   const MoneyRange({super.key, required this.onRange, this.initialRange});
@@ -9,7 +10,8 @@ class MoneyRange extends StatefulWidget {
   final MoneyRangeValues? initialRange;
 
   static const double _maxValue = 4;
-  static int _rangeValueToAmount(double rangeValue) => pow(10, rangeValue).round();
+  static int _rangeValueToAmount(double rangeValue) => (pow(10, rangeValue) * 100).round();
+  static double _amountToRangeValue(int amount) => log(amount.toDouble() / 100)/ln10;
 
   @override
   State<MoneyRange> createState() => _MoneyRangeState();
@@ -20,19 +22,23 @@ class _MoneyRangeState extends State<MoneyRange> {
 
   RangeValues _currentRangeValues = const RangeValues(0, MoneyRange._maxValue);
 
-  // TODO: log base 10 to find reverse
-  /*@override
+  @override
   void initState() {
     super.initState();
     if (widget.initialRange == null) {
       return;
     }
 
-    _currentRangeValues = RangeValues(
-        widget.initialRange!.minAmount.toDouble(),
-        widget.initialRange!.maxAmount?.toDouble() ?? MoneyRange._maxValue
+    double rangeStart = widget.initialRange!.minAmount <= 0 ? 0 : MoneyRange._amountToRangeValue(
+      widget.initialRange!.minAmount
     );
-  }*/
+
+    double rangeEnd =  widget.initialRange!.maxAmount == null ? MoneyRange._maxValue : MoneyRange._amountToRangeValue(
+        widget.initialRange!.maxAmount!
+    );
+
+    _currentRangeValues = RangeValues(rangeStart, rangeEnd);
+  }
 
   void _onChangeEnd(RangeValues rangeValues) => setState(() {
     widget.onRange(
@@ -46,8 +52,8 @@ class _MoneyRangeState extends State<MoneyRange> {
       values: _currentRangeValues,
       max: MoneyRange._maxValue,
       labels: RangeLabels(
-        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toString(),
-        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toString()
+        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toString().dropLast(2),
+        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toString().dropLast(2)
       ),
       onChanged: (rangeValues) => setState(() {
         _currentRangeValues = rangeValues;
@@ -59,8 +65,8 @@ class _MoneyRangeState extends State<MoneyRange> {
 
 class MoneyRangeValues {
   MoneyRangeValues.fromRange(RangeValues rangeValues) : this(
-      MoneyRange._rangeValueToAmount(rangeValues.start) * 100,
-      rangeValues.end == MoneyRange._maxValue ? null : MoneyRange._rangeValueToAmount(rangeValues.end) * 100
+      MoneyRange._rangeValueToAmount(rangeValues.start),
+      rangeValues.end == MoneyRange._maxValue ? null : MoneyRange._rangeValueToAmount(rangeValues.end)
   );
 
   MoneyRangeValues(this.minAmount, this.maxAmount);

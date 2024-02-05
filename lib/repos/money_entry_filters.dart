@@ -1,5 +1,6 @@
 part of 'money_entry_repo.dart';
 
+/// maxAmount may take negative values, which indicates it is to be ignored.
 class MoneyEntryFilters {
   MoneyEntryFilters(
       {this.minAmount, this.maxAmount, this.minDate, this.maxDate, this.allowedTypes}) {
@@ -32,13 +33,13 @@ class MoneyEntryFilters {
     }
 
     // Amount
-    if (minAmount != null) {
+    if (minAmount != null && minAmount! >= 0) {
       whereBuilder.add(
           _WhereCondition()..and('amount >= ?')
       );
       whereArgsBuilder.addInt(minAmount!);
     }
-    if (maxAmount != null) {
+    if (maxAmount != null && maxAmount! >= 0) {
       whereBuilder.add(
           _WhereCondition()..and('amount <= ?')
       );

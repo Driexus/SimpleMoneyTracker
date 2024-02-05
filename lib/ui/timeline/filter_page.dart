@@ -15,7 +15,7 @@ class FilterPage extends StatelessWidget {
         FiltersAdded(
           MoneyEntryFilters(
             minAmount: values.minAmount,
-            maxAmount: values.maxAmount
+            maxAmount: values.maxAmount ?? -1 // Causes a value overwrite (null does not)
           )
         )
     );
@@ -34,6 +34,10 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int minAmount = entriesBloc.state.filters.minAmount ?? 0;
+    int? maxAmount = entriesBloc.state.filters.maxAmount;
+    maxAmount = (maxAmount != null && maxAmount < 0) ? null : maxAmount;
+
     return SizedBox(
       height: 800,
       child: Center(
@@ -50,8 +54,8 @@ class FilterPage extends StatelessWidget {
             MoneyRange(
               onRange: _updateAmountFilters,
               initialRange: MoneyRangeValues(
-                entriesBloc.state.filters.minAmount ?? 0,
-                entriesBloc.state.filters.maxAmount
+                minAmount,
+                maxAmount
               ),
             ),
           ],

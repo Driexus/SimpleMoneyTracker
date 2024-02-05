@@ -10,6 +10,7 @@ final class EntriesInit extends EntriesEvent {
   List<Object> get props => [];
 }
 
+/// All filter values are overwritten
 final class FiltersUpdated extends EntriesEvent {
   const FiltersUpdated(this.filters);
 
@@ -19,6 +20,7 @@ final class FiltersUpdated extends EntriesEvent {
   List<Object> get props => [filters];
 }
 
+/// Non-null filter values overwrite the old. Null filter values are ignored.
 final class FiltersAdded extends EntriesEvent {
   const FiltersAdded(this.filters);
 

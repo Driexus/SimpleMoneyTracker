@@ -30,6 +30,7 @@ extension StringOrEmpty on int? {
 
 // Date formats https://www.woolha.com/tutorials/dart-format-datetime-to-string-examples
 extension DateString on DateTime {
+
   String toDayMonth() {
     return "$day/$month";
   }
@@ -40,5 +41,30 @@ extension DateString on DateTime {
 
   String toDateFull() {
     return DateFormat("yMMMd").format(this);
+  }
+}
+
+extension Substrings on String {
+
+  /// Takes the first n characters.
+  String takeFirst(int n) {
+    final int end = n > length ? length : n;
+    return substring(0, end);
+  }
+
+  /// Takes the last n characters.
+  String takeLast(int n) {
+    final int start = n > length ? 0 : length - n;
+    return substring(start, length);
+  }
+
+  /// Drops the first n characters.
+  String dropFirst(int n) {
+    return n > length ? "" : substring(length - n, length);
+  }
+
+  /// Drops the last n characters.
+  String dropLast(int n) {
+    return n > length ? "" : substring(0, length - n);
   }
 }
