@@ -28,6 +28,28 @@ extension StringOrEmpty on int? {
   }
 }
 
+extension Amounts on int {
+  String toEuros() {
+    String remaining = toString();
+
+    // Decimals
+    String result = "${remaining.takeLast(2)} €";
+    remaining = remaining.dropLast(2);
+
+    // First chunk of 3s with comma
+    result = "${remaining.takeLast(3)},$result";
+    remaining = remaining.dropLast(3);
+
+    // Chunks of 3s with dot
+    while (remaining.isNotEmpty) {
+      result = "${remaining.takeLast(3)}.$result";
+      remaining = remaining.dropLast(3);
+    }
+
+    return result;
+  }
+}
+
 // Date formats https://www.woolha.com/tutorials/dart-format-datetime-to-string-examples
 extension DateString on DateTime {
 

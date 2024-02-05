@@ -49,15 +49,6 @@ class MoneyEntry {
     };
   }
 
-  String getStringAmount() {
-    /*String str = amount.toString();
-    String front = str.substring(0, str.length - 2);
-    String back = str.substring(str.length - 2, str.length );
-    return "$front.$back";*/
-
-    return amount.toString(); // TODO
-  }
-
   @override
   String toString() {
     return 'MoneyEntry{ createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment, activity: $activity }';
