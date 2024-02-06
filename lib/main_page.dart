@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/home/add_activity/colors_list.dart';
@@ -53,11 +54,14 @@ class _MainPageState extends State<MainPage> {
                       create: (_) => ActivitiesCubit(),
                     ),
                   ],
-                  child: const TabBarView(
+                  child: TabBarView(
                     children: [
-                      HomePage(),
-                      TimelinePage(),
-                      ColorsList(),
+                      BlocProvider(
+                          create: (_) => HomePageBloc(),
+                        child: const HomePage(),
+                      ),
+                      const TimelinePage(),
+                      const ColorsList(),
                     ],
                   )
               )

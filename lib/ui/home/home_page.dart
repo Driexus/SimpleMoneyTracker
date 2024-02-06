@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
+import 'package:simplemoneytracker/ui/timeline/money_type_toggles.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'numpad.dart';
@@ -64,6 +66,7 @@ class _HomePageState extends State<HomePage> {
     }
   });
 
+  // TODO: Replace submit
   void _submit(EntriesBloc entriesBloc, MoneyType moneyEntryType) {
     if (_currentActivity == null) {
       ToastHelper.showToast("Please select an activity before saving an entry");
@@ -103,11 +106,16 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
+  void _onToggle(List<MoneyType> toggledTypes) {
+    // TODO: Types should be one
+  }
+
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
         final entriesBloc = context.watch<EntriesBloc>();
+        final homePageBloc = context.watch<HomePageBloc>();
 
         return Stack(
           children: [
@@ -128,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                 right: 0,
                 top: 100,
                 child: ActivityButtonContainer(
-                  onActivity: _onActivity,
+                  onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
                 )
             ),
             Positioned(
@@ -138,43 +146,16 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Numpad(
-                      onNumber: _onNumber,
-                      onDecimal: _onDecimal,
-                      onBackspace: _onBackspace,
+                      onNumber: (digit) => homePageBloc.add(DigitPressed(digit)),
+                      onDecimal: () => homePageBloc.add(const DecimalPressed()),
+                      onBackspace: () => homePageBloc.add(const BackspacePressed()),
                     ),
-                    Row(
-                      children: [
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SubmitButton(
-                            moneyType: MoneyType.credit,
-                            onPressed: () => _submit(entriesBloc, MoneyType.credit),
-                            color: MoneyType.credit.color,
-                          ),
-                        ),
-                        Expanded(
-                          child: _SubmitButton(
-                            moneyType: MoneyType.income,
-                            onPressed: () => _submit(entriesBloc, MoneyType.income),
-                            color: MoneyType.income.color,
-                          ),
-                        ),
-                        Expanded(
-                          child: _SubmitButton(
-                            moneyType: MoneyType.expense,
-                            onPressed: () => _submit(entriesBloc, MoneyType.expense),
-                            color: MoneyType.expense.color,
-                          ),
-                        ),
-                        Expanded(
-                          child: _SubmitButton(
-                            moneyType: MoneyType.debt,
-                            onPressed: () => _submit(entriesBloc, MoneyType.debt),
-                            color: MoneyType.debt.color,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                      ],
+                    MoneyTypeToggles(
+                      selectionMode: SelectionMode.single,
+                      defaultSelected: const [MoneyType.expense], // TODO: Change default
+                      middleIcon: Icons.done,
+                      onToggle: _onToggle,
+                      onMiddlePressed: () => _submit(entriesBloc, MoneyType.expense), // TODO: Change type
                     )
                   ],
                 )

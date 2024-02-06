@@ -4,13 +4,21 @@ import '../../model/money_entry.dart';
 
 /// A [MoneyType] toggle widget. At any time at least one toggle is active.
 class MoneyTypeToggles extends StatefulWidget {
-  const MoneyTypeToggles({super.key, required this.onToggle, required this.defaultSelected, required this.onMiddlePressed, required this.middleIcon});
+  const MoneyTypeToggles({
+    super.key,
+    required this.selectionMode,
+    required this.onToggle,
+    required this.defaultSelected,
+    required this.onMiddlePressed,
+    required this.middleIcon
+  });
 
   /// A list of the currently selected MoneyTypes
   final ValueChanged<List<MoneyType>> onToggle;
   final VoidCallback onMiddlePressed;
   final List<MoneyType> defaultSelected;
   final IconData middleIcon;
+  final SelectionMode selectionMode;
 
   static const List<MoneyType> moneyTypes = [MoneyType.credit, MoneyType.income, MoneyType.expense, MoneyType.debt]; // Correct order of types
 
@@ -38,6 +46,11 @@ class _MoneyTypeTogglesState extends State<MoneyTypeToggles> {
     // If the last active toggle is pressed do nothing
     if (_isSelected[index] && _isSelected.where((element) => element).length == 1) {
       return;
+    }
+
+    // If the selection mode is single reset every toggle
+    if (widget.selectionMode == SelectionMode.single) {
+      _isSelected.setAll(0, Iterable.generate(5, (_) => false));
     }
 
     // Change the toggle
@@ -83,4 +96,8 @@ class _MoneyTypeTogglesState extends State<MoneyTypeToggles> {
       ),
     );
   }
+}
+
+enum SelectionMode {
+  single, multi
 }
