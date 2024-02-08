@@ -29,15 +29,25 @@ extension StringOrEmpty on int? {
 }
 
 extension Amounts on int {
-  String toEuros() {
-    String remaining = toString();
+  String toEuros({int decimals = 2, bool isDecimal = false, int ignoreLast = 0}) {
+    String remaining = toString().dropLast(ignoreLast);
 
     // Decimals
-    String result = "${remaining.takeLast(2)} €";
-    remaining = remaining.dropLast(2);
+    String result = "${remaining.takeLast(decimals)} €";
+    remaining = remaining.dropLast(decimals);
 
-    // First chunk of 3s with comma
-    result = "${remaining.takeLast(3)},$result";
+    // If decimal, add comma
+    if (decimals > 0 || isDecimal) {
+      result = ",$result";
+    }
+
+    // If no digits remain, add 0 to the front
+    if (remaining.isEmpty) {
+      return "0$result";
+    }
+
+    // First chunk of 3s without dot
+    result = "${remaining.takeLast(3)}$result";
     remaining = remaining.dropLast(3);
 
     // Chunks of 3s with dot
@@ -47,6 +57,12 @@ extension Amounts on int {
     }
 
     return result;
+  }
+}
+
+extension IntColors on int {
+  Color toColor() {
+    return Color(this);
   }
 }
 
