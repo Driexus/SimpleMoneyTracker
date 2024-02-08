@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
@@ -22,6 +24,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<BackspacePressed>(_onBackspacePressed);
     on<DecimalPressed>(_onDecimalPressed);
     on<EntrySubmitted>(_onEntrySubmitted);
+    log("Initialized HomePageBloc");
   }
 
   final EntriesBloc entriesBloc;

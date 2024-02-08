@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
@@ -10,9 +11,7 @@ import 'package:simplemoneytracker/utils/extensions.dart';
 import 'numpad.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
-  final log = Logger("HomePage");
+  const HomePage({super.key});
 
   String stringAmount(HomePageState state) {
     String result = state.amount.toStringOrEmpty();
@@ -27,7 +26,7 @@ class HomePage extends StatelessWidget {
   void _onToggle(List<MoneyType> toggledTypes, HomePageBloc homePageBloc) {
     // This should never happen
     if (toggledTypes.isEmpty) {
-      log.severe("Toggled types is empty. This should never happen");
+      log("Toggled types is empty. This should never happen");
       return;
     }
 
