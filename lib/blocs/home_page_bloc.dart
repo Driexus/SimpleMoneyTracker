@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import '../model/money_activity.dart';
 import '../model/money_entry.dart';
 import 'package:equatable/equatable.dart';
 
+import '../utils/toast_helper.dart';
+
 part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc() : super(
+  HomePageBloc(this.entriesBloc) : super(
       _initialState()
   ) {
     on<MoneyTypeUpdated>(_onMoneyTypeUpdated);
@@ -20,6 +23,8 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<DecimalPressed>(_onDecimalPressed);
     on<EntrySubmitted>(_onEntrySubmitted);
   }
+
+  final EntriesBloc entriesBloc;
 
   Future<void> _onMoneyActivityUpdated(MoneyActivityUpdated event, Emitter<HomePageState> emit) async {
     emit(
@@ -88,6 +93,30 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   }
 
   Future<void> _onEntrySubmitted(EntrySubmitted event, Emitter<HomePageState> emit) async {
+    if (!state.isSubmittable()) {
+      if (state.moneyActivity == null) {
+        ToastHelper.showToast("Please select an activity before saving an entry");
+      }
+      else if (state.amount == 0) {
+        ToastHelper.showToast("Please add a valid amount before saving an entry");
+      }
+      return;
+    }
+
+    entriesBloc.add(
+        EntryAdded(
+            MoneyEntry(
+              createdAt: DateTime.now(),
+              amount: state.getDBAmount(),
+              type: state.moneyType,
+              currencyId: 1, // TODO: Add more currencies
+              comment: "",
+              activity: state.moneyActivity!
+            )
+        )
+    );
+
+    ToastHelper.showToast("${state.moneyType.displayName} entry added");
     emit(_initialState());
   }
 

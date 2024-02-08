@@ -24,6 +24,14 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    EntriesBloc entriesBloc = EntriesBloc(MainPage._repo)..add(
+        FiltersUpdated(
+            MoneyEntryFilters(
+                allowedTypes: [MoneyType.expense]
+            )
+        )
+    );
+
     return OverscrollNotificationListener(
         child: DefaultTabController(
           length: 3,
@@ -42,13 +50,7 @@ class _MainPageState extends State<MainPage> {
               body: MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => EntriesBloc(MainPage._repo)..add(
-                          FiltersUpdated(
-                            MoneyEntryFilters(
-                              allowedTypes: [MoneyType.expense]
-                            )
-                          )
-                      ),
+                      create: (_) => entriesBloc,
                     ),
                     BlocProvider(
                       create: (_) => ActivitiesCubit(),
@@ -57,8 +59,8 @@ class _MainPageState extends State<MainPage> {
                   child: TabBarView(
                     children: [
                       BlocProvider(
-                          create: (_) => HomePageBloc(),
-                        child: const HomePage(),
+                          create: (_) => HomePageBloc(entriesBloc),
+                        child: HomePage(),
                       ),
                       const TimelinePage(),
                       const ColorsList(),

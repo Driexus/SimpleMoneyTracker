@@ -13,5 +13,10 @@ final class HomePageState extends Equatable {
   @override
   List<Object?> get props => [isDecimal, currentDecimals, amount, date, moneyType, moneyActivity];
 
-  bool isSubmittable() => moneyActivity != null;
+  bool isSubmittable() => moneyActivity != null && amount != 0;
+
+  int getDBAmount() {
+    // Add remaining digits as zeroes
+    return int.parse(amount.toString() + "0" * (2 - currentDecimals));
+  }
 }

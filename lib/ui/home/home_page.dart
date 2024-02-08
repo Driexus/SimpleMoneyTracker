@@ -1,121 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
-import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/timeline/money_type_toggles.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
-import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'numpad.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+  final log = Logger("HomePage");
 
-class _HomePageState extends State<HomePage> {
-
-  MoneyActivity? _currentActivity;
-  bool _isDecimal = false;
-  int _currentDecimals = 0;
-  int? _amount;
-
-  void _reset() => setState(() {
-    _currentActivity = null;
-    _isDecimal = false;
-    _currentDecimals = 0;
-    _amount = null;
-  });
-
-  void _onActivity(MoneyActivity activity) => setState(() {
-    _currentActivity = activity;
-  });
-
-  void _onNumber(int number) => setState(() {
-    if (_currentDecimals >= 2) {
-      return;
-    }
-
-    _amount = int.parse(_amount.toStringOrEmpty() + number.toString());
-    if (_isDecimal) {
-      _currentDecimals ++;
-    }
-  });
-
-  void _onDecimal() => setState(() {
-    _isDecimal = true;
-  });
-
-  void _onBackspace() => setState(() {
-    if (_isDecimal && _currentDecimals == 0) {
-      _isDecimal = false;
-    }
-    else if (_amount != null) {
-      var strAmount = _amount.toString();
-      strAmount = strAmount.substring(0, strAmount.length - 1);
-      _amount = strAmount == "" ? null : int.parse(strAmount);
-    }
-
-    if (_currentDecimals  > 0) {
-      _currentDecimals --;
-    }
-  });
-
-  // TODO: Replace submit
-  void _submit(EntriesBloc entriesBloc, MoneyType moneyEntryType) {
-    if (_currentActivity == null) {
-      ToastHelper.showToast("Please select an activity before saving an entry");
-      return;
-    }
-
-    entriesBloc.add(EntryAdded(
-      MoneyEntry(
-          createdAt: DateTime.now(),
-          amount: _getDBAmount(),
-          type: moneyEntryType,
-          currencyId: 1,
-          comment: "",
-          activity: _currentActivity!
-      ))
-    );
-    _reset();
-    ToastHelper.showToast("${moneyEntryType.displayName} entry added");
-  }
-
-  int _getDBAmount() {
-    if (_amount == null) {
-      return 0;
-    }
-
-    // Add remaining digits as zeroes
-    return int.parse(_amount.toString() + "0" * (2 - _currentDecimals));
-  }
-
-  String stringAmount() {
-    String result = _amount.toStringOrEmpty();
-    if (_isDecimal) {
-      String front = result.substring(0, result.length - _currentDecimals);
-      String back = result.substring(result.length - _currentDecimals, result.length );
+  String stringAmount(HomePageState state) {
+    String result = state.amount.toStringOrEmpty();
+    if (state.isDecimal) {
+      String front = result.substring(0, result.length - state.currentDecimals);
+      String back = result.substring(result.length - state.currentDecimals, result.length );
       result = "$front.$back";
     }
-    return result;
+    return "$result €";
   }
 
-  void _onToggle(List<MoneyType> toggledTypes) {
-    // TODO: Types should be one
+  void _onToggle(List<MoneyType> toggledTypes, HomePageBloc homePageBloc) {
+    // This should never happen
+    if (toggledTypes.isEmpty) {
+      log.severe("Toggled types is empty. This should never happen");
+      return;
+    }
+
+    homePageBloc.add(
+      MoneyTypeUpdated(
+        toggledTypes.first
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final entriesBloc = context.watch<EntriesBloc>();
         final homePageBloc = context.watch<HomePageBloc>();
+        final state = homePageBloc.state;
 
         return Stack(
           children: [
@@ -124,11 +52,12 @@ class _HomePageState extends State<HomePage> {
                 right: 0,
                 top: 20,
                 child: MoneyEntryBar(
-                  description: _currentActivity?.title,
-                  color: Colors.cyan,
-                  imageKey: _currentActivity?.imageKey,
-                  amount: stringAmount(),
+                  description: state.moneyActivity?.title,
+                  color: state.moneyActivity?.color.toColor() ?? Colors.cyan,
+                  imageKey: state.moneyActivity?.imageKey,
+                  amount: stringAmount(state),
                   date: DateTime.now(),
+                  moneyType: state.moneyType,
                 )
             ),
             Positioned(
@@ -154,8 +83,8 @@ class _HomePageState extends State<HomePage> {
                       selectionMode: SelectionMode.single,
                       defaultSelected: const [MoneyType.expense], // TODO: Change default
                       middleIcon: Icons.done,
-                      onToggle: _onToggle,
-                      onMiddlePressed: () => _submit(entriesBloc, MoneyType.expense), // TODO: Change type
+                      onToggle: (toggleList) => _onToggle(toggleList, homePageBloc),
+                      onMiddlePressed: () => homePageBloc.add(const EntrySubmitted()),
                     )
                   ],
                 )
@@ -163,51 +92,6 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       }
-    );
-  }
-}
-
-class _SubmitButton extends StatefulWidget {
-  const _SubmitButton({
-    required this.moneyType,
-    required this.color,
-    this.onPressed,
-  });
-
-  final MoneyType moneyType;
-  final Color color;
-  final VoidCallback? onPressed;
-
-  @override
-  _SubmitButtonState createState() => _SubmitButtonState();
-}
-
-class _SubmitButtonState extends State<_SubmitButton> {
-  bool _isSelected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _isSelected = !_isSelected;
-        });
-        widget.onPressed?.call();
-      },
-      child: Container(
-        padding: const EdgeInsets.all(13),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(1),
-          border: Border.all(
-            color: _isSelected ? widget.color : Colors.grey,
-            width: 0.3,
-          ),
-        ),
-        child: Icon(
-          widget.moneyType.icon,
-          color: widget.color
-        ),
-      ),
     );
   }
 }

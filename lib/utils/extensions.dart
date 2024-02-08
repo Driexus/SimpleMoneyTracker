@@ -28,6 +28,7 @@ extension StringOrEmpty on int? {
   }
 }
 
+// TODO: Copy some logic in home page
 extension Amounts on int {
   String toEuros() {
     String remaining = toString();
@@ -47,6 +48,12 @@ extension Amounts on int {
     }
 
     return result;
+  }
+}
+
+extension IntColors on int {
+  Color toColor() {
+    return Color(this);
   }
 }
 
