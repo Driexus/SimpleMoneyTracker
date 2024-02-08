@@ -13,16 +13,6 @@ import 'numpad.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  String stringAmount(HomePageState state) {
-    String result = state.amount.toStringOrEmpty();
-    if (state.isDecimal) {
-      String front = result.substring(0, result.length - state.currentDecimals);
-      String back = result.substring(result.length - state.currentDecimals, result.length );
-      result = "$front.$back";
-    }
-    return "$result €";
-  }
-
   void _onToggle(List<MoneyType> toggledTypes, HomePageBloc homePageBloc) {
     // This should never happen
     if (toggledTypes.isEmpty) {
@@ -54,7 +44,10 @@ class HomePage extends StatelessWidget {
                   description: state.moneyActivity?.title,
                   color: state.moneyActivity?.color.toColor() ?? Colors.cyan,
                   imageKey: state.moneyActivity?.imageKey,
-                  amount: stringAmount(state),
+                  amount: state.amount.toEuros(
+                      decimals: state.currentDecimals,
+                      isDecimal: state.isDecimal
+                  ),
                   date: DateTime.now(),
                   moneyType: state.moneyType,
                 )
@@ -80,7 +73,7 @@ class HomePage extends StatelessWidget {
                     ),
                     MoneyTypeToggles(
                       selectionMode: SelectionMode.single,
-                      defaultSelected: const [MoneyType.expense], // TODO: Change default
+                      defaultSelected: [homePageBloc.state.moneyType],
                       middleIcon: Icons.done,
                       onToggle: (toggleList) => _onToggle(toggleList, homePageBloc),
                       onMiddlePressed: () => homePageBloc.add(const EntrySubmitted()),

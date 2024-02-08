@@ -52,8 +52,8 @@ class _MoneyRangeState extends State<MoneyRange> {
       values: _currentRangeValues,
       max: MoneyRange._maxValue,
       labels: RangeLabels(
-        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toString().dropLast(2),
-        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toString().dropLast(2)
+        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toEuros(decimals: 0, ignoreLast: 2),
+        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toEuros(decimals: 0, ignoreLast: 2)
       ),
       onChanged: (rangeValues) => setState(() {
         _currentRangeValues = rangeValues;

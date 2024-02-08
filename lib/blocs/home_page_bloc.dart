@@ -52,7 +52,13 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     int currentDecimals = state.currentDecimals;
     int amount = state.amount;
 
+    // If max decimals return
     if (currentDecimals >= 2) {
+      return;
+    }
+
+    // If max amount continue only if trying to add a decimal
+    if (!isDecimal && state.getDBAmount().toString().length > 10) {
       return;
     }
 
