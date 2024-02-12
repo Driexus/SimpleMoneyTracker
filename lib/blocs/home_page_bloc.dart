@@ -115,7 +115,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     entriesBloc.add(
         EntryAdded(
             MoneyEntry(
-              createdAt: DateTime.now(),
+              createdAt: state.date,
               amount: state.getDBAmount(),
               type: state.moneyType,
               currencyId: 1, // TODO: Add more currencies

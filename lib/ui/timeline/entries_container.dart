@@ -25,10 +25,6 @@ class EntriesContainer extends StatelessWidget {
     final MoneyEntry firstVisibleEntry = entries[index];
 
     entriesBloc.add(FirstEntryUpdated(firstVisibleEntry));
-
-    /*log(notification.metrics.pixels.toString());
-    log("First index: $index");
-    log("First entry: $firstVisibleEntry");*/
     return true;
   }
 
@@ -53,7 +49,10 @@ class EntriesContainer extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: entries.map((entry) =>
-                        MoneyEntryBar.fromEntry(entry)
+                        MoneyEntryBar.fromEntry(
+                          entry: entry,
+                          onPressed: (_) => {}, // TODO: Show entry info (edit menu)
+                        )
                     ).addVerticalSpacing(_entrySpacing)
                 ),
               ),

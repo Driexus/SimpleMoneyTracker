@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
-import 'package:simplemoneytracker/ui/timeline/filter_page.dart';
+import 'package:simplemoneytracker/ui/timeline/filter_sheet.dart';
 import 'package:simplemoneytracker/ui/timeline/entries_container.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import '../../repos/money_entry_repo.dart';
@@ -79,7 +79,7 @@ class TimelinePage extends StatelessWidget {
                       showModalBottomSheet<void>(
                         context: blocContext,
                         builder: (BuildContext context) {
-                          return FilterPage(entriesBloc: entriesBloc);
+                          return FilterSheet(entriesBloc: entriesBloc);
                         }
                       )
                     },

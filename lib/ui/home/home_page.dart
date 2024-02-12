@@ -8,7 +8,10 @@ import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/timeline/money_type_toggles.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'numpad.dart';
+
+part 'date_picker_sheet.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,8 +33,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(
-      builder: (context) {
-        final homePageBloc = context.watch<HomePageBloc>();
+      builder: (blocContext) {
+        final homePageBloc = blocContext.watch<HomePageBloc>();
         final state = homePageBloc.state;
 
         return Stack(
@@ -48,8 +51,14 @@ class HomePage extends StatelessWidget {
                       decimals: state.currentDecimals,
                       isDecimal: state.isDecimal
                   ),
-                  date: DateTime.now(),
+                  date: state.date,
                   moneyType: state.moneyType,
+                  onPressed: (_) => showModalBottomSheet<void>(
+                      context: blocContext,
+                      builder: (BuildContext context) {
+                        return DatePickerSheet(homePageBloc: homePageBloc);
+                      }
+                  ),
                 )
             ),
             Positioned(
