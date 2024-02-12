@@ -5,8 +5,8 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';
 
-class FilterPage extends StatelessWidget {
-  const FilterPage({super.key, required this.entriesBloc});
+class FilterSheet extends StatelessWidget {
+  const FilterSheet({super.key, required this.entriesBloc});
 
   final EntriesBloc entriesBloc;
 
