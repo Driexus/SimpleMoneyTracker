@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';
 
@@ -21,7 +20,7 @@ class FilterSheet extends StatelessWidget {
     );
   }
 
-  _updateDateFilters(PickerDateRange dateRange) {
+  _updateDateFilters(DateRange dateRange) {
     entriesBloc.add(
       FiltersAdded(
         MoneyEntryFilters(
@@ -38,28 +37,37 @@ class FilterSheet extends StatelessWidget {
     int? maxAmount = entriesBloc.state.filters.maxAmount;
     maxAmount = (maxAmount != null && maxAmount < 0) ? null : maxAmount;
 
+    final DateTime? startDate = entriesBloc.state.filters.minDate;
+    final DateTime? endDate = entriesBloc.state.filters.maxDate;
+    final DateRange? initialRange = (startDate != null && endDate != null) ?
+      DateRange(startDate, endDate) : null;
+
     return SizedBox(
-      height: 800,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            DatePicker(
-              onRange: _updateDateFilters,
-              initialRange: PickerDateRange(
-                entriesBloc.state.filters.minDate,
-                entriesBloc.state.filters.maxDate
-              )
+      height: 450,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 10,
+            right: 10,
+            left: 10,
+            child: DatePicker(
+                onRange: _updateDateFilters,
+                initialRange: initialRange
             ),
-            MoneyRange(
+          ),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            left: 10,
+            child: MoneyRange(
               onRange: _updateAmountFilters,
               initialRange: MoneyRangeValues(
-                minAmount,
-                maxAmount
+                  minAmount,
+                  maxAmount
               ),
             ),
-          ],
-        ),
+          )
+        ]
       ),
     );
   }

@@ -1,19 +1,31 @@
 part of 'home_page.dart';
 
-class DatePickerSheet extends StatelessWidget {
+class DatePickerSheet extends StatefulWidget {
   DatePickerSheet({super.key, required this.homePageBloc}) :
-      initialDate = homePageBloc.state.date;
+        initialDate = homePageBloc.state.date;
 
   final HomePageBloc homePageBloc;
   final DateTime initialDate;
 
-  // The final dateTime is this exact moment in a different day
-  _selectDate(DateRangePickerSelectionChangedArgs args, BuildContext context) {
-    final selectedDate = (args.value as DateTime);
-    final DateTime now = DateTime.now();
-    final date = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, now.hour, now.minute, now.second);
+  @override
+  State<DatePickerSheet> createState() => _DatePickerSheetState();
+}
 
-    homePageBloc.add(
+class _DatePickerSheetState extends State<DatePickerSheet> {
+  late DateTime _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.initialDate;
+  }
+
+    // The final dateTime is this exact moment in a different day
+  void _selectDate(DateTime day, BuildContext context) {
+    final DateTime now = DateTime.now();
+    final date = DateTime(day.year, day.month, day.day, now.hour, now.minute, now.second);
+
+    widget.homePageBloc.add(
       DateUpdated(date)
     );
     Navigator.pop(context);
@@ -22,13 +34,25 @@ class DatePickerSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
-      height: 280,
+      padding: const EdgeInsets.all(10),
+      height: 420,
       child: Center(
-        child: SfDateRangePicker(
-          onSelectionChanged: (args) => _selectDate(args, context),
-          selectionMode: DateRangePickerSelectionMode.single,
-          initialSelectedDate: initialDate,
+        child: TableCalendar(
+          firstDay: DateTime.utc(1990),
+          lastDay: DateTime.utc(2050),
+          focusedDay: _selectedDate,
+          headerStyle: const HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true
+          ),
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDate, day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            if (!isSameDay(_selectedDate, selectedDay)) {
+              _selectDate(selectedDay, context);
+            }
+          }
         )
       ),
     );

@@ -1,44 +1,57 @@
 import 'package:flutter/cupertino.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:simplemoneytracker/utils/extensions.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class DatePicker extends StatefulWidget {
   const DatePicker({super.key, required this.onRange, this.initialRange});
 
-  final ValueChanged<PickerDateRange> onRange;
-  final PickerDateRange? initialRange;
+  final ValueChanged<DateRange> onRange;
+  final DateRange? initialRange;
 
   @override
   State<DatePicker> createState() => _DatePickerState();
 }
 
 class _DatePickerState extends State<DatePicker>  {
-  String? _startDate;
-  String? _endDate;
+  late DateTime _focusedDate;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) => setState(() {
-      PickerDateRange dateRange = args.value;
+  @override
+  void initState() {
+    super.initState();
+    _focusedDate = widget.initialRange?.startDate ?? DateTime.now();
+    _rangeStart = widget.initialRange?.startDate;
+    _rangeEnd = widget.initialRange?.endDate;
+  }
 
-      // Update text
-      _startDate = dateRange.startDate?.toDateFull();
-      _endDate = dateRange.endDate?.toDateFull();
+  void _onRangeSelected(DateTime? start, DateTime? end, DateTime? focusedDay) => setState(() {
+    _rangeStart = start;
+    _rangeEnd = end;
 
-      // Call listeners
-      widget.onRange(dateRange);
-    });
+    if (start != null && end != null) {
+      widget.onRange(
+        DateRange(start, end)
+      );
+    }
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Start date: ${_startDate ?? ""}'),
-        Text('End date: ${_endDate ?? ""}'),
-        SfDateRangePicker(
-          onSelectionChanged: _onSelectionChanged,
-          selectionMode: DateRangePickerSelectionMode.range,
-          initialSelectedRange: widget.initialRange,
-        ),
-      ]
+    return TableCalendar(
+      firstDay: DateTime.utc(1990),
+      lastDay: DateTime.utc(2050),
+      focusedDay: _focusedDate,
+      rangeStartDay: _rangeStart,
+      rangeEndDay: _rangeEnd,
+      rangeSelectionMode: RangeSelectionMode.enforced,
+      headerStyle: const HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true
+      ),
+      onRangeSelected: _onRangeSelected,
+      onPageChanged: (focusedDay) {
+        _focusedDate = focusedDay;
+      },
     );
   }
 }

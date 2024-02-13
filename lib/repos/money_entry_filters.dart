@@ -51,13 +51,19 @@ class MoneyEntryFilters {
       whereBuilder.add(
           _WhereCondition()..and('createdAt >= ?')
       );
-      whereArgsBuilder.addInt(minDate!.millisecondsSinceEpoch);
+
+      // Filter since the start of this day
+      DateTime minFilterDay = DateTime(minDate!.year, minDate!.month, minDate!.day);
+      whereArgsBuilder.addInt(minFilterDay.millisecondsSinceEpoch);
     }
     if (maxDate != null) {
       whereBuilder.add(
           _WhereCondition()..and('createdAt <= ?')
       );
-      whereArgsBuilder.addInt(maxDate!.millisecondsSinceEpoch);
+
+      // Filter until the start of the next day
+      DateTime maxFilterDay = DateTime(maxDate!.year, maxDate!.month, maxDate!.day).add(const Duration(days: 1));
+      whereArgsBuilder.addInt(maxFilterDay.millisecondsSinceEpoch);
     }
 
     where = whereBuilder.build();

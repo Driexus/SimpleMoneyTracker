@@ -8,7 +8,7 @@ import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/timeline/money_type_toggles.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'numpad.dart';
 
 part 'date_picker_sheet.dart';
