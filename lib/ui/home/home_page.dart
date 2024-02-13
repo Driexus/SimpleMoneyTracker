@@ -42,29 +42,45 @@ class HomePage extends StatelessWidget {
             Positioned(
                 left: 0,
                 right: 0,
-                top: 20,
-                child: MoneyEntryBar(
-                  description: state.moneyActivity?.title,
-                  color: state.moneyActivity?.color.toColor() ?? Colors.cyan,
-                  imageKey: state.moneyActivity?.imageKey,
-                  amount: state.amount.toEuros(
-                      decimals: state.currentDecimals,
-                      isDecimal: state.isDecimal
-                  ),
-                  date: state.date,
-                  moneyType: state.moneyType,
-                  onPressed: (_) => showModalBottomSheet<void>(
-                      context: blocContext,
-                      builder: (BuildContext context) {
-                        return DatePickerSheet(homePageBloc: homePageBloc);
-                      }
-                  ),
+                top: 10,
+                child: Column(
+                  children: [
+                    MoneyEntryBar(
+                      description: state.moneyActivity?.title,
+                      color: state.moneyActivity?.color.toColor() ?? Colors.cyan,
+                      imageKey: state.moneyActivity?.imageKey,
+                      amount: state.amount.toEuros(
+                          decimals: state.currentDecimals,
+                          isDecimal: state.isDecimal
+                      ),
+                      date: state.date,
+                      moneyType: state.moneyType,
+                      onPressed: (_) => showModalBottomSheet<void>(
+                          context: blocContext,
+                          builder: (BuildContext context) {
+                            return DatePickerSheet(homePageBloc: homePageBloc);
+                          }
+                      ),
+                    ),
+                    const SizedBox(width: 1, height: 5),
+                    const Text(
+                      "Click on card to change date",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black38,
+                      ),
+                    ),
+                    const Divider(
+                      indent: 15,
+                      endIndent: 15,
+                    )
+                  ],
                 )
             ),
             Positioned(
                 left: 0,
                 right: 0,
-                top: 100,
+                top: 110,
                 child: ActivityButtonContainer(
                   onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
                 )
