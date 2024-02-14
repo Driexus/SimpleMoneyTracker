@@ -51,7 +51,8 @@ class MoneyEntryBar extends StatelessWidget {
         color: color,
         borderRadius: borderRadius,
         child: InkWell(
-          splashColor: Colors.black26,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.black26,
           borderRadius: borderRadius,
           onTap: () => onPressed(moneyEntry),
           child: Stack(

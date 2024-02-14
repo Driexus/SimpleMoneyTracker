@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/ui/home/edit_activity/all_icons_list.dart';
@@ -7,7 +6,6 @@ import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
-import 'package:provider/provider.dart';
 
 class EditActivityPage extends StatefulWidget {
   const EditActivityPage({super.key, this.moneyActivity, required this.cubit});
@@ -124,7 +122,8 @@ class _EditActivityPageState extends State<EditActivityPage> {
               RectangularButton(
                 imageKey: _imageKey,
                 description: _title,
-                color: _color
+                color: _color,
+                hasRipple: false,
               ),
               const SizedBox(height: 30),
               TextField(

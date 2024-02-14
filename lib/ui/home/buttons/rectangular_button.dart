@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
-  RectangularButton({super.key, this.imageKey, required this.description, required this.color});
+  RectangularButton({super.key, this.imageKey, required this.description, required this.color, this.hasRipple = true});
 
   final String? imageKey;
   final String description;
   final Color color;
+  final bool hasRipple;
 
   late final Icon? icon = imageKey != null ? Icon(
       IconsHelper.getIcon(imageKey!),
@@ -30,11 +31,16 @@ class RectangularButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Material(
+        color: color,
         elevation: 6,
         borderRadius: borderRadius,
         child: InkWell(
           onTap: onTap,
           onLongPress: onLongPress,
+          splashColor: Colors.transparent,
+          highlightColor: hasRipple ? Colors.black26 : Colors.transparent,
+          enableFeedback: hasRipple,
+          borderRadius: borderRadius,
           child: Container(
             height: 85.0,
             width: 65.0,
@@ -42,13 +48,9 @@ class RectangularButton extends StatelessWidget {
               borderRadius: borderRadius,
             ),
             child: LayoutBuilder(builder: (context, constraints) {
-              return Container(
+              return SizedBox(
                 height: constraints.maxHeight,
                 width: constraints.maxHeight,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: borderRadius,
-                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[ // TODO: Use positioned icon
