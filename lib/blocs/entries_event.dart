@@ -5,11 +5,6 @@ sealed class EntriesEvent extends Equatable {
   const EntriesEvent();
 }
 
-final class EntriesInit extends EntriesEvent {
-  @override
-  List<Object> get props => [];
-}
-
 /// All filter values are overwritten
 final class FiltersUpdated extends EntriesEvent {
   const FiltersUpdated(this.filters);

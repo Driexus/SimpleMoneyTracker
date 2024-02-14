@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   final MoneyEntryRepo _moneyEntryRepo = const MoneyEntryRepo();
   final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
   late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
-  late final EntriesBloc _entriesBloc = EntriesBloc(_moneyEntryRepo)..add(
+  late final EntriesBloc _entriesBloc = EntriesBloc(_moneyEntryRepo, _activitiesCubit)..add(
       FiltersUpdated(
           MoneyEntryFilters(
               allowedTypes: [MoneyType.expense]

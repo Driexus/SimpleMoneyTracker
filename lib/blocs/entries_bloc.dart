@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import '../model/money_entry.dart';
 import '../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -8,14 +9,18 @@ part 'entries_event.dart';
 part 'entries_state.dart';
 
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
-  EntriesBloc(this.entryRepo) : super(EmptyEntries(MoneyEntryFilters.empty)) {
+  EntriesBloc(this.entryRepo, this.activitiesCubit) : super(EmptyEntries(MoneyEntryFilters.empty)) {
     on<FiltersUpdated>(_onFiltersUpdated);
     on<FiltersAdded>(_onFiltersAdded);
     on<FirstEntryUpdated>(_onFirstEntryUpdated);
     on<EntryAdded>(_onEntryAdded);
+
+    // Refresh entries when the activities change
+    activitiesCubit.stream.listen((event) => add(FiltersUpdated(state.filters)));
   }
 
   final MoneyEntryRepo entryRepo;
+  final ActivitiesCubit activitiesCubit;
 
   Future<void> _onFiltersUpdated(FiltersUpdated event, Emitter<EntriesState> emit) async {
     await entryRepo.retrieveSome(filters: event.filters).then((entries) => {
