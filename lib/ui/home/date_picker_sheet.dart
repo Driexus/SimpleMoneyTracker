@@ -45,14 +45,8 @@ class _DatePickerSheetState extends State<DatePickerSheet> {
             formatButtonVisible: false,
             titleCentered: true
           ),
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDate, day);
-          },
-          onDaySelected: (selectedDay, focusedDay) {
-            if (!isSameDay(_selectedDate, selectedDay)) {
-              _selectDate(selectedDay, context);
-            }
-          }
+          selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+          onDaySelected: (selectedDay, focusedDay) => _selectDate(selectedDay, context)
         )
       ),
     );

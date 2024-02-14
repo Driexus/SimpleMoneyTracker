@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
             Positioned(
                 left: 0,
                 right: 0,
-                top: 10,
+                top: 15,
                 child: Column(
                   children: [
                     MoneyEntryBar(
@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
             Positioned(
                 left: 0,
                 right: 0,
-                top: 110,
+                top: 115,
                 child: ActivityButtonContainer(
                   onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
                 )
