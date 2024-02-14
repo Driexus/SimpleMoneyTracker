@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/home/add_activity/colors_list.dart';
+import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
 import 'package:simplemoneytracker/ui/timeline/timeline_page.dart';

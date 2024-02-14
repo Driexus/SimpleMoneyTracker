@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import '../model/money_activity.dart';
 import '../model/money_entry.dart';
@@ -14,7 +15,7 @@ part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc(this.entriesBloc) : super(
+  HomePageBloc(this.entriesBloc, this.activitiesCubit) : super(
       _initialState()
   ) {
     on<MoneyTypeUpdated>(_onMoneyTypeUpdated);
@@ -24,9 +25,11 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<BackspacePressed>(_onBackspacePressed);
     on<DecimalPressed>(_onDecimalPressed);
     on<EntrySubmitted>(_onEntrySubmitted);
+    activitiesCubit.stream.listen(_onActivitiesRefreshed);
     log("Initialized HomePageBloc");
   }
 
+  final ActivitiesCubit activitiesCubit;
   final EntriesBloc entriesBloc;
 
   Future<void> _onMoneyActivityUpdated(MoneyActivityUpdated event, Emitter<HomePageState> emit) async {
@@ -127,6 +130,25 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
 
     ToastHelper.showToast("${state.moneyType.displayName} entry added");
     emit(_initialState());
+  }
+
+  /// Called when the activities cubit is refreshed in order to update the activity saved in the state
+  void _onActivitiesRefreshed(Map<int, MoneyActivity>? activityMap) {
+    final currentActivityId = state.moneyActivity?.id;
+    if (currentActivityId == null) {
+      return;
+    }
+
+    final updatedActivity = activityMap?[currentActivityId];
+    if (updatedActivity == null) {
+      return;
+    }
+
+    add(
+        MoneyActivityUpdated(
+            updatedActivity
+        )
+    );
   }
 
   static HomePageState _initialState() => HomePageState(false, 0, 0, DateTime.now(), MoneyType.expense, null);

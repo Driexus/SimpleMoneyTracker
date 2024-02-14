@@ -10,9 +10,10 @@ import 'package:simplemoneytracker/utils/extensions.dart';
 import 'buttons/rectangular_button.dart';
 
 class ActivityButtonContainer extends StatefulWidget {
-  const ActivityButtonContainer({super.key, required this.onActivity});
+  const ActivityButtonContainer({super.key, required this.onActivity, required this.onActivityLongPress});
 
   final ValueChanged<MoneyActivity> onActivity;
+  final ValueChanged<MoneyActivity> onActivityLongPress;
 
   @override
   State<StatefulWidget> createState() => _ActivityButtonContainerState();
@@ -44,6 +45,7 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
       description: activity.title,
       color: Color(activity.color),
       onPressed: () => widget.onActivity(activity),
+      onLongPressed: () => widget.onActivityLongPress(activity),
     ) as RectangularButton).toList();
 
     buttons.add(_addButton);
@@ -59,10 +61,10 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
   Widget build(BuildContext context) {
     // The AddButton must be recreated in every build in order pass the correct BuildContext
     _addButton = AddButton(context: context);
-    return BlocBuilder<ActivitiesCubit, List<MoneyActivity>>(
-      builder: (context, activities) => Column(
+    return BlocBuilder<ActivitiesCubit, Map<int, MoneyActivity>>(
+      builder: (context, activityMap) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _getRows(activities),
+        children: _getRows(activityMap.values.toList()),
       )
     );
   }

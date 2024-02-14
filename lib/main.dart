@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
 import 'blocs/entries_bloc.dart';
@@ -15,15 +16,18 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final MoneyEntryRepo _repo = const MoneyEntryRepo();
-  late final HomePageBloc _homePageBloc = HomePageBloc(_entriesBloc);
-  late final EntriesBloc _entriesBloc = EntriesBloc(_repo)..add(
+  final MoneyEntryRepo _moneyEntryRepo = const MoneyEntryRepo();
+  final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
+  late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
+  late final EntriesBloc _entriesBloc = EntriesBloc(_moneyEntryRepo)..add(
       FiltersUpdated(
           MoneyEntryFilters(
               allowedTypes: [MoneyType.expense]
           )
       )
   );
+
+  late final HomePageBloc _homePageBloc = HomePageBloc(_entriesBloc, _activitiesCubit);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
             create: (_) => _entriesBloc,
           ),
           BlocProvider(
-            create: (_) => ActivitiesCubit(),
+            create: (_) => _activitiesCubit,
           ),
         ],
         child: const MainPage()

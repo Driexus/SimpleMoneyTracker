@@ -15,6 +15,16 @@ class MoneyActivityRepo {
     );
   }
 
+  Future<void> update(MoneyActivity activity) async {
+    final db = await _service.getDB();
+    await db.update(
+      'money_activities',
+      activity.toMap(),
+      where: 'activityId = ?',
+      whereArgs: [activity.id!.toString()]
+    );
+  }
+
   Future<List<MoneyActivity>> retrieveAll() async {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> maps = await db.query('money_activities');

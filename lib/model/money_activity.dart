@@ -27,6 +27,19 @@ class MoneyActivity {
     };
   }
 
+  MoneyActivity copy({
+    String? title,
+    int? color,
+    String? imageKey
+  }) {
+    return MoneyActivity(
+      id: id,
+      title: title ?? this.title,
+      color: color ?? this.color,
+      imageKey: imageKey ?? this.imageKey
+    );
+  }
+
   @override
   String toString() {
     return 'MoneyActivity{title: $title, color: $color, imageKey: $imageKey}';

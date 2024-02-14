@@ -6,6 +6,7 @@ import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
+import 'package:simplemoneytracker/ui/shared/navigations.dart';
 import 'package:simplemoneytracker/ui/timeline/money_type_toggles.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -83,6 +84,7 @@ class HomePage extends StatelessWidget {
                 top: 115,
                 child: ActivityButtonContainer(
                   onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
+                  onActivityLongPress: (activity) => Navigations.toEditActivity(context, activity),
                 )
             ),
             Positioned(

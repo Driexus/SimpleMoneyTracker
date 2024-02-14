@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/ui/home/add_activity/all_icons_list.dart';
+import 'package:simplemoneytracker/ui/home/edit_activity/all_icons_list.dart';
 import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
-import 'package:simplemoneytracker/ui/home/add_activity/colors_list.dart';
+import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
+import 'package:provider/provider.dart';
 
-class AddActivityPage extends StatefulWidget {
-  const AddActivityPage({super.key});
+class EditActivityPage extends StatefulWidget {
+  const EditActivityPage({super.key, this.moneyActivity, required this.cubit});
+
+  final MoneyActivity? moneyActivity;
+  final ActivitiesCubit cubit;
 
   @override
-  State<StatefulWidget> createState() => _AddActivityPageState();
+  State<StatefulWidget> createState() => _EditActivityPageState();
 }
 
-class _AddActivityPageState extends State<AddActivityPage> {
+class _EditActivityPageState extends State<EditActivityPage> {
 
   //region Main State Handling
 
-  static final _cubit = ActivitiesCubit();
-
-  String _title = "";
-  Color _color = Colors.black87;
+  late String _title;
+  late Color _color;
   String? _imageKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _title = widget.moneyActivity?.title ?? "";
+    _color = widget.moneyActivity?.color.toColor() ?? Colors.cyan;
+    _imageKey = widget.moneyActivity?.imageKey;
+  }
 
   void _updateTitle(String value) => setState(() {
     _title = value;
@@ -46,15 +58,22 @@ class _AddActivityPageState extends State<AddActivityPage> {
       return;
     }
 
-    _cubit.addActivity(
-        MoneyActivity(
-            title: _title,
-            color: _color.value,
-            imageKey: _imageKey!
-        )
-    );
+    // Create new activity or pass values to the one that already exists
+    final MoneyActivity finalActivity = widget.moneyActivity == null ?
+      MoneyActivity(
+          title: _title,
+          color: _color.value,
+          imageKey: _imageKey!
+      ) :
+      widget.moneyActivity!.copy(
+          title: _title,
+          color: _color.value,
+          imageKey: _imageKey!
+      );
+
+    widget.cubit.saveActivity(finalActivity);
     Navigator.pop(context);
-    ToastHelper.showToast("New activity created");
+    ToastHelper.showToast("Activity saved");
   }
 
   //endregion
@@ -110,9 +129,10 @@ class _AddActivityPageState extends State<AddActivityPage> {
               const SizedBox(height: 30),
               TextField(
                 maxLines: 1,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
                   labelText: 'Title',
+                  hintText: _title,
                 ),
                 onChanged: _updateTitle
               ),

@@ -22,6 +22,10 @@ class RectangularButton extends StatelessWidget {
     log("Clicked on $description");
   }
 
+  void onLongPress() {
+    log("Long pressed on $description");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -30,6 +34,7 @@ class RectangularButton extends StatelessWidget {
         borderRadius: borderRadius,
         child: InkWell(
           onTap: onTap,
+          onLongPress: onLongPress,
           child: Container(
             height: 85.0,
             width: 65.0,

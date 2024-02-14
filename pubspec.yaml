@@ -46,6 +46,7 @@ dependencies:
   material_symbols_icons: ^4.2718.0
   logging: ^1.2.0
   table_calendar: ^3.0.9
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
