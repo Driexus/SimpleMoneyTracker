@@ -15,7 +15,7 @@ class TimelinePage extends StatelessWidget {
   static final String _defaultDateHeader = DateTime.now().toMonthYearFull();
 
   void _onToggle(EntriesBloc entriesBloc, List<MoneyType> allowedTypes) {
-    entriesBloc.add(FiltersUpdated(
+    entriesBloc.add(FiltersAdded(
         MoneyEntryFilters(allowedTypes: allowedTypes)
     ));
   }
