@@ -72,7 +72,7 @@ class TimelinePage extends StatelessWidget {
                   bottom: 0,
                   child: MoneyTypeToggles(
                     selectionMode: SelectionMode.multi,
-                    defaultSelected: entriesBloc.state.filters.allowedTypes ?? const [MoneyType.expense],
+                    defaultSelected: entriesBloc.state.filters.allowedTypes ?? const [MoneyType.expense, MoneyType.credit, MoneyType.debt, MoneyType.income],
                     middleIcon: Symbols.instant_mix,
                     onToggle: (toggledTypes) => _onToggle(entriesBloc, toggledTypes),
                     onMiddlePressed: () => {

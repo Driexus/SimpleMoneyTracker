@@ -36,7 +36,16 @@ class Numpad extends StatelessWidget {
           children: [
             _NumpadButton(description: ".", onPressed: onDecimal),
             _NumpadButton(description: "0", onPressed: () => { onNumber(0) }),
-            _NumpadButton(description: "<--", onPressed: onBackspace),
+            IconButton(
+              icon: const Icon(Icons.backspace),
+              constraints: const BoxConstraints(minHeight: 50),
+              onPressed: onBackspace,
+              style: IconButton.styleFrom(
+                iconSize: 24,
+                foregroundColor: Colors.black38,
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
+              ),
+            ),
           ]
         ),
       ],
@@ -54,8 +63,9 @@ class _NumpadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
+        minimumSize: const Size(0, 50),
         foregroundColor: Colors.black38,
-        textStyle: const TextStyle(fontSize: 30),
+        textStyle: const TextStyle(fontSize: 28),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
       ),
       onPressed: onPressed,
