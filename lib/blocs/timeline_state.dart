@@ -1,19 +1,19 @@
-part of '../blocs/entries_bloc.dart';
+part of '../blocs/timeline_bloc.dart';
 
-sealed class EntriesState extends Equatable {
-  const EntriesState(this.filters);
+sealed class TimelineState extends Equatable {
+  const TimelineState(this.filters);
 
   final MoneyEntryFilters filters;
 }
 
-final class EmptyEntries extends EntriesState {
+final class EmptyEntries extends TimelineState {
   const EmptyEntries(super.filters);
 
   @override
   List<Object?> get props => [filters];
 }
 
-final class ValidEntries extends EntriesState {
+final class ValidEntries extends TimelineState {
   const ValidEntries(this.firstEntry, this.entries, super.filters);
 
   final MoneyEntry firstEntry;

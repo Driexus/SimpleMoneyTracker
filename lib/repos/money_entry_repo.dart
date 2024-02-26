@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
 import '../model/money_entry.dart';
 
 part 'money_entry_filters.dart';
 
 class MoneyEntryRepo {
-  const MoneyEntryRepo();
+  MoneyEntryRepo();
 
   static final _service = SqliteService();
+
+  final List<VoidCallback> _entriesChangedListeners = [];
 
   Future<void> create(MoneyEntry moneyEntry) async {
     final db = await _service.getDB();
@@ -16,7 +19,7 @@ class MoneyEntryRepo {
     await db.insert(
       'money_entries',
       moneyEntry.toDBMap(),
-    );
+    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
   }
 
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {
@@ -33,5 +36,9 @@ class MoneyEntryRepo {
     );
 
     return maps.map((e) => MoneyEntry.fromDBMap(e)).toList();
+  }
+
+  void addOnEntriesChangedListener(VoidCallback listener) {
+    _entriesChangedListeners.add(listener);
   }
 }

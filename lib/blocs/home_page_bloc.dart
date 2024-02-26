@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/entries_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
+import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import '../model/money_activity.dart';
 import '../model/money_entry.dart';
@@ -15,7 +15,7 @@ part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc(this.entriesBloc, this.activitiesCubit) : super(
+  HomePageBloc(this.moneyEntryRepo, this.activitiesCubit) : super(
       _initialState()
   ) {
     on<MoneyTypeUpdated>(_onMoneyTypeUpdated);
@@ -30,7 +30,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   }
 
   final ActivitiesCubit activitiesCubit;
-  final EntriesBloc entriesBloc;
+  final MoneyEntryRepo moneyEntryRepo;
 
   Future<void> _onMoneyActivityUpdated(MoneyActivityUpdated event, Emitter<HomePageState> emit) async {
     emit(
@@ -115,17 +115,15 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       return;
     }
 
-    entriesBloc.add(
-        EntryAdded(
-            MoneyEntry(
-              createdAt: state.date,
-              amount: state.getDBAmount(),
-              type: state.moneyType,
-              currencyId: 1, // TODO: Add more currencies
-              comment: "",
-              activity: state.moneyActivity!
-            )
-        )
+    moneyEntryRepo.create(
+      MoneyEntry(
+          createdAt: state.date,
+          amount: state.getDBAmount(),
+          type: state.moneyType,
+          currencyId: 1, // TODO: Add more currencies
+          comment: "",
+          activity: state.moneyActivity!
+      )
     );
 
     ToastHelper.showToast("${state.moneyType.displayName} entry added");

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
@@ -15,7 +15,7 @@ class EntriesContainer extends StatelessWidget {
   static const double _bias = _totalEntryHeight / 3;
 
   // Find the first visible money entry and fire callback
-  bool _onScroll(ScrollUpdateNotification notification, List<MoneyEntry> entries, EntriesBloc entriesBloc) {
+  bool _onScroll(ScrollUpdateNotification notification, List<MoneyEntry> entries, TimelineBloc entriesBloc) {
     if (entries.isEmpty) {
       return true;
     }
@@ -32,7 +32,7 @@ class EntriesContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
         builder: (context) {
-          final entriesBloc = context.watch<EntriesBloc>();
+          final entriesBloc = context.watch<TimelineBloc>();
           late final List<MoneyEntry> entries;
 
           switch (entriesBloc.state.runtimeType) {
