@@ -38,6 +38,18 @@ class MoneyEntryRepo {
     return maps.map((e) => MoneyEntry.fromDBMap(e)).toList();
   }
 
+  Future<int?> calculateTotal(MoneyEntryFilters? filters) async {
+    final db = await _service.getDB();
+    final List<Map<String, dynamic>> result = await db.query(
+        'money_entries',
+        columns: ["sum(amount) as sum"],
+        where: filters?.where,
+        whereArgs: filters?.whereArgs
+    );
+
+    return result[0]["sum"];
+  }
+
   void addOnEntriesChangedListener(VoidCallback listener) {
     _entriesChangedListeners.add(listener);
   }

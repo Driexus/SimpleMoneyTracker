@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/cubits/activities_cubit.dart';
-import '../model/money_entry.dart';
+import 'package:simplemoneytracker/model/money_entry.dart';
 import '../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,64 +10,53 @@ part 'stats_event.dart';
 part 'stats_state.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
-  StatsBloc(this.entryRepo, this.activitiesCubit) : super(EmptyEntries(MoneyEntryFilters.empty)) {
-    on<FiltersUpdated>(_onFiltersUpdated);
-    on<FiltersAdded>(_onFiltersAdded);
-    on<FirstEntryUpdated>(_onFirstEntryUpdated);
-    on<Refreshed>(_onRefreshed);
-
-    // Refresh entries when the activities change
-    activitiesCubit.stream.listen((event) => add(const Refreshed()));
+  StatsBloc(this.entryRepo) : super(const EmptyStatsState()) {
+    on<DatesUpdated>(_datesUpdated);
+    on<StartDateUpdated>(_startDateUpdated);
+    on<EndDateUpdated>(_endDateUpdated);
+    on<EntriesChanged>(_entriesChanged);
 
     // Refresh entries when an entry is added
-    entryRepo.addOnEntriesChangedListener(() => add(const Refreshed()));
+    entryRepo.addOnEntriesChangedListener(() => add(const EntriesChanged()));
+
+    log("Initialized StatsBloc");
   }
 
   final MoneyEntryRepo entryRepo;
-  final ActivitiesCubit activitiesCubit;
 
-  Future<void> _onFiltersUpdated(FiltersUpdated event, Emitter<StatsState> emit) async {
-    await entryRepo.retrieveSome(filters: event.filters).then((entries) => {
-      if (entries.isEmpty) {
-        emit(EmptyEntries(event.filters))
-      }
-      else {
-        emit(ValidEntries(entries.first, entries, event.filters))
-      }
-    });
+  Future<void> _datesUpdated(DatesUpdated event, Emitter<StatsState> emit) async {
+    final newState = await _calculateStatsState(event.startDate, event.endDate);
+    emit(newState);
   }
 
-  Future<void> _onFiltersAdded(FiltersAdded event, Emitter<StatsState> emit) async {
-    MoneyEntryFilters filters = MoneyEntryFilters.combine(state.filters, event.filters);
-    await entryRepo.retrieveSome(filters: filters).then((entries) => {
-      if (entries.isEmpty) {
-        emit(EmptyEntries(filters))
-      }
-      else {
-        emit(ValidEntries(entries.first, entries, filters))
-      }
-    });
+  Future<void> _startDateUpdated(StartDateUpdated event, Emitter<StatsState> emit) async {
+    final newState = await _calculateStatsState(event.startDate, state.endDate);
+    emit(newState);
   }
 
-  Future<void> _onFirstEntryUpdated(FirstEntryUpdated event, Emitter<StatsState> emit) async {
-    final currentState = state;
-    if (currentState.runtimeType == ValidEntries) {
-      emit(ValidEntries(
-          event.firstEntry, (currentState as ValidEntries).entries, currentState.filters
-      ));
-    }
+  Future<void> _endDateUpdated(EndDateUpdated event, Emitter<StatsState> emit) async {
+    final newState = await _calculateStatsState(state.startDate, event.endDate);
+    emit(newState);
   }
 
-  Future<void> _onRefreshed(Refreshed event, Emitter<StatsState> emit) async {
-    final currentState = state;
+  Future<void> _entriesChanged(EntriesChanged event, Emitter<StatsState> emit) async {
+    final newState = await _calculateStatsState(state.startDate, state.endDate);
+    emit(newState);
+  }
 
-    await entryRepo.retrieveSome(filters: currentState.filters).then((entries) => {
-      if (entries.isEmpty) {
-        emit(EmptyEntries(MoneyEntryFilters.empty))
-      }
-      else {
-        emit(ValidEntries(entries.first, entries, currentState.filters))
-      }
+  Future<StatsState> _calculateStatsState(DateTime? startDate, DateTime? endDate) async {
+    MoneyEntryFilters filters = MoneyEntryFilters(
+        minDate: startDate, maxDate: endDate);
+
+    return Future.wait<int?>([
+      entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.expense])),
+      entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.income])),
+      entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.debt])),
+      entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.credit])),
+    ]).then((futures) {
+      return ValidStatsState(
+          startDate, endDate, futures[0] ?? 0, futures[1] ?? 0, futures[2] ?? 0,
+          futures[3] ?? 0);
     });
   }
 }

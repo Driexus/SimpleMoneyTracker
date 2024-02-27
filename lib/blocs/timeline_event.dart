@@ -34,8 +34,8 @@ final class FirstEntryUpdated extends TimelineEvent {
   List<Object> get props => [firstEntry];
 }
 
-final class Refreshed extends TimelineEvent {
-  const Refreshed();
+final class EntriesChanged extends TimelineEvent {
+  const EntriesChanged();
 
   @override
   List<Object> get props => [];

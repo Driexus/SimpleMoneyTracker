@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
@@ -13,13 +15,15 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
     on<FiltersUpdated>(_onFiltersUpdated);
     on<FiltersAdded>(_onFiltersAdded);
     on<FirstEntryUpdated>(_onFirstEntryUpdated);
-    on<Refreshed>(_onRefreshed);
+    on<EntriesChanged>(_onEntriesChanged);
 
     // Refresh entries when the activities change
-    activitiesCubit.stream.listen((event) => add(const Refreshed()));
+    activitiesCubit.stream.listen((event) => add(const EntriesChanged()));
 
     // Refresh entries when an entry is added
-    entryRepo.addOnEntriesChangedListener(() => add(const Refreshed()));
+    entryRepo.addOnEntriesChangedListener(() => add(const EntriesChanged()));
+
+    log("Initialized TimelineBloc");
   }
 
   final MoneyEntryRepo entryRepo;
@@ -57,7 +61,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
     }
   }
 
-  Future<void> _onRefreshed(Refreshed event, Emitter<TimelineState> emit) async {
+  Future<void> _onEntriesChanged(EntriesChanged event, Emitter<TimelineState> emit) async {
     final currentState = state;
 
     await entryRepo.retrieveSome(filters: currentState.filters).then((entries) => {

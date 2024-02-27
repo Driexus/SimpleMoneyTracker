@@ -5,38 +5,37 @@ sealed class StatsEvent extends Equatable {
   const StatsEvent();
 }
 
-/// All filter values are overwritten
-final class FiltersUpdated extends StatsEvent {
-  const FiltersUpdated(this.filters);
+final class DatesUpdated extends StatsEvent {
+  const DatesUpdated(this.startDate, this.endDate);
 
-  final MoneyEntryFilters filters;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   @override
-  List<Object> get props => [filters];
+  List<Object?> get props => [startDate, endDate];
 }
 
-/// Non-null filter values overwrite the old. Null filter values are ignored.
-final class FiltersAdded extends StatsEvent {
-  const FiltersAdded(this.filters);
+final class StartDateUpdated extends StatsEvent {
+  const StartDateUpdated(this.startDate);
 
-  final MoneyEntryFilters filters;
+  final DateTime? startDate;
 
   @override
-  List<Object> get props => [filters];
+  List<Object?> get props => [startDate];
 }
 
-final class FirstEntryUpdated extends StatsEvent {
-  const FirstEntryUpdated(this.firstEntry);
+final class EndDateUpdated extends StatsEvent {
+  const EndDateUpdated(this.endDate);
 
-  final MoneyEntry firstEntry;
+  final DateTime? endDate;
 
   @override
-  List<Object> get props => [firstEntry];
+  List<Object?> get props => [endDate];
 }
 
-final class Refreshed extends StatsEvent {
-  const Refreshed();
+final class EntriesChanged extends StatsEvent {
+  const EntriesChanged();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
