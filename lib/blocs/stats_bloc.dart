@@ -40,6 +40,8 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   Future<void> _entriesChanged(EntriesChanged event, Emitter<StatsState> emit) async {
+    final a = await entryRepo.calculateSubtotals(MoneyEntryFilters.empty);
+
     final newState = await _calculateStatsState(state.startDate, state.endDate);
     emit(newState);
   }

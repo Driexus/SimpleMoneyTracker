@@ -44,10 +44,26 @@ class MoneyEntryRepo {
         'money_entries',
         columns: ["sum(amount) as sum"],
         where: filters?.where,
-        whereArgs: filters?.whereArgs
+        whereArgs: filters?.whereArgs,
     );
 
     return result[0]["sum"];
+  }
+
+  // TODO: Usage -> Create filters (MoneyType, dates) inside
+  Future<List<Map<String, dynamic>>> calculateSubtotals(MoneyEntryFilters? filters) async {
+    final db = await _service.getDB();
+    final List<Map<String, dynamic>> result = await db.query(
+      'money_entries JOIN money_activities ON money_entries.activityId = money_activities.activityId',
+      columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey"],
+      where: filters?.where,
+      whereArgs: filters?.whereArgs,
+      groupBy: "money_entries.activityId, type",
+      orderBy: "sum desc"
+    );
+
+    // TODO: Return Pair(amount, MoneyActivity)
+    return result;
   }
 
   void addOnEntriesChangedListener(VoidCallback listener) {

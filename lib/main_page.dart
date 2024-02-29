@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
-import 'package:simplemoneytracker/ui/stats/stats_page.dart';
+import 'package:simplemoneytracker/ui/stats/page/stats_page.dart';
 import 'package:simplemoneytracker/ui/timeline/timeline_page.dart';
 
 class MainPage extends StatelessWidget {
