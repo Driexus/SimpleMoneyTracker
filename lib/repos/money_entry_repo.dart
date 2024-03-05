@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
 import '../model/money_entry.dart';
 
@@ -50,23 +51,32 @@ class MoneyEntryRepo {
     return result[0]["sum"];
   }
 
-  // TODO: Usage -> Create filters (MoneyType, dates) inside
-  Future<List<Map<String, dynamic>>> calculateSubtotals(MoneyEntryFilters? filters) async {
+  Future<List<Subtotal>> calculateSubtotals(MoneyType moneyType, DateTime? minDate, DateTime? maxDate) async {
+    MoneyEntryFilters filters = MoneyEntryFilters(allowedTypes: [moneyType], minDate: minDate, maxDate: maxDate);
     final db = await _service.getDB();
     final List<Map<String, dynamic>> result = await db.query(
       'money_entries JOIN money_activities ON money_entries.activityId = money_activities.activityId',
       columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey"],
-      where: filters?.where,
-      whereArgs: filters?.whereArgs,
-      groupBy: "money_entries.activityId, type",
+      where: filters.where,
+      whereArgs: filters.whereArgs,
+      groupBy: "money_entries.activityId",
       orderBy: "sum desc"
     );
 
-    // TODO: Return Pair(amount, MoneyActivity)
-    return result;
+    return result.map((e) => Subtotal(
+        MoneyActivity.fromDBMap(e),
+        e["sum"]
+    )).toList();
   }
 
   void addOnEntriesChangedListener(VoidCallback listener) {
     _entriesChangedListeners.add(listener);
   }
+}
+
+class Subtotal {
+  const Subtotal(this.moneyActivity, this.amount);
+
+  final MoneyActivity moneyActivity;
+  final int amount;
 }

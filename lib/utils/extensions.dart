@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 extension WidgetSpacing on Iterable<Widget> {
   List<Widget> addHorizontalSpacing(double space) {
@@ -79,6 +80,12 @@ extension DateString on DateTime {
 
   String toDateFull() {
     return DateFormat("yMMMd").format(this);
+  }
+}
+
+extension KeyIcons on String {
+  IconData? toIconData() {
+    return IconsHelper.getIcon(this);
   }
 }
 

@@ -1,120 +1,113 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
-import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
+import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
-// TODO: Fix
-class MoneyEntryBar extends StatelessWidget {
-  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType, required this.onPressed}) :
-        moneyEntry = null;
+import '../../../model/money_activity.dart';
 
-  MoneyEntryBar.fromEntry({super.key, required MoneyEntry entry, required this.onPressed}) :
-        amount = entry.amount.toEuros(),
-        date = entry.createdAt,
-        moneyType = entry.type,
-        color = Color(entry.activity.color),
-        imageKey = entry.activity.imageKey,
-        description = entry.activity.title,
-        moneyEntry = entry;
+class TotalMoneyActivityBar extends StatelessWidget {
+  const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.typeTotalAmount, this.onPressed});
 
-  static const double height = 55;
+  TotalMoneyActivityBar.fromSubtotal({super.key, required Subtotal subtotal, required this.typeTotalAmount, this.onPressed}) :
+      amount = subtotal.amount,
+      moneyActivity = subtotal.moneyActivity;
 
-  final String? imageKey;
-  final String? description;
-  final Color color;
-  final String amount;
-  final DateTime date;
-  final MoneyType? moneyType;
-  final MoneyEntry? moneyEntry;
-  final ValueChanged<MoneyEntry?> onPressed;
+  final int amount;
+  final MoneyActivity moneyActivity;
+  final int typeTotalAmount;
+  final ValueChanged<MoneyEntry?>? onPressed;
 
-  late final Icon? activityIcon = imageKey != null ? Icon(
-      IconsHelper.getIcon(imageKey!),
+  Icon? get _typeIcon => Icon(
+      moneyActivity.imageKey.toIconData(),
       color: Colors.white,
-      size: 20
-  ) : null;
+      size: 18
+  );
 
-  late final Icon? typeIcon = moneyType != null ? Icon(
-      moneyType!.icon,
-      color: Colors.white,
-      size: 20
-  ) : null;
+  String get _amountPercentage {
+    final percentage = ((amount / typeTotalAmount) * 100).round();
+    return percentage == 0 ? "<1%" : "$percentage%";
+  }
 
-  final BorderRadius borderRadius = BorderRadius.circular(8.0);
+  BorderRadius get _borderRadius => BorderRadius.circular(8.0);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: height,
-        width: 370,
+        height: 40,
+        width: 340,
         child: Material(
-            color: color,
-            borderRadius: borderRadius,
+            color: moneyActivity.color.toColor(),
+            borderRadius: _borderRadius,
             child: InkWell(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.black26,
-                borderRadius: borderRadius,
-                onTap: () => onPressed(moneyEntry),
+                borderRadius: _borderRadius,
+                onTap: () => (),
                 child: Stack(
                   children: [
                     Positioned(
                         left: 10,
                         top: 0,
                         bottom: 0,
-                        child: Container(child: activityIcon)
+                        child: Container(child: _typeIcon)
                     ),
                     Positioned(
                         left: 40,
-                        top: 5,
-                        child: Text(
-                          description ?? "",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                        top: 0,
+                        bottom: 0,
+                        child: Center(
+                            child: Text(
+                              moneyActivity.title,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            )
                         )
                     ),
                     Positioned(
-                        left: 40,
-                        bottom: 5,
-                        child: Text(
-                          date.toDayMonth(),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        )
-                    ),
-                    Align(
-                        alignment: Alignment.center,
-                        child: AutoSizeText(
-                          amount,
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 23,
-                            color: Colors.white,
-                          ),
+                        right: 60,
+                        top: 0,
+                        bottom: 0,
+                        child: Center(
+                            child: AutoSizeText(
+                              amount.toEuros(),
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            )
                         )
                     ),
                     Positioned(
                         right: 10,
-                        top: 5,
-                        child: Container(child: typeIcon)
-                    ),
-                    Positioned(
-                        right: 10,
-                        bottom: 5,
-                        child: AutoSizeText(
-                          moneyType?.displayName ?? "",
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                        top: 0,
+                        bottom: 0,
+                        child: Center(
+                            child: AutoSizeText(
+                              _amountPercentage,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            )
                         )
+                    ),
+                    const Positioned(
+                        right: 43,
+                        top: 0,
+                        bottom: 0,
+                        child: VerticalDivider(
+                          thickness: 2,
+                          indent: 7,
+                          endIndent: 7,
+                          color: Colors.black12,
+                        ),
                     ),
                   ],
                 )

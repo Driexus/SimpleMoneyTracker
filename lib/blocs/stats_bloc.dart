@@ -40,8 +40,6 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   }
 
   Future<void> _entriesChanged(EntriesChanged event, Emitter<StatsState> emit) async {
-    final a = await entryRepo.calculateSubtotals(MoneyEntryFilters.empty);
-
     final newState = await _calculateStatsState(state.startDate, state.endDate);
     emit(newState);
   }
@@ -50,15 +48,32 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     MoneyEntryFilters filters = MoneyEntryFilters(
         minDate: startDate, maxDate: endDate);
 
-    return Future.wait<int?>([
+    return Future.wait<dynamic>([
       entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.expense])),
       entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.income])),
       entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.debt])),
       entryRepo.calculateTotal(filters.copy(allowedTypes: [MoneyType.credit])),
+      entryRepo.calculateSubtotals(MoneyType.expense, startDate, endDate),
+      entryRepo.calculateSubtotals(MoneyType.income, startDate, endDate),
+      entryRepo.calculateSubtotals(MoneyType.debt, startDate, endDate),
+      entryRepo.calculateSubtotals(MoneyType.credit, startDate, endDate),
     ]).then((futures) {
-      return ValidStatsState(
-          startDate, endDate, futures[0] ?? 0, futures[1] ?? 0, futures[2] ?? 0,
-          futures[3] ?? 0);
+
+      Map<MoneyType, int> totals = {
+        MoneyType.expense: futures[0] ?? 0,
+        MoneyType.income: futures[1] ?? 0,
+        MoneyType.debt: futures[2] ?? 0,
+        MoneyType.credit: futures[3] ?? 0,
+      };
+
+      Map<MoneyType, List<Subtotal>> subtotals = {
+        MoneyType.expense: futures[4] ?? List.empty(),
+        MoneyType.income: futures[5] ?? List.empty(),
+        MoneyType.debt: futures[6] ?? List.empty(),
+        MoneyType.credit: futures[7] ?? List.empty(),
+      };
+
+      return ValidStatsState(startDate, endDate, totals, subtotals);
     });
   }
 }

@@ -18,26 +18,30 @@ final class ValidStatsState extends StatsState {
   const ValidStatsState(
       super.startDate,
       super.endDate,
-      this.totalExpenses,
-      this.totalIncome,
-      this.totalDebt,
-      this.totalCredit
+      this.totals,
+      this.subtotals
   );
 
-  final int totalExpenses;
-  final int totalIncome;
-  final int totalDebt;
-  final int totalCredit;
+  final Map<MoneyType, int> totals;
+  final Map<MoneyType, List<Subtotal>> subtotals;
 
   @override
   List<Object?> get props => [
     ...super.props,
-    totalExpenses,
-    totalIncome,
-    totalDebt,
-    totalCredit
+    totals,
+    subtotals
   ];
 
-  int netTotal() => totalIncome - totalExpenses;
-  int netSettlements() => totalCredit - totalDebt;
+  int get totalExpenses => totals[MoneyType.expense]!;
+  int get totalIncome => totals[MoneyType.income]!;
+  int get totalDebt => totals[MoneyType.debt]!;
+  int get totalCredit => totals[MoneyType.credit]!;
+
+  List<Subtotal> get expensesSubtotals => subtotals[MoneyType.expense]!;
+  List<Subtotal> get incomeSubtotals => subtotals[MoneyType.income]!;
+  List<Subtotal> get debtSubtotals => subtotals[MoneyType.debt]!;
+  List<Subtotal> get creditSubtotals => subtotals[MoneyType.credit]!;
+
+  int get netTotal => totalIncome - totalExpenses;
+  int get netSettlements => totalCredit - totalDebt;
 }
