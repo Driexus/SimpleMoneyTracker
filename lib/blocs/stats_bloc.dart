@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import '../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -10,7 +11,7 @@ part 'stats_event.dart';
 part 'stats_state.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
-  StatsBloc(this.entryRepo) : super(const EmptyStatsState()) {
+  StatsBloc(this.entryRepo, this.activitiesCubit) : super(const EmptyStatsState()) {
     on<DatesUpdated>(_datesUpdated);
     on<StartDateUpdated>(_startDateUpdated);
     on<EndDateUpdated>(_endDateUpdated);
@@ -19,10 +20,14 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     // Refresh entries when an entry is added
     entryRepo.addOnEntriesChangedListener(() => add(const EntriesChanged()));
 
+    // Refresh entries when activities are changed
+    activitiesCubit.stream.listen((event) => add(const EntriesChanged()));
+
     log("Initialized StatsBloc");
   }
 
   final MoneyEntryRepo entryRepo;
+  final ActivitiesCubit activitiesCubit;
 
   Future<void> _datesUpdated(DatesUpdated event, Emitter<StatsState> emit) async {
     final newState = await _calculateStatsState(event.startDate, event.endDate);

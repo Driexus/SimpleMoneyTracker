@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
 
   late final HomePageBloc _homePageBloc = HomePageBloc(_moneyEntryRepo, _activitiesCubit);
 
-  late final StatsBloc _statsBloc = StatsBloc(_moneyEntryRepo)..add(
+  late final StatsBloc _statsBloc = StatsBloc(_moneyEntryRepo, _activitiesCubit)..add(
     const EntriesChanged()
   );
 
