@@ -23,8 +23,7 @@ class StatsPage extends StatelessWidget {
             return const Stack(); // TODO
           }
 
-          // TODO: Add totals per 2 categories (income - expense) (credit - debt)
-          // TODO: Refactor to make more visible
+          // TODO: Add month on top and buttons for back/forth
           return OverscrollNotificationListener(
             child: NotificationListener<ScrollUpdateNotification> (
               child: SingleChildScrollView(
@@ -34,9 +33,13 @@ class StatsPage extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: Column(
                         children: [
+                          const SizedBox(height: 15),
                           TotalMoneyBarContainer(amount: state.totalExpenses, moneyType: MoneyType.expense, subtotals: state.expensesSubtotals),
+                          const Divider(height: 35, indent: 15, endIndent: 15, thickness: 2),
                           TotalMoneyBarContainer(amount: state.totalIncome, moneyType: MoneyType.income, subtotals: state.incomeSubtotals),
+                          const Divider(height: 35, indent: 15, endIndent: 15, thickness: 2),
                           TotalMoneyBarContainer(amount: state.totalDebt, moneyType: MoneyType.debt, subtotals: state.debtSubtotals),
+                          const Divider(height: 35, indent: 15, endIndent: 15, thickness: 2),
                           TotalMoneyBarContainer(amount: state.totalCredit, moneyType: MoneyType.credit, subtotals: state.creditSubtotals),
                         ],
                       ),

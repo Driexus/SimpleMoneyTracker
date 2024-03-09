@@ -35,7 +35,7 @@ class TotalMoneyActivityBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         height: 40,
-        width: 340,
+        width: 370,
         child: Material(
             color: moneyActivity.color.toColor(),
             borderRadius: _borderRadius,

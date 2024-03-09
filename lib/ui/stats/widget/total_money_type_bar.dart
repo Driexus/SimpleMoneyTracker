@@ -12,7 +12,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
 
   late final Icon? typeIcon = Icon(
       moneyType.icon,
-      color: Colors.white,
+      color: moneyType.color,
       size: 20
   );
 
@@ -24,7 +24,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
         height: 55,
         width: 370,
         child: Material(
-            color: moneyType.color,
+            color: Colors.deepPurple[50],
             borderRadius: borderRadius,
             child: InkWell(
                 splashColor: Colors.transparent,
@@ -48,7 +48,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                             "Total ${moneyType.displayName}",
                             style: const TextStyle(
                               fontSize: 16,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           )
                         )
@@ -64,7 +64,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 16,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           )
                         )
