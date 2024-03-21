@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 import '../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,8 +14,7 @@ part 'stats_state.dart';
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsBloc(this.entryRepo, this.activitiesCubit) : super(const EmptyStatsState()) {
     on<DatesUpdated>(_datesUpdated);
-    on<StartDateUpdated>(_startDateUpdated);
-    on<EndDateUpdated>(_endDateUpdated);
+    on<MonthUpdated>(_monthUpdated);
     on<EntriesChanged>(_entriesChanged);
 
     // Refresh entries when an entry is added
@@ -30,26 +30,30 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
   final ActivitiesCubit activitiesCubit;
 
   Future<void> _datesUpdated(DatesUpdated event, Emitter<StatsState> emit) async {
-    final newState = await _calculateStatsState(event.startDate, event.endDate);
-    emit(newState);
+    final totals = await _calculateTotals(event.startDate, event.endDate);
+    emit(CustomStatsState(event.startDate, event.endDate, totals[0], totals[1]));
   }
 
-  Future<void> _startDateUpdated(StartDateUpdated event, Emitter<StatsState> emit) async {
-    final newState = await _calculateStatsState(event.startDate, state.endDate);
-    emit(newState);
+  Future<void> _monthUpdated(MonthUpdated event, Emitter<StatsState> emit) async {
+    final totals = await _calculateTotals(event.month.startOfMonth(), event.month.startOfNextMonth());
+    emit(MonthStatsState(event.month, totals[0], totals[1]));
   }
 
-  Future<void> _endDateUpdated(EndDateUpdated event, Emitter<StatsState> emit) async {
-    final newState = await _calculateStatsState(state.startDate, event.endDate);
-    emit(newState);
-  }
-
+  /// Renew entries and emit the same state as before.
   Future<void> _entriesChanged(EntriesChanged event, Emitter<StatsState> emit) async {
-    final newState = await _calculateStatsState(state.startDate, state.endDate);
-    emit(newState);
+    if (state.runtimeType == EmptyStatsState) {
+      emit(const EmptyStatsState());
+      return;
+    }
+
+    final totals = await _calculateTotals(state.startDate, state.endDate);
+    switch (state.runtimeType) {
+      case CustomStatsState: emit(CustomStatsState(state.startDate, state.endDate, totals[0], totals[1]));
+      case MonthStatsState: emit(MonthStatsState((state as MonthStatsState).month, totals[0], totals[1]));
+    }
   }
 
-  Future<StatsState> _calculateStatsState(DateTime? startDate, DateTime? endDate) async {
+  Future<List<dynamic>> _calculateTotals(DateTime? startDate, DateTime? endDate) async {
     MoneyEntryFilters filters = MoneyEntryFilters(
         minDate: startDate, maxDate: endDate);
 
@@ -78,7 +82,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
         MoneyType.credit: futures[7] ?? List.empty(),
       };
 
-      return ValidStatsState(startDate, endDate, totals, subtotals);
+      return [totals, subtotals];
     });
   }
 }

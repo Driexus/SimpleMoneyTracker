@@ -15,22 +15,13 @@ final class DatesUpdated extends StatsEvent {
   List<Object?> get props => [startDate, endDate];
 }
 
-final class StartDateUpdated extends StatsEvent {
-  const StartDateUpdated(this.startDate);
+final class MonthUpdated extends StatsEvent {
+  const MonthUpdated(this.month);
 
-  final DateTime? startDate;
-
-  @override
-  List<Object?> get props => [startDate];
-}
-
-final class EndDateUpdated extends StatsEvent {
-  const EndDateUpdated(this.endDate);
-
-  final DateTime? endDate;
+  final DateTime month;
 
   @override
-  List<Object?> get props => [endDate];
+  List<Object?> get props => [month];
 }
 
 final class EntriesChanged extends StatsEvent {

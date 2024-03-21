@@ -26,7 +26,7 @@ class MainPage extends StatelessWidget {
               ),
               body: const TabBarView(
                 children: [
-                  StatsPage(), // TODO
+                  StatsPage(), // TODO: swap
                   HomePage(),
                   TimelinePage(),
                 ],

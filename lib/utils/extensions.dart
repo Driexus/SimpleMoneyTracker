@@ -83,6 +83,13 @@ extension DateString on DateTime {
   }
 }
 
+extension Months on DateTime {
+
+  DateTime startOfMonth() => DateTime(year, month);
+
+  DateTime startOfNextMonth() => DateTime(year, month + 1);
+}
+
 extension KeyIcons on String {
   IconData? toIconData() {
     return IconsHelper.getIcon(this);
