@@ -45,7 +45,7 @@ class StatsPage extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: Column(
                         children: [
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 5),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

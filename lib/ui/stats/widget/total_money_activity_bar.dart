@@ -6,6 +6,7 @@ import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../../model/money_activity.dart';
 
+// TODO #49: On press -> go to timeline for specific activity
 class TotalMoneyActivityBar extends StatelessWidget {
   const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.typeTotalAmount, this.onPressed});
 
@@ -43,7 +44,7 @@ class TotalMoneyActivityBar extends StatelessWidget {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.black26,
                 borderRadius: _borderRadius,
-                onTap: () => (),
+                //onTap: () => (), TODO #49: enable when resolved
                 child: Stack(
                   children: [
                     Positioned(

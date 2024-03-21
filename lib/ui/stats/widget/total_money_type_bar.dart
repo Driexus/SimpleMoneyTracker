@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
+import '../../shared/navigations.dart';
+
 class TotalMoneyTypeBar extends StatelessWidget {
-  TotalMoneyTypeBar({super.key, required this.amount, required this.moneyType, this.onPressed});
+  const TotalMoneyTypeBar({super.key, required this.amount, required this.moneyType, this.onPressed});
 
   final int amount;
   final MoneyType moneyType;
   final ValueChanged<MoneyEntry?>? onPressed;
 
-  late final Icon? typeIcon = Icon(
+  Icon? get typeIcon => Icon(
       moneyType.icon,
       color: moneyType.color,
       size: 20
   );
 
-  final BorderRadius borderRadius = BorderRadius.circular(8.0);
+  BorderRadius get borderRadius => BorderRadius.circular(8.0);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.black26,
                 borderRadius: borderRadius,
-                onTap: () => (),
+                onTap: () => Navigations.toBreakdownPage(context, moneyType),
                 child: Stack(
                   children: [
                     Positioned(
