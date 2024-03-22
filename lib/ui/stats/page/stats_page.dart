@@ -33,7 +33,7 @@ class StatsPage extends StatelessWidget {
             state = statsBloc.state as MonthStatsState;
           }
           else {
-            return const Stack(); // TODO
+            return const Stack(); // TODO: Handle more states
           }
 
           return OverscrollNotificationListener(

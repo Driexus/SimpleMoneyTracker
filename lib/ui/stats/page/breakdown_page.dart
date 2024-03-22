@@ -6,6 +6,7 @@ import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../../model/money_entry.dart';
 import '../../../repos/money_entry_repo.dart';
+import '../../shared/overscroll_notification_listener.dart';
 import '../widget/total_money_activity_bar.dart';
 
 class BreakdownPage extends StatelessWidget {
@@ -36,7 +37,7 @@ class BreakdownPage extends StatelessWidget {
       return (statsState as MonthStatsState).month.toMonthYearFull();
     }
 
-    return ""; // TODO
+    return ""; // TODO: Handle more states
   }
 
   @override
@@ -81,11 +82,18 @@ class BreakdownPage extends StatelessWidget {
             ),
             Positioned(
               top: 380,
+              bottom: 65,
               right: 0,
               left: 0,
-              child: Column(
-                  children: _totalMoneyActivityBars.addVerticalSpacing(10)
-              ),
+              child: OverscrollNotificationListener(
+                child: NotificationListener<ScrollUpdateNotification> (
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: _totalMoneyActivityBars.addVerticalSpacing(10)
+                    )
+                  )
+                )
+              )
             ),
             BottomButton(
               text: "OK",

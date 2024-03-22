@@ -5,7 +5,6 @@ import 'package:simplemoneytracker/ui/stats/widget/total_money_activity_bar.dart
 import 'package:simplemoneytracker/ui/stats/widget/total_money_type_bar.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
-// TODO: Add on click listeners and disable non-clickable bars
 class TotalMoneyBarContainer extends StatelessWidget {
   const TotalMoneyBarContainer({super.key, required this.amount, required this.moneyType, required this.subtotals});
 
