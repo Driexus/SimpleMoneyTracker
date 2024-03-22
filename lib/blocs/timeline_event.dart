@@ -1,12 +1,12 @@
-part of '../blocs/entries_bloc.dart';
+part of '../blocs/timeline_bloc.dart';
 
 @immutable
-sealed class EntriesEvent extends Equatable {
-  const EntriesEvent();
+sealed class TimelineEvent extends Equatable {
+  const TimelineEvent();
 }
 
 /// All filter values are overwritten
-final class FiltersUpdated extends EntriesEvent {
+final class FiltersUpdated extends TimelineEvent {
   const FiltersUpdated(this.filters);
 
   final MoneyEntryFilters filters;
@@ -16,7 +16,7 @@ final class FiltersUpdated extends EntriesEvent {
 }
 
 /// Non-null filter values overwrite the old. Null filter values are ignored.
-final class FiltersAdded extends EntriesEvent {
+final class FiltersAdded extends TimelineEvent {
   const FiltersAdded(this.filters);
 
   final MoneyEntryFilters filters;
@@ -25,7 +25,7 @@ final class FiltersAdded extends EntriesEvent {
   List<Object> get props => [filters];
 }
 
-final class FirstEntryUpdated extends EntriesEvent {
+final class FirstEntryUpdated extends TimelineEvent {
   const FirstEntryUpdated(this.firstEntry);
 
   final MoneyEntry firstEntry;
@@ -34,11 +34,9 @@ final class FirstEntryUpdated extends EntriesEvent {
   List<Object> get props => [firstEntry];
 }
 
-final class EntryAdded extends EntriesEvent {
-  const EntryAdded(this.entry);
-
-  final MoneyEntry entry;
+final class EntriesChanged extends TimelineEvent {
+  const EntriesChanged();
 
   @override
-  List<Object> get props => [entry];
+  List<Object> get props => [];
 }

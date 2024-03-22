@@ -47,6 +47,7 @@ dependencies:
   logging: ^1.2.0
   table_calendar: ^3.0.9
   provider: ^6.1.1
+  pie_chart: ^5.4.0
 
 dev_dependencies:
   flutter_test:

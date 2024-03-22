@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';
@@ -7,7 +7,7 @@ import '../shared/money_range.dart';
 class FilterSheet extends StatelessWidget {
   const FilterSheet({super.key, required this.entriesBloc});
 
-  final EntriesBloc entriesBloc;
+  final TimelineBloc entriesBloc;
 
   _updateAmountFilters(MoneyRangeValues values) {
     entriesBloc.add(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:simplemoneytracker/blocs/entries_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/timeline/filter_sheet.dart';
 import 'package:simplemoneytracker/ui/timeline/entries_container.dart';
@@ -14,7 +14,7 @@ class TimelinePage extends StatelessWidget {
 
   static final String _defaultDateHeader = DateTime.now().toMonthYearFull();
 
-  void _onToggle(EntriesBloc entriesBloc, List<MoneyType> allowedTypes) {
+  void _onToggle(TimelineBloc entriesBloc, List<MoneyType> allowedTypes) {
     entriesBloc.add(FiltersAdded(
         MoneyEntryFilters(allowedTypes: allowedTypes)
     ));
@@ -24,7 +24,7 @@ class TimelinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
         builder: (blocContext) {
-          final entriesBloc = blocContext.watch<EntriesBloc>();
+          final entriesBloc = blocContext.watch<TimelineBloc>();
           late final String dateHeader;
 
           switch (entriesBloc.state.runtimeType) {
@@ -52,7 +52,7 @@ class TimelinePage extends StatelessWidget {
                       ),
                       const Divider(
                         height: 26,
-                        thickness: 2,
+                        thickness: 1,
                         indent: 13,
                         endIndent: 13,
                       ),

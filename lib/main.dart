@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
-import 'blocs/entries_bloc.dart';
 import 'blocs/home_page_bloc.dart';
+import 'blocs/timeline_bloc.dart' hide EntriesChanged;
+import 'blocs/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
 import 'model/money_entry.dart';
@@ -16,18 +17,22 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final MoneyEntryRepo _moneyEntryRepo = const MoneyEntryRepo();
+  final MoneyEntryRepo _moneyEntryRepo = MoneyEntryRepo();
   final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
   late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
-  late final EntriesBloc _entriesBloc = EntriesBloc(_moneyEntryRepo, _activitiesCubit)..add(
+  late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit)..add(
       FiltersUpdated(
           MoneyEntryFilters(
-              allowedTypes: [MoneyType.expense]
+              allowedTypes: [MoneyType.expense, MoneyType.income, MoneyType.debt, MoneyType.credit]
           )
       )
   );
 
-  late final HomePageBloc _homePageBloc = HomePageBloc(_entriesBloc, _activitiesCubit);
+  late final HomePageBloc _homePageBloc = HomePageBloc(_moneyEntryRepo, _activitiesCubit);
+
+  late final StatsBloc _statsBloc = StatsBloc(_moneyEntryRepo, _activitiesCubit)..add(
+     MonthUpdated(DateTime.now())
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +49,13 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (_) => _entriesBloc,
+          ),
+          BlocProvider(
             create: (_) => _homePageBloc,
           ),
           BlocProvider(
-            create: (_) => _entriesBloc,
+            create: (_) => _statsBloc,
           ),
           BlocProvider(
             create: (_) => _activitiesCubit,

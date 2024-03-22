@@ -7,6 +7,8 @@ import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 
+import '../../shared/bottom_button.dart';
+
 class EditActivityPage extends StatefulWidget {
   const EditActivityPage({super.key, this.moneyActivity, required this.cubit});
 
@@ -176,20 +178,9 @@ class _EditActivityPageState extends State<EditActivityPage> {
               left: 0,
               child: _activeList
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.black87,
-                    foregroundColor: Colors.white,
-                    textStyle: const TextStyle(fontSize: 20),
-                    minimumSize: const Size(double.infinity, 0)
-                ),
-                onPressed: () => _submit(context),
-                child: const Text('SAVE'),
-              )
+            BottomButton(
+                text: "SAVE",
+                onTap: () => _submit(context)
             ),
           ]
         )

@@ -70,6 +70,15 @@ class MoneyEntryFilters {
     whereArgs = whereArgsBuilder.build();
   }
 
+  MoneyEntryFilters copy({int? minAmount, int? maxAmount, DateTime? minDate, DateTime? maxDate, allowedTypes}) =>
+    MoneyEntryFilters(
+      minAmount: minAmount ?? this.minAmount,
+      maxAmount: maxAmount ?? this.maxAmount,
+      minDate: minDate ?? this.minDate,
+      maxDate: maxDate ?? this.maxDate,
+      allowedTypes: allowedTypes ?? this.allowedTypes
+    );
+
   static MoneyEntryFilters combine(MoneyEntryFilters initialFilters, MoneyEntryFilters newFilters) {
 
     int? minAmount = initialFilters.minAmount;
