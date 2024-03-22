@@ -52,7 +52,7 @@ class TimelinePage extends StatelessWidget {
                       ),
                       const Divider(
                         height: 26,
-                        thickness: 2,
+                        thickness: 1,
                         indent: 13,
                         endIndent: 13,
                       ),

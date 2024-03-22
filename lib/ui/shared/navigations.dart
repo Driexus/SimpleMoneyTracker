@@ -18,12 +18,11 @@ class Navigations {
     );
   }
 
-  // TODO: add state to constructor
   static toBreakdownPage(BuildContext context, MoneyType moneyType) {
     final state = Provider.of<StatsBloc>(context, listen: false).state;
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const BreakdownPage())
+        MaterialPageRoute(builder: (context) => BreakdownPage(statsState: state, moneyType: moneyType))
     );
   }
 }
