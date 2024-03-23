@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
-  RectangularButton({super.key, this.imageKey, required this.description, required this.color, this.hasRipple = true});
+  const RectangularButton({super.key, this.imageKey, required this.description, required this.color, this.hasRipple = true});
 
   final String? imageKey;
   final String description;
   final Color color;
   final bool hasRipple;
 
-  late final Icon? icon = imageKey != null ? Icon(
+  Icon? get icon => imageKey != null ? Icon(
       IconsHelper.getIcon(imageKey!),
       color: Colors.white,
       size: 45
   ) : null;
 
-  final BorderRadius borderRadius = BorderRadius.circular(8.0);
+  BorderRadius get borderRadius => BorderRadius.circular(8.0);
 
   void onTap() {
     log("Clicked on $description");
@@ -29,7 +29,9 @@ class RectangularButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SizedBox(
+      height: 85.0,
+      width: 65.0,
       child: Material(
         color: color,
         elevation: 6,
@@ -41,36 +43,30 @@ class RectangularButton extends StatelessWidget {
           highlightColor: hasRipple ? Colors.black26 : Colors.transparent,
           enableFeedback: hasRipple,
           borderRadius: borderRadius,
-          child: Container(
-            height: 85.0,
-            width: 65.0,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-            ),
-            child: LayoutBuilder(builder: (context, constraints) {
-              return SizedBox(
-                height: constraints.maxHeight,
-                width: constraints.maxHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[ // TODO: Use positioned icon
-                    Container(
-                      child: icon,
-                    ),
-                    const SizedBox(height: 5),
-                    AutoSizeText(
-                      description,
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
-              );
-            }),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 9,
+                left: 0,
+                right: 0,
+                child: Container(child: icon)
+              ),
+              Positioned(
+                bottom: 5,
+                left: 0,
+                right: 0,
+                child: AutoSizeText(
+                  description,
+                  maxLines: 1,
+                  minFontSize: 9,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ]
           ),
         ),
       ),
