@@ -10,15 +10,16 @@ class BottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
     Positioned(
-      left: 0,
-      right: 0,
+      left: 10,
+      right: 10,
       bottom: 0,
       child: TextButton(
         style: TextButton.styleFrom(
-            backgroundColor: Colors.black87,
-            foregroundColor: Colors.white,
-            textStyle: const TextStyle(fontSize: 20),
-            minimumSize: const Size(double.infinity, 0)
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Colors.white,
+          textStyle: const TextStyle(fontSize: 20),
+          minimumSize: const Size(double.infinity, 0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
         onPressed: onTap,
         child: Text(text),

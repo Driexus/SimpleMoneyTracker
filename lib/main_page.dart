@@ -18,9 +18,10 @@ class MainPage extends StatelessWidget {
                 toolbarHeight: 0, // Remove extra space on top of tabs
                 bottom: const TabBar(
                   tabs: [
-                    Tab(icon: Icon(Icons.directions_car)),
-                    Tab(icon: Icon(Icons.directions_transit)),
-                    Tab(icon: Icon(Icons.directions_bike)),
+                    Tab(icon: Icon(Icons.home)),
+                    Tab(icon: Icon(Icons.format_list_bulleted)),
+                    Tab(icon: Icon(Icons.show_chart)),
+                    // TODO #52: Tab(icon: Icon(Icons.settings)),
                   ],
                 ),
               ),
@@ -29,6 +30,7 @@ class MainPage extends StatelessWidget {
                   HomePage(),
                   TimelinePage(),
                   StatsPage(),
+                  // TODO #52: SettingsPage()
                 ],
               )
           )

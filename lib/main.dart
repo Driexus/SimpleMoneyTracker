@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Simple Time Tracker',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent), // blue, blueAccent
         useMaterial3: true,
         splashFactory: InkSplash.splashFactory,
         sliderTheme: const SliderThemeData(
