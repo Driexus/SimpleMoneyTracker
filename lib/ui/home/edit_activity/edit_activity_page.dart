@@ -120,56 +120,59 @@ class _EditActivityPageState extends State<EditActivityPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            Column(
-              children: [
-                const SizedBox(height: 60),
-                RectangularButton(
-                  imageKey: _imageKey,
-                  description: _title,
-                  color: _color,
-                  hasRipple: false,
-                ),
-                const SizedBox(height: 30),
-                TextFormField(
-                  initialValue: _title,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Title',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  const SizedBox(height: 60),
+                  RectangularButton(
+                    imageKey: _imageKey,
+                    description: _title,
+                    color: _color,
+                    hasRipple: false,
                   ),
-                  onChanged: _updateTitle
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => _onListButtonTap(ButtonType.color),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Color"),
-                            _getButtonIcon(ButtonType.color)
-                          ],
-                        ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                      initialValue: _title,
+                      maxLines: 1,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Title',
                       ),
-                    ),
-                    Expanded(
+                      onChanged: _updateTitle
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
                         child: OutlinedButton(
-                          onPressed: () => _onListButtonTap(ButtonType.icon),
+                          onPressed: () => _onListButtonTap(ButtonType.color),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Icon"),
-                              _getButtonIcon(ButtonType.icon)
+                              const Text("Color"),
+                              _getButtonIcon(ButtonType.color)
                             ],
                           ),
-                        )
-                    )
-                  ],
-                )
-              ]
+                        ),
+                      ),
+                      Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => _onListButtonTap(ButtonType.icon),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Icon"),
+                                _getButtonIcon(ButtonType.icon)
+                              ],
+                            ),
+                          )
+                      )
+                    ],
+                  )
+                ]
+              )
             ),
             Positioned(
               bottom: 55,
