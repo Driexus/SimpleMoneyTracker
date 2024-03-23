@@ -26,7 +26,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
         height: 55,
         width: 370,
         child: Material(
-            color: Colors.deepPurple[50],
+            color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: borderRadius,
             child: InkWell(
                 splashColor: Colors.transparent,
