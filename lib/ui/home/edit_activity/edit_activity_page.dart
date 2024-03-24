@@ -113,6 +113,37 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
   //endregion
 
+  String? get _activityTitle => widget.moneyActivity?.title;
+
+  IconButton? _deleteButton(BuildContext mainContext) => widget.moneyActivity == null ? null : IconButton(
+      iconSize: 35,
+      icon: const Icon(Icons.delete_forever),
+      onPressed: () =>  {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Delete ${_activityTitle!}?'),
+            content: Text('Are you sure you want to delete ${_activityTitle!} and all its relevant entries? This action is not reversible.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  widget.cubit.deleteActivity(widget.moneyActivity!);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  ToastHelper.showToast("Activity ${_activityTitle!} deleted");
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        )
+      }
+  );
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -120,6 +151,11 @@ class _EditActivityPageState extends State<EditActivityPage> {
       child: Scaffold(
         body: Stack(
           children: [
+            Positioned(
+              top: 35,
+              right: 10,
+              child: Container(child: _deleteButton(context))
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(

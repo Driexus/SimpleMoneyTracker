@@ -25,6 +25,15 @@ class MoneyActivityRepo {
     );
   }
 
+  Future<void> delete(MoneyActivity activity) async {
+    final db = await _service.getDB();
+    await db.delete(
+      'money_activities',
+      where: 'activityId = ?',
+      whereArgs: [activity.id!.toString()]
+    );
+  }
+
   Future<List<MoneyActivity>> retrieveAll() async {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> maps = await db.query('money_activities');

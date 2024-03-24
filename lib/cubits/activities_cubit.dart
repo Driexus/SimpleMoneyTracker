@@ -21,6 +21,10 @@ class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
     }
   }
 
+  void deleteActivity(MoneyActivity activity) {
+    _repo.delete(activity).then((value) => refreshActivities());
+  }
+
   void refreshActivities() {
     _repo.retrieveAll().then((activities) => {
       emit({ for (var activity in activities) activity.id! : activity })

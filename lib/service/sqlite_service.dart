@@ -22,17 +22,19 @@ class SqliteService {
     }
 
     // Open db if it is not cached
-    return openDatabase(
+    final db = await openDatabase(
       join(await getDatabasesPath(), 'simple_money_tracker.db'),
       onCreate: (db, version) async {
-        await db.execute('CREATE TABLE money_activities('
+        await db.execute(
+          'CREATE TABLE money_activities('
             'activityId INTEGER PRIMARY KEY,'
             'title TEXT NOT NULL,'
             'color INTEGER NOT NULL,'
             'imageKey TEXT NOT NULL'
-            ')'
+          ')'
         );
-        await db.execute('CREATE TABLE money_entries('
+        await db.execute(
+          'CREATE TABLE money_entries('
             'entryId INTEGER PRIMARY KEY,'
             'createdAt INTEGER NOT NULL,'
             'amount INTEGER NOT NULL,'
@@ -40,11 +42,14 @@ class SqliteService {
             'currencyId INTEGER,'
             'comment TEXT,'
             'activityId INTEGER NOT NULL,'
-            'FOREIGN KEY(activityId) REFERENCES money_activities(activityId)'
-            ')'
+            'FOREIGN KEY(activityId) REFERENCES money_activities(activityId) ON DELETE CASCADE'
+          ')'
         );
       },
       version: 1,
     );
+
+    await db.execute('PRAGMA foreign_keys=on');
+    return db;
   }
 }
