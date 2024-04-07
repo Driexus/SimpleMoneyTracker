@@ -30,7 +30,11 @@ class SqliteService {
             'activityId INTEGER PRIMARY KEY,'
             'title TEXT NOT NULL,'
             'color INTEGER NOT NULL,'
-            'imageKey TEXT NOT NULL'
+            'imageKey TEXT NOT NULL,'
+            'isIncome int(1) NOT NULL,'
+            'isExpense int(1) NOT NULL,'
+            'isCredit int(1) NOT NULL,'
+            'isDebt int(1) NOT NULL'
           ')'
         );
         await db.execute(
