@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:simplemoneytracker/blocs/stats_bloc.dart';
 import 'package:simplemoneytracker/ui/shared/bottom_button.dart';
+import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../../model/money_entry.dart';
 import '../../../repos/money_entry_repo.dart';
-import '../../shared/overscroll_notification_listener.dart';
 import '../widget/total_money_activity_bar.dart';
 
 class BreakdownPage extends StatelessWidget {
@@ -85,13 +85,9 @@ class BreakdownPage extends StatelessWidget {
               bottom: 65,
               right: 0,
               left: 0,
-              child: OverscrollNotificationListener(
-                child: NotificationListener<ScrollUpdateNotification> (
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: _totalMoneyActivityBars.addVerticalSpacing(10)
-                    )
-                  )
+              child: SingleChildScrollableWidget(
+                child: Column(
+                  children: _totalMoneyActivityBars.addVerticalSpacing(10)
                 )
               )
             ),

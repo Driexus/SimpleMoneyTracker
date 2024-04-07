@@ -5,6 +5,7 @@ import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
+import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import 'buttons/rectangular_button.dart';
@@ -62,9 +63,14 @@ class _ActivityButtonContainerState extends State<ActivityButtonContainer> {
     // The AddButton must be recreated in every build in order pass the correct BuildContext
     _addButton = AddButton(context: context);
     return BlocBuilder<ActivitiesCubit, Map<int, MoneyActivity>>(
-      builder: (context, activityMap) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _getRows(activityMap.values.toList()),
+      builder: (context, activityMap) => SizedBox(
+        height: 350,
+        child: SingleChildScrollableWidget(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _getRows(activityMap.values.toList()),
+          ),
+        ),
       )
     );
   }
