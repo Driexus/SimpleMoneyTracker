@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../blocs/stats_bloc.dart';
 import '../home/edit_activity/edit_activity_page.dart';
@@ -20,6 +21,9 @@ class Navigations {
 
   static toBreakdownPage(BuildContext context, MoneyType moneyType) {
     final state = Provider.of<StatsBloc>(context, listen: false).state;
+    if (state.subtotals[moneyType].isEmptyOrNull()) {
+      return;
+    }
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => BreakdownPage(statsState: state, moneyType: moneyType))

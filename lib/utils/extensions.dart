@@ -2,6 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
+extension EmptyOrNullList on Iterable<dynamic>? {
+  bool isEmptyOrNull() => this?.isEmpty ?? true;
+}
+
+extension FlattenList<T> on Iterable<Iterable<T>> {
+  List<T> flatten() => expand((i) => i ).toList();
+}
+
 extension WidgetSpacing on Iterable<Widget> {
   List<Widget> addHorizontalSpacing(double space) {
     final box = SizedBox(width: space, height: 1);
