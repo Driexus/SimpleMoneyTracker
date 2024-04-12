@@ -65,6 +65,11 @@ class _EditActivityPageState extends State<EditActivityPage> {
       return;
     }
 
+    if (_isSelected.every((element) => element == false)) {
+      ToastHelper.showToast("Cannot save activity without a category");
+      return;
+    }
+
     // Create new activity or pass values to the one that already exists (this way the id wont be null so it will get updated)
     final MoneyActivity finalActivity = widget.moneyActivity == null ?
       MoneyActivity(

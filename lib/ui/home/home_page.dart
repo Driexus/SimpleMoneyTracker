@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
+import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/activity_button_container.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
@@ -37,6 +38,17 @@ class HomePage extends StatelessWidget {
       builder: (blocContext) {
         final homePageBloc = blocContext.watch<HomePageBloc>();
         final state = homePageBloc.state;
+
+        // Find only the activities that are ok for this specific MoneyType
+        final activitiesCubit = blocContext.watch<ActivitiesCubit>();
+        final activities = activitiesCubit.state.values.where((activity) {
+          switch (state.moneyType) {
+            case MoneyType.income: return activity.isIncome;
+            case MoneyType.credit: return activity.isCredit;
+            case MoneyType.expense: return activity.isExpense;
+            case MoneyType.debt: return activity.isDebt;
+          }
+        }).toList();
 
         return Stack(
           children: [
@@ -83,6 +95,7 @@ class HomePage extends StatelessWidget {
                 right: 0,
                 top: 115,
                 child: ActivityButtonContainer(
+                  activities: activities,
                   onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
                   onActivityLongPress: (activity) => Navigations.toEditActivity(context, activity),
                 )
