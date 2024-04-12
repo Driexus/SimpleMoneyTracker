@@ -26,6 +26,10 @@ class _EditActivityPageState extends State<EditActivityPage> {
   late String _title;
   late Color _color;
   String? _imageKey;
+  bool get _isIncome => _isSelected[0];
+  bool get _isExpense => _isSelected[1];
+  bool get _isCredit => _isSelected[2];
+  bool get _isDebt => _isSelected[2];
 
   @override
   void initState() {
@@ -33,6 +37,9 @@ class _EditActivityPageState extends State<EditActivityPage> {
     _title = widget.moneyActivity?.title ?? "";
     _color = widget.moneyActivity?.color.toColor() ?? Colors.cyan;
     _imageKey = widget.moneyActivity?.imageKey;
+    _isSelected[0] = widget.moneyActivity?.isIncome ?? true;
+    _isSelected[1] = widget.moneyActivity?.isExpense ?? false;
+    _isSelected[2] = widget.moneyActivity?.isDebt ?? false;
   }
 
   void _updateTitle(String value) => setState(() {
@@ -58,17 +65,30 @@ class _EditActivityPageState extends State<EditActivityPage> {
       return;
     }
 
-    // Create new activity or pass values to the one that already exists
+    if (_isSelected.every((element) => element == false)) {
+      ToastHelper.showToast("Cannot save activity without a category");
+      return;
+    }
+
+    // Create new activity or pass values to the one that already exists (this way the id wont be null so it will get updated)
     final MoneyActivity finalActivity = widget.moneyActivity == null ?
       MoneyActivity(
           title: _title,
           color: _color.value,
-          imageKey: _imageKey!
+          imageKey: _imageKey!,
+          isIncome: _isIncome,
+          isExpense: _isExpense,
+          isCredit: _isCredit,
+          isDebt: _isDebt
       ) :
       widget.moneyActivity!.copy(
           title: _title,
           color: _color.value,
-          imageKey: _imageKey!
+          imageKey: _imageKey!,
+          isIncome: _isIncome,
+          isExpense: _isExpense,
+          isCredit: _isCredit,
+          isDebt: _isDebt
       );
 
     widget.cubit.saveActivity(finalActivity);
@@ -110,6 +130,16 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
     return Icon(iconData);
   }
+
+  //endregion
+
+  //region Toggle handling
+
+  final List<bool> _isSelected = [true, false, false];
+
+  void _onToggle(int index) => setState(() {
+    _isSelected[index] = !_isSelected[index];
+  });
 
   //endregion
 
@@ -177,6 +207,23 @@ class _EditActivityPageState extends State<EditActivityPage> {
                       ),
                       onChanged: _updateTitle
                   ),
+                  const SizedBox(height: 15),
+                  ToggleButtons(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    borderColor: Colors.black54,
+                    selectedBorderColor: Colors.black54,
+                    constraints: const BoxConstraints(
+                      minHeight: 40.0,
+                      minWidth: 119.5,
+                    ),
+                    onPressed: _onToggle,
+                    isSelected: _isSelected,
+                    children: const [
+                      Text("Income"),
+                      Text("Expense"),
+                      Text("Credit / Debt")
+                    ]
+                  ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,6 +240,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(width: 10),
                       Expanded(
                           child: OutlinedButton(
                             onPressed: () => _onListButtonTap(ButtonType.icon),
@@ -212,7 +260,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
             ),
             Positioned(
               bottom: 55,
-              top: 310,
+              top: 365,
               right: 0,
               left: 0,
               child: _activeList
