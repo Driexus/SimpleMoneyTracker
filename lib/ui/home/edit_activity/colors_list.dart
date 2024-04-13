@@ -6,7 +6,19 @@ import '../../shared/overscroll_notification_listener.dart';
 class ColorsList extends StatelessWidget {
   const ColorsList({super.key, this.onColor = _onColorDefault});
 
-  static const _colors = [Colors.deepOrange, Colors.red, Colors.purple, Colors.green, Colors.deepPurple, Colors.yellow, Colors.black38, Colors.black12, Colors.blueAccent, Colors.blueGrey];
+  static const _colors = [
+    Colors.cyan,
+    Colors.blueAccent,
+    Colors.deepPurple,
+    Colors.purple,
+    Colors.red,
+    Colors.deepOrange,
+    Colors.orangeAccent,
+    Colors.green,
+    Colors.blueGrey,
+    Colors.black38,
+    Colors.black12,
+  ];
 
   final ValueChanged<Color> onColor;
   static void _onColorDefault(Color color) {}
