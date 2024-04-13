@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
-  const RectangularButton({super.key, this.imageKey, required this.description, required this.color, this.hasRipple = true});
+  const RectangularButton({super.key, this.iconData, required this.description, required this.color, this.hasRipple = true});
 
-  final String? imageKey;
+  RectangularButton.fromImageKey({super.key, String? imageKey, required this.description, required this.color, this.hasRipple = true}) :
+    iconData = imageKey != null ? IconsHelper.getIcon(imageKey) : null;
+
+  final IconData? iconData;
   final String description;
   final Color color;
   final bool hasRipple;
 
-  Icon? get icon => imageKey != null ? Icon(
-      IconsHelper.getIcon(imageKey!),
+  Icon? get icon => iconData != null ? Icon(
+      iconData,
       color: Colors.white,
       size: 45
   ) : null;

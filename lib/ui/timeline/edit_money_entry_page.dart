@@ -152,7 +152,7 @@ class _EdiMoneyEntryPageState extends State<EditMoneyEntryPage> {
                       child: Column(
                           children: [
                             const SizedBox(height: 60),
-                            RectangularButton(
+                            RectangularButton.fromImageKey(
                               imageKey: _imageKey,
                               description: _title,
                               color: _color,

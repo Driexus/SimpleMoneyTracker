@@ -4,7 +4,7 @@ import 'package:simplemoneytracker/ui/home/buttons/rectangular_button.dart';
 import '../../shared/navigations.dart';
 
 class AddButton extends RectangularButton {
-  AddButton({super.key, required this.context}) : super(imageKey: 'add', description: "Add", color: Colors.deepPurple) ;
+  const AddButton({super.key, required this.context}) : super(iconData: Icons.add, description: "Add", color: Colors.deepPurple) ;
 
   final BuildContext context;
 

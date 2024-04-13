@@ -191,7 +191,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 60),
-                  RectangularButton(
+                  RectangularButton.fromImageKey(
                     imageKey: _imageKey,
                     description: _title,
                     color: _color,
