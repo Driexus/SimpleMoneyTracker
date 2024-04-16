@@ -14,6 +14,7 @@ import '../utils/toast_helper.dart';
 part 'home_page_event.dart';
 part 'home_page_state.dart';
 
+// TODO: Change bloc name
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc(this.moneyEntryRepo, this.activitiesCubit) : super(
       _initialState()

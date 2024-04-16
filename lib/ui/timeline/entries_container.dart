@@ -7,6 +7,8 @@ import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
+import '../shared/navigations.dart';
+
 class EntriesContainer extends StatelessWidget {
   const EntriesContainer({super.key});
 
@@ -51,7 +53,7 @@ class EntriesContainer extends StatelessWidget {
                     children: entries.map((entry) =>
                         MoneyEntryBar.fromEntry(
                           entry: entry,
-                          onPressed: (_) => {}, // TODO: Show entry info (edit menu)
+                          onPressed: (_) => Navigations.toEditEntryPage(context, entry),
                         )
                     ).addVerticalSpacing(_entrySpacing)
                 ),

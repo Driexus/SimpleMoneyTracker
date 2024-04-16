@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/repos/money_entry_repo.dart';
+import 'package:simplemoneytracker/ui/timeline/timeline_edit_entry_page.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../blocs/stats_bloc.dart';
@@ -15,7 +17,7 @@ class Navigations {
     ActivitiesCubit cubit = Provider.of<ActivitiesCubit>(context, listen: false);
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EditActivityPage(moneyActivity: moneyActivity, cubit: cubit))
+        MaterialPageRoute(builder: (_) => EditActivityPage(moneyActivity: moneyActivity, cubit: cubit))
     );
   }
 
@@ -26,7 +28,22 @@ class Navigations {
     }
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => BreakdownPage(statsState: state, moneyType: moneyType))
+        MaterialPageRoute(builder: (_) => BreakdownPage(statsState: state, moneyType: moneyType))
+    );
+  }
+
+  static toEditEntryPage(BuildContext context, MoneyEntry moneyEntry) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) =>
+          Provider.value(
+              value: context.read<MoneyEntryRepo>(),
+              child: Provider.value(
+                value: context.read<ActivitiesCubit>(),
+                child: TimelineEditEntryPage(moneyEntry: moneyEntry)
+              )
+          )
+        )
     );
   }
 }
