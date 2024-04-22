@@ -1,14 +1,14 @@
-part of '../blocs/home_page_bloc.dart';
+part of '../blocs/money_entry_bloc.dart';
 
 @immutable
-sealed class HomePageEvent extends Equatable {
-  const HomePageEvent();
+sealed class MoneyEntryEvent extends Equatable {
+  const MoneyEntryEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-final class MoneyTypeUpdated extends HomePageEvent {
+final class MoneyTypeUpdated extends MoneyEntryEvent {
   const MoneyTypeUpdated(this.moneyType);
 
   final MoneyType moneyType;
@@ -17,7 +17,7 @@ final class MoneyTypeUpdated extends HomePageEvent {
   List<Object?> get props => [moneyType];
 }
 
-final class MoneyActivityUpdated extends HomePageEvent {
+final class MoneyActivityUpdated extends MoneyEntryEvent {
   const MoneyActivityUpdated(this.moneyActivity);
 
   final MoneyActivity moneyActivity;
@@ -26,7 +26,7 @@ final class MoneyActivityUpdated extends HomePageEvent {
   List<Object?> get props => [moneyActivity];
 }
 
-final class DateUpdated extends HomePageEvent {
+final class DateUpdated extends MoneyEntryEvent {
   const DateUpdated(this.date);
 
   final DateTime date;
@@ -35,7 +35,7 @@ final class DateUpdated extends HomePageEvent {
   List<Object?> get props => [date];
 }
 
-final class DigitPressed extends HomePageEvent {
+final class DigitPressed extends MoneyEntryEvent {
   const DigitPressed(this.digit);
 
   final int digit;
@@ -44,14 +44,14 @@ final class DigitPressed extends HomePageEvent {
   List<Object?> get props => [digit];
 }
 
-final class BackspacePressed extends HomePageEvent {
+final class BackspacePressed extends MoneyEntryEvent {
   const BackspacePressed();
 }
 
-final class DecimalPressed extends HomePageEvent {
+final class DecimalPressed extends MoneyEntryEvent {
   const DecimalPressed();
 }
 
-final class EntrySubmitted extends HomePageEvent {
+final class EntrySubmitted extends MoneyEntryEvent {
   const EntrySubmitted();
 }

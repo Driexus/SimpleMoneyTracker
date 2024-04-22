@@ -1,10 +1,10 @@
-part of 'home_page.dart';
+part of 'edit_money_entry_page.dart';
 
 class DatePickerSheet extends StatefulWidget {
-  DatePickerSheet({super.key, required this.homePageBloc}) :
-        initialDate = homePageBloc.state.date;
+  DatePickerSheet({super.key, required this.moneyEntryBloc}) :
+        initialDate = moneyEntryBloc.state.date;
 
-  final HomePageBloc homePageBloc;
+  final MoneyEntryBloc moneyEntryBloc;
   final DateTime initialDate;
 
   @override
@@ -25,7 +25,7 @@ class _DatePickerSheetState extends State<DatePickerSheet> {
     final DateTime now = DateTime.now();
     final date = DateTime(day.year, day.month, day.day, now.hour, now.minute, now.second);
 
-    widget.homePageBloc.add(
+    widget.moneyEntryBloc.add(
       DateUpdated(date)
     );
     Navigator.pop(context);

@@ -14,12 +14,39 @@ class MoneyEntryRepo {
 
   final List<VoidCallback> _entriesChangedListeners = [];
 
+  /// Creates a new entry
   Future<void> create(MoneyEntry moneyEntry) async {
     final db = await _service.getDB();
     log("Inserting entry: $moneyEntry");
     await db.insert(
       'money_entries',
       moneyEntry.toDBMap(),
+    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+  }
+
+  /// Updates an entry
+  Future<void> update(MoneyEntry moneyEntry) async {
+    final db = await _service.getDB();
+    log("Updating entry: $moneyEntry");
+    await db.update(
+      'money_entries',
+      moneyEntry.toDBMap(),
+      where: 'entryId = ?',
+      whereArgs: [moneyEntry.id]
+    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+  }
+
+  /// Updates an entry or creates a new one if the id is null
+  Future<void> save(MoneyEntry moneyEntry) async {
+    moneyEntry.id == null ? create(moneyEntry) : update(moneyEntry);
+  }
+
+  Future<void> delete(MoneyEntry moneyEntry) async {
+    final db = await _service.getDB();
+    await db.delete(
+        'money_entries',
+        where: 'entryId = ?',
+        whereArgs: [moneyEntry.id]
     ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
   }
 
@@ -56,7 +83,7 @@ class MoneyEntryRepo {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> result = await db.query(
       'money_entries JOIN money_activities ON money_entries.activityId = money_activities.activityId',
-      columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey"],
+      columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey", "isIncome", "isExpense", "isCredit", "isDebt"],
       where: filters.where,
       whereArgs: filters.whereArgs,
       groupBy: "money_entries.activityId",

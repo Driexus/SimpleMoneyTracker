@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
-import 'blocs/home_page_bloc.dart';
 import 'blocs/timeline_bloc.dart' hide EntriesChanged;
 import 'blocs/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
@@ -28,8 +28,6 @@ class MyApp extends StatelessWidget {
       )
   );
 
-  late final HomePageBloc _homePageBloc = HomePageBloc(_moneyEntryRepo, _activitiesCubit);
-
   late final StatsBloc _statsBloc = StatsBloc(_moneyEntryRepo, _activitiesCubit)..add(
      MonthUpdated(DateTime.now())
   );
@@ -48,11 +46,14 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (_) => _entriesBloc,
+          Provider(
+            create: (_) => _moneyEntryRepo,
+          ),
+          Provider(
+            create: (_) => _moneyActivityRepo,
           ),
           BlocProvider(
-            create: (_) => _homePageBloc,
+            create: (_) => _entriesBloc,
           ),
           BlocProvider(
             create: (_) => _statsBloc,
