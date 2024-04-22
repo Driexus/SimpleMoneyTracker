@@ -41,6 +41,15 @@ class MoneyEntryRepo {
     moneyEntry.id == null ? create(moneyEntry) : update(moneyEntry);
   }
 
+  Future<void> delete(MoneyEntry moneyEntry) async {
+    final db = await _service.getDB();
+    await db.delete(
+        'money_entries',
+        where: 'entryId = ?',
+        whereArgs: [moneyEntry.id]
+    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+  }
+
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {
     log("###### Retrieving money entries with filters:");
     log("where: ${filters?.where}");
