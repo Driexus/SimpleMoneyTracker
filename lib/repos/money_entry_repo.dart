@@ -56,7 +56,7 @@ class MoneyEntryRepo {
     final db = await _service.getDB();
     final List<Map<String, dynamic>> result = await db.query(
       'money_entries JOIN money_activities ON money_entries.activityId = money_activities.activityId',
-      columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey"],
+      columns: ["sum(amount) as sum", "money_entries.activityId", "title", "color", "imageKey", "isIncome", "isExpense", "isCredit", "isDebt"],
       where: filters.where,
       whereArgs: filters.whereArgs,
       groupBy: "money_entries.activityId",
