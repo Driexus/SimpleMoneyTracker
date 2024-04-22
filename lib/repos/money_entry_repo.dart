@@ -14,6 +14,7 @@ class MoneyEntryRepo {
 
   final List<VoidCallback> _entriesChangedListeners = [];
 
+  /// Creates a new entry
   Future<void> create(MoneyEntry moneyEntry) async {
     final db = await _service.getDB();
     log("Inserting entry: $moneyEntry");
@@ -21,6 +22,23 @@ class MoneyEntryRepo {
       'money_entries',
       moneyEntry.toDBMap(),
     ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+  }
+
+  /// Updates an entry
+  Future<void> update(MoneyEntry moneyEntry) async {
+    final db = await _service.getDB();
+    log("Updating entry: $moneyEntry");
+    await db.update(
+      'money_entries',
+      moneyEntry.toDBMap(),
+      where: 'entryId = ?',
+      whereArgs: [moneyEntry.id]
+    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+  }
+
+  /// Updates an entry or creates a new one if the id is null
+  Future<void> save(MoneyEntry moneyEntry) async {
+    moneyEntry.id == null ? create(moneyEntry) : update(moneyEntry);
   }
 
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {

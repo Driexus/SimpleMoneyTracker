@@ -6,7 +6,7 @@ import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../blocs/home_page_bloc.dart';
+import '../../blocs/money_entry_bloc.dart';
 import '../../model/money_entry.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
@@ -17,9 +17,11 @@ import '../timeline/money_type_toggles.dart';
 part 'date_picker_sheet.dart';
 
 class EditMoneyEntryPage extends StatelessWidget {
-  const EditMoneyEntryPage({super.key});
+  const EditMoneyEntryPage({super.key, required this.forUpdate});
 
-  void _onToggle(List<MoneyType> toggledTypes, HomePageBloc homePageBloc) {
+  final bool forUpdate;
+
+  void _onToggle(List<MoneyType> toggledTypes, MoneyEntryBloc homePageBloc) {
     // This should never happen
     if (toggledTypes.isEmpty) {
       log("Toggled types is empty. This should never happen");
@@ -33,12 +35,19 @@ class EditMoneyEntryPage extends StatelessWidget {
     );
   }
 
+  void _submit(MoneyEntryBloc moneyEntryBloc, BuildContext context) {
+    moneyEntryBloc.add(const EntrySubmitted());
+    if (forUpdate) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Builder(
         builder: (blocContext) {
-          final homePageBloc = blocContext.watch<HomePageBloc>();
-          final state = homePageBloc.state;
+          final moneyEntryBloc = blocContext.watch<MoneyEntryBloc>();
+          final state = moneyEntryBloc.state;
 
           // Find only the activities that are ok for this specific MoneyType
           final activitiesCubit = blocContext.watch<ActivitiesCubit>();
@@ -72,7 +81,7 @@ class EditMoneyEntryPage extends StatelessWidget {
                         onPressed: (_) => showModalBottomSheet<void>(
                             context: blocContext,
                             builder: (BuildContext context) {
-                              return DatePickerSheet(homePageBloc: homePageBloc);
+                              return DatePickerSheet(moneyEntryBloc: moneyEntryBloc);
                             }
                         ),
                       ),
@@ -97,8 +106,10 @@ class EditMoneyEntryPage extends StatelessWidget {
                   top: 115,
                   child: ActivityButtonContainer(
                     activities: activities,
-                    onActivity: (activity) => homePageBloc.add(MoneyActivityUpdated(activity)),
-                    onActivityLongPress: (activity) => Navigations.toEditActivity(context, activity), // TODO: Disable requirement
+                    onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
+                    // Disable activity edit if the entry is being edited // TODO: Completely remove long press
+                    onActivityLongPress: (activity) => forUpdate ? null : Navigations.toEditActivity(context, activity),
+                    enableAdd: !forUpdate,
                   )
               ),
               Positioned(
@@ -108,16 +119,16 @@ class EditMoneyEntryPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Numpad(
-                        onNumber: (digit) => homePageBloc.add(DigitPressed(digit)),
-                        onDecimal: () => homePageBloc.add(const DecimalPressed()),
-                        onBackspace: () => homePageBloc.add(const BackspacePressed()),
+                        onNumber: (digit) => moneyEntryBloc.add(DigitPressed(digit)),
+                        onDecimal: () => moneyEntryBloc.add(const DecimalPressed()),
+                        onBackspace: () => moneyEntryBloc.add(const BackspacePressed()),
                       ),
                       MoneyTypeToggles(
                         selectionMode: SelectionMode.single,
-                        defaultSelected: [homePageBloc.state.moneyType],
+                        defaultSelected: [state.moneyType],
                         middleIcon: Icons.done,
-                        onToggle: (toggleList) => _onToggle(toggleList, homePageBloc),
-                        onMiddlePressed: () => homePageBloc.add(const EntrySubmitted()),
+                        onToggle: (toggleList) => _onToggle(toggleList, moneyEntryBloc),
+                        onMiddlePressed: () => _submit(moneyEntryBloc, context),
                       )
                     ],
                   )

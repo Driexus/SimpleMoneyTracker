@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/home_page_bloc.dart';
+import 'package:simplemoneytracker/blocs/money_entry_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/shared/edit_money_entry_page.dart';
 
-// TODO: Parameterize money Entry
 class TimelineEditEntryPage extends StatelessWidget {
   const TimelineEditEntryPage({super.key, required this.moneyEntry});
 
@@ -17,11 +16,17 @@ class TimelineEditEntryPage extends StatelessWidget {
     final activitiesCubit = context.watch<ActivitiesCubit>();
     final moneyEntryRepo = context.watch<MoneyEntryRepo>();
 
-    // TODO: Add back button, delete and space at the top
     return BlocProvider(
-      create: (_) => HomePageBloc(moneyEntryRepo, activitiesCubit),
+      create: (_) => MoneyEntryBloc.fromMoneyEntry(moneyEntryRepo, activitiesCubit, moneyEntry),
       child: const Scaffold(
-        body: EditMoneyEntryPage()
+        body: Column (
+          children: [
+            SizedBox(height: 40,),
+            Expanded(
+              child: EditMoneyEntryPage(forUpdate: true),
+            )
+          ]
+        )
       )
     );
   }

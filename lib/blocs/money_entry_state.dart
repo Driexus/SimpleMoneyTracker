@@ -1,8 +1,9 @@
-part of '../blocs/home_page_bloc.dart';
+part of '../blocs/money_entry_bloc.dart';
 
-final class HomePageState extends Equatable {
-  const HomePageState(this.isDecimal, this.currentDecimals, this.amount, this.date, this.moneyType, this.moneyActivity);
+final class MoneyEntryState extends Equatable {
+  const MoneyEntryState(this.id, this.isDecimal, this.currentDecimals, this.amount, this.date, this.moneyType, this.moneyActivity);
 
+  final int? id;
   final bool isDecimal;
   final int currentDecimals;
   final int amount;

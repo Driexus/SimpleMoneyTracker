@@ -9,11 +9,12 @@ import '../shared/single_child_scrollable_widget.dart';
 import 'buttons/rectangular_button.dart';
 
 class ActivityButtonContainer extends StatelessWidget {
-  const ActivityButtonContainer({super.key, required this.activities, required this.onActivity, required this.onActivityLongPress});
+  const ActivityButtonContainer({super.key, required this.activities, required this.onActivity, required this.onActivityLongPress, required this.enableAdd});
 
   final List<MoneyActivity> activities;
   final ValueChanged<MoneyActivity> onActivity;
   final ValueChanged<MoneyActivity> onActivityLongPress;
+  final bool enableAdd;
 
   /// Slice the buttons into chunks, add spacing between them, and return them as a list of rows with spacing between them
   List<Widget> _createRows(BuildContext context) {
@@ -40,7 +41,9 @@ class ActivityButtonContainer extends StatelessWidget {
     ) as RectangularButton).toList();
 
     // The AddButton must be recreated in every build in order pass the correct BuildContext
-    buttons.add(AddButton(context: context));
+    if (enableAdd) {
+      buttons.add(AddButton(context: context));
+    }
     return buttons;
   }
 

@@ -11,14 +11,21 @@ import 'package:equatable/equatable.dart';
 
 import '../utils/toast_helper.dart';
 
-part 'home_page_event.dart';
-part 'home_page_state.dart';
+part 'money_entry_event.dart';
+part 'money_entry_state.dart';
 
-// TODO: Change bloc name
-class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc(this.moneyEntryRepo, this.activitiesCubit) : super(
+class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
+  MoneyEntryBloc(this.moneyEntryRepo, this.activitiesCubit) : super(
       _initialState()
   ) {
+    _initCallbacks();
+  }
+
+  MoneyEntryBloc.fromMoneyEntry(this.moneyEntryRepo, this.activitiesCubit, MoneyEntry entry) : super(
+    MoneyEntryState(entry.id, true, 2, entry.amount, entry.createdAt, entry.type, entry.activity)
+  ) { _initCallbacks(); }
+
+  void _initCallbacks() {
     on<MoneyTypeUpdated>(_onMoneyTypeUpdated);
     on<MoneyActivityUpdated>(_onMoneyActivityUpdated);
     on<DateUpdated>(_onDateUpdated);
@@ -32,26 +39,26 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
 
   final ActivitiesCubit activitiesCubit;
   final MoneyEntryRepo moneyEntryRepo;
-
-  Future<void> _onMoneyActivityUpdated(MoneyActivityUpdated event, Emitter<HomePageState> emit) async {
+  
+  Future<void> _onMoneyActivityUpdated(MoneyActivityUpdated event, Emitter<MoneyEntryState> emit) async {
     emit(
-        HomePageState(state.isDecimal, state.currentDecimals, state.amount, state.date, state.moneyType, event.moneyActivity)
+        MoneyEntryState(state.id, state.isDecimal, state.currentDecimals, state.amount, state.date, state.moneyType, event.moneyActivity)
     );
   }
 
-  Future<void> _onMoneyTypeUpdated(MoneyTypeUpdated event, Emitter<HomePageState> emit) async {
+  Future<void> _onMoneyTypeUpdated(MoneyTypeUpdated event, Emitter<MoneyEntryState> emit) async {
     emit(
-        HomePageState(state.isDecimal, state.currentDecimals, state.amount, state.date, event.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, state.isDecimal, state.currentDecimals, state.amount, state.date, event.moneyType, state.moneyActivity)
     );
   }
 
-  Future<void> _onDateUpdated(DateUpdated event, Emitter<HomePageState> emit) async {
+  Future<void> _onDateUpdated(DateUpdated event, Emitter<MoneyEntryState> emit) async {
     emit(
-        HomePageState(state.isDecimal, state.currentDecimals, state.amount, event.date, state.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, state.isDecimal, state.currentDecimals, state.amount, event.date, state.moneyType, state.moneyActivity)
     );
   }
 
-  Future<void> _onDigitPressed(DigitPressed event, Emitter<HomePageState> emit) async {
+  Future<void> _onDigitPressed(DigitPressed event, Emitter<MoneyEntryState> emit) async {
     bool isDecimal = state.isDecimal;
     int currentDecimals = state.currentDecimals;
     int amount = state.amount;
@@ -72,11 +79,11 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     }
 
     emit(
-        HomePageState(isDecimal, currentDecimals, amount, state.date, state.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, isDecimal, currentDecimals, amount, state.date, state.moneyType, state.moneyActivity)
     );
   }
 
-  Future<void> _onBackspacePressed(BackspacePressed event, Emitter<HomePageState> emit) async {
+  Future<void> _onBackspacePressed(BackspacePressed event, Emitter<MoneyEntryState> emit) async {
     bool isDecimal = state.isDecimal;
     int currentDecimals = state.currentDecimals;
     int amount = state.amount;
@@ -95,17 +102,17 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     }
 
     emit(
-        HomePageState(isDecimal, currentDecimals, amount, state.date, state.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, isDecimal, currentDecimals, amount, state.date, state.moneyType, state.moneyActivity)
     );
   }
 
-  Future<void> _onDecimalPressed(DecimalPressed event, Emitter<HomePageState> emit) async {
+  Future<void> _onDecimalPressed(DecimalPressed event, Emitter<MoneyEntryState> emit) async {
     emit(
-        HomePageState(true, state.currentDecimals, state.amount, state.date, state.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, true, state.currentDecimals, state.amount, state.date, state.moneyType, state.moneyActivity)
     );
   }
 
-  Future<void> _onEntrySubmitted(EntrySubmitted event, Emitter<HomePageState> emit) async {
+  Future<void> _onEntrySubmitted(EntrySubmitted event, Emitter<MoneyEntryState> emit) async {
     if (!state.isSubmittable()) {
       if (state.moneyActivity == null) {
         ToastHelper.showToast("Please select an activity before saving an entry");
@@ -116,18 +123,19 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       return;
     }
 
-    moneyEntryRepo.create(
-      MoneyEntry(
-          createdAt: state.date,
-          amount: state.getDBAmount(),
-          type: state.moneyType,
-          currencyId: 1, // TODO: Add more currencies
-          comment: "",
-          activity: state.moneyActivity!
-      )
+    final moneyEntry = MoneyEntry(
+        id: state.id,
+        createdAt: state.date,
+        amount: state.getDBAmount(),
+        type: state.moneyType,
+        currencyId: 1, // TODO: Add more currencies
+        comment: "",
+        activity: state.moneyActivity!
     );
 
-    ToastHelper.showToast("${state.moneyType.displayName} entry added");
+    moneyEntryRepo.save(moneyEntry);
+
+    ToastHelper.showToast("${state.moneyType.displayName} entry saved");
     emit(_initialState());
   }
 
@@ -150,5 +158,5 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     );
   }
 
-  static HomePageState _initialState() => HomePageState(false, 0, 0, DateTime.now(), MoneyType.expense, null);
+  static MoneyEntryState _initialState() => MoneyEntryState(null, false, 0, 0, DateTime.now(), MoneyType.expense, null);
 }

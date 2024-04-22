@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'money_activity.dart';
 
 class MoneyEntry {
+  final int? id;
   final DateTime createdAt;
   final int amount;
   final MoneyType type;
@@ -11,6 +12,7 @@ class MoneyEntry {
   final MoneyActivity activity;
 
   MoneyEntry({
+    this.id,
     required this.createdAt,
     required this.amount,
     required this.type,
@@ -20,6 +22,7 @@ class MoneyEntry {
   });
 
   MoneyEntry.fromDBMap(Map<String, dynamic> dbMap) : this.fromDB(
+    id: dbMap['entryId'] as int?,
     createdAtMillis: dbMap['createdAt'] as int,
     amount: dbMap['amount'] as int,
     typeName: dbMap['type'] as String,
@@ -29,6 +32,7 @@ class MoneyEntry {
   );
 
   MoneyEntry.fromDB({
+    this.id,
     required int createdAtMillis,
     required this.amount,
     required String typeName,
@@ -40,6 +44,7 @@ class MoneyEntry {
   
   Map<String, dynamic> toDBMap() {
     return {
+      'entryId': id,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'amount': amount,
       'type': type.name,
@@ -51,7 +56,7 @@ class MoneyEntry {
 
   @override
   String toString() {
-    return 'MoneyEntry{ createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment, activity: $activity }';
+    return 'MoneyEntry{ id: $id, createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment, activity: $activity }';
   }
 }
 
