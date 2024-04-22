@@ -136,7 +136,7 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
     moneyEntryRepo.save(moneyEntry);
 
     ToastHelper.showToast("${state.moneyType.displayName} entry saved");
-    emit(_initialState());
+    emit(_initialState(moneyType: state.moneyType, moneyActivity: state.moneyActivity));
   }
 
   /// Called when the activities cubit is refreshed in order to update the activity saved in the state
@@ -158,5 +158,8 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
     );
   }
 
-  static MoneyEntryState _initialState() => MoneyEntryState(null, false, 0, 0, DateTime.now(), MoneyType.expense, null);
+  static MoneyEntryState _initialState({
+    MoneyType moneyType = MoneyType.expense,
+    MoneyActivity? moneyActivity
+  }) => MoneyEntryState(null, false, 0, 0, DateTime.now(), moneyType, moneyActivity);
 }
