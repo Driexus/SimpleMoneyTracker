@@ -107,8 +107,8 @@ class EditMoneyEntryPage extends StatelessWidget {
                   child: ActivityButtonContainer(
                     activities: activities,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
-                    // Disable activity edit if the entry is being edited // TODO: Completely remove long press
-                    onActivityLongPress: (activity) => forUpdate ? null : Navigations.toEditActivity(context, activity),
+                    // Disable activity edit if the entry is being edited
+                    onActivityLongPress: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),
                     enableAdd: !forUpdate,
                   )
               ),

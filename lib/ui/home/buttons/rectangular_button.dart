@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
-  const RectangularButton({super.key, this.iconData, required this.description, required this.color, this.hasRipple = true});
+  const RectangularButton({super.key, this.iconData, required this.description, required this.color, this.hasRipple = true, this.onLongPress});
 
-  RectangularButton.fromImageKey({super.key, String? imageKey, required this.description, required this.color, this.hasRipple = true}) :
+  RectangularButton.fromImageKey({super.key, String? imageKey, required this.description, required this.color, this.hasRipple = true, this.onLongPress}) :
     iconData = imageKey != null ? IconsHelper.getIcon(imageKey) : null;
 
   final IconData? iconData;
@@ -26,9 +26,7 @@ class RectangularButton extends StatelessWidget {
     log("Clicked on $description");
   }
 
-  void onLongPress() {
-    log("Long pressed on $description");
-  }
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
