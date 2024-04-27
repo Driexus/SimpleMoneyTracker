@@ -1,3 +1,5 @@
+import 'package:simplemoneytracker/model/money_entry.dart';
+
 class MoneyActivity {
 
   final int? id;
@@ -63,6 +65,15 @@ class MoneyActivity {
       isCredit: isCredit ?? this.isCredit,
       isDebt: isDebt ?? this.isDebt
     );
+  }
+
+  bool isOfType(MoneyType type) {
+    switch (type) {
+      case MoneyType.income: return isIncome;
+      case MoneyType.expense: return isExpense;
+      case MoneyType.credit: return isCredit;
+      case MoneyType.debt: return isDebt;
+    }
   }
 
   @override

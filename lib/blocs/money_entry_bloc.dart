@@ -47,8 +47,11 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
   }
 
   Future<void> _onMoneyTypeUpdated(MoneyTypeUpdated event, Emitter<MoneyEntryState> emit) async {
+    // If the activity is null or is not of the changed type pass it as null the new entry state
+    final activity = state.moneyActivity?.isOfType(event.moneyType) ?? false ? state.moneyActivity : null;
+
     emit(
-        MoneyEntryState(state.id, state.isDecimal, state.currentDecimals, state.amount, state.date, event.moneyType, state.moneyActivity)
+        MoneyEntryState(state.id, state.isDecimal, state.currentDecimals, state.amount, state.date, event.moneyType, activity)
     );
   }
 
