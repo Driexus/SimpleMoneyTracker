@@ -63,7 +63,6 @@ class IconsHelper {
     'local_grocery_store': Icons.local_grocery_store,
     'local_hotel': Icons.local_hotel,
     'local_print_shop': Icons.local_print_shop,
-    'local_restaurant': Icons.local_restaurant,
     'local_see': Icons.local_see,
     'local_shipping': Icons.local_shipping,
     'local_taxi': Icons.local_taxi,
@@ -156,6 +155,9 @@ class IconsHelper {
     'wine_bar': Icons.wine_bar,
     'work': Icons.work,
     'workspaces': Icons.workspaces,
+    'local_mall': Icons.local_mall,
+    'receipt': Icons.receipt,
+    'receipt_long': Icons.receipt_long,
   };
 
   static IconData? getIcon(String key) {
