@@ -36,9 +36,10 @@ class EditMoneyEntryPage extends StatelessWidget {
   }
 
   void _submit(MoneyEntryBloc moneyEntryBloc, BuildContext context) {
-    moneyEntryBloc.add(const EntrySubmitted());
     if (forUpdate) {
-      Navigator.pop(context);
+      moneyEntryBloc.add(EntryChanged(context));
+    } else {
+      moneyEntryBloc.add(const EntrySubmitted());
     }
   }
 

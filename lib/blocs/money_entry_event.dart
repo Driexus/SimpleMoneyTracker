@@ -55,3 +55,13 @@ final class DecimalPressed extends MoneyEntryEvent {
 final class EntrySubmitted extends MoneyEntryEvent {
   const EntrySubmitted();
 }
+
+/// Called when an entry should be changed. Context is passed in order to pop it from navigator
+final class EntryChanged extends MoneyEntryEvent {
+  const EntryChanged(this.context);
+
+  final BuildContext context;
+
+  @override
+  List<Object?> get props => [context];
+}

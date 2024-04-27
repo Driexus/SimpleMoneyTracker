@@ -33,6 +33,7 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
     on<BackspacePressed>(_onBackspacePressed);
     on<DecimalPressed>(_onDecimalPressed);
     on<EntrySubmitted>(_onEntrySubmitted);
+    on<EntryChanged>(_onEntryChanged);
     activitiesCubit.stream.listen(_onActivitiesRefreshed);
     log("Initialized HomePageBloc");
   }
@@ -116,30 +117,17 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
   }
 
   Future<void> _onEntrySubmitted(EntrySubmitted event, Emitter<MoneyEntryState> emit) async {
-    if (!state.isSubmittable()) {
-      if (state.moneyActivity == null) {
-        ToastHelper.showToast("Please select an activity before saving an entry");
-      }
-      else if (state.amount == 0) {
-        ToastHelper.showToast("Please add a valid amount before saving an entry");
-      }
-      return;
-    }
-
-    final moneyEntry = MoneyEntry(
-        id: state.id,
-        createdAt: state.date,
-        amount: state.getDBAmount(),
-        type: state.moneyType,
-        currencyId: 1, // TODO: Add more currencies
-        comment: "",
-        activity: state.moneyActivity!
-    );
-
-    moneyEntryRepo.save(moneyEntry);
+    if (!await _saveEntry()) return;
 
     ToastHelper.showToast("${state.moneyType.displayName} entry saved");
     emit(_initialState(moneyType: state.moneyType, moneyActivity: state.moneyActivity));
+  }
+
+  Future<void> _onEntryChanged(EntryChanged event, Emitter<MoneyEntryState> emit) async {
+    if (!await _saveEntry()) return;
+
+    ToastHelper.showToast("${state.moneyType.displayName} entry edited");
+    if (event.context.mounted) Navigator.pop(event.context);
   }
 
   /// Called when the activities cubit is refreshed in order to update the activity saved in the state
@@ -159,6 +147,31 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
             updatedActivity
         )
     );
+  }
+
+  Future<bool> _saveEntry() async {
+    if (!state.isSubmittable()) {
+      if (state.moneyActivity == null) {
+        ToastHelper.showToast("Please select an activity before saving an entry");
+      }
+      else if (state.amount == 0) {
+        ToastHelper.showToast("Please add a valid amount before saving an entry");
+      }
+      return false;
+    }
+
+    final moneyEntry = MoneyEntry(
+        id: state.id,
+        createdAt: state.date,
+        amount: state.getDBAmount(),
+        type: state.moneyType,
+        currencyId: 1, // TODO: Add more currencies
+        comment: "",
+        activity: state.moneyActivity!
+    );
+
+    await moneyEntryRepo.save(moneyEntry);
+    return true;
   }
 
   static MoneyEntryState _initialState({
