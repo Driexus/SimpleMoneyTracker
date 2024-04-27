@@ -54,8 +54,8 @@ class RectangularButton extends StatelessWidget {
               ),
               Positioned(
                 bottom: 5,
-                left: 0,
-                right: 0,
+                left: 3,
+                right: 3,
                 child: AutoSizeText(
                   description,
                   maxLines: 1,
