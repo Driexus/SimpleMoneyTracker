@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../blocs/money_entry_bloc.dart';
 import '../../model/money_entry.dart';
+import '../../utils/currencies.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
 import 'money_entry_bar.dart';
@@ -73,9 +74,10 @@ class EditMoneyEntryPage extends StatelessWidget {
                         description: state.moneyActivity?.title,
                         color: state.moneyActivity?.color.toColor() ?? Colors.cyan,
                         imageKey: state.moneyActivity?.imageKey,
-                        amount: state.amount.toEuros(
+                        amount: state.amount.toCurrency(
                             decimals: state.currentDecimals,
-                            isDecimal: state.isDecimal
+                            isDecimal: state.isDecimal,
+                            currency: Currency.euro
                         ),
                         date: state.date,
                         moneyType: state.moneyType,

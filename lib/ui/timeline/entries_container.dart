@@ -5,6 +5,7 @@ import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
+import 'package:simplemoneytracker/utils/currencies.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../utils/toast_helper.dart';
@@ -38,7 +39,7 @@ class EntriesContainer extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text('Delete ${moneyEntry.type.displayName}?'),
-        content: Text('Are you sure you want to delete ${moneyEntry.amount.toEuros()} of ${moneyEntry.type.displayName}? This action is not reversible.'),
+        content: Text('Are you sure you want to delete ${moneyEntry.amount.toCurrency(currency: Currency.euro)} of ${moneyEntry.type.displayName}? This action is not reversible.'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),

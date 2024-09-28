@@ -3,6 +3,7 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:simplemoneytracker/blocs/stats_bloc.dart';
 import 'package:simplemoneytracker/ui/shared/bottom_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
+import 'package:simplemoneytracker/utils/currencies.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../../model/money_entry.dart';
@@ -67,7 +68,7 @@ class BreakdownPage extends StatelessWidget {
                 colorList: _colorList,
                 chartType: ChartType.ring,
                 centerWidget: Text(
-                  "Total ${moneyType.displayName}\n${total.toEuros()}",
+                  "Total ${moneyType.displayName}\n${total.toCurrency(currency: Currency.euro)}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,

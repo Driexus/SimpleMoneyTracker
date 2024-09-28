@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
+import 'package:simplemoneytracker/utils/currencies.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyEntryBar extends StatelessWidget {
@@ -9,7 +10,7 @@ class MoneyEntryBar extends StatelessWidget {
     moneyEntry = null;
 
   MoneyEntryBar.fromEntry({super.key, required MoneyEntry entry, required this.onPressed, this.onLongPress}) :
-    amount = entry.amount.toEuros(),
+    amount = entry.amount.toCurrency(currency: Currency.euro),
     date = entry.createdAt,
     moneyType = entry.type,
     color = Color(entry.activity.color),

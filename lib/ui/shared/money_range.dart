@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/utils/currencies.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyRange extends StatefulWidget {
@@ -52,8 +53,8 @@ class _MoneyRangeState extends State<MoneyRange> {
       values: _currentRangeValues,
       max: MoneyRange._maxValue,
       labels: RangeLabels(
-        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toEuros(decimals: 0, ignoreLast: 2),
-        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toEuros(decimals: 0, ignoreLast: 2)
+        MoneyRange._rangeValueToAmount(_currentRangeValues.start).toCurrency(decimals: 0, ignoreLast: 2, currency: Currency.euro),
+        _currentRangeValues.end == MoneyRange._maxValue ? "∞" : MoneyRange._rangeValueToAmount(_currentRangeValues.end).toCurrency(decimals: 0, ignoreLast: 2, currency: Currency.euro)
       ),
       onChanged: (rangeValues) => setState(() {
         _currentRangeValues = rangeValues;

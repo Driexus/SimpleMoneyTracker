@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:simplemoneytracker/utils/currencies.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../model/money_entry.dart';
@@ -34,7 +35,7 @@ class CsvExporter {
 
   static final List<String> _headers = [
     'Date',
-    'Amount',
+    'Amount (${Currency.euro.symbol})',
     'Type',
     'Activity',
     'Comment',
@@ -42,7 +43,7 @@ class CsvExporter {
 
   static List<dynamic> _toCsvList(MoneyEntry moneyEntry) => [
     moneyEntry.createdAt.toDateFull(),
-    moneyEntry.amount.toEuros(),
+    moneyEntry.amount.toCurrency(),
     moneyEntry.type.name,
     moneyEntry.activity.title,
     moneyEntry.comment,
