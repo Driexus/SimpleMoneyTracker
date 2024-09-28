@@ -37,6 +37,7 @@ extension StringOrEmpty on int? {
   }
 }
 
+// TODO #68: Replace with toCurrency
 extension Amounts on int {
   String toEuros({int decimals = 2, bool isDecimal = false, int ignoreLast = 0}) {
     String remaining = toString().dropLast(ignoreLast);

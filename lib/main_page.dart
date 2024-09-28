@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
+import 'package:simplemoneytracker/ui/settings/settings_page.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
 import 'package:simplemoneytracker/ui/stats/page/stats_page.dart';
 import 'package:simplemoneytracker/ui/timeline/timeline_page.dart';
@@ -21,16 +22,16 @@ class MainPage extends StatelessWidget {
                     Tab(icon: Icon(Icons.home)),
                     Tab(icon: Icon(Icons.format_list_bulleted)),
                     Tab(icon: Icon(Icons.show_chart)),
-                    // TODO #52: Tab(icon: Icon(Icons.settings)),
+                    Tab(icon: Icon(Icons.settings)),
                   ],
                 ),
               ),
               body: const TabBarView(
                 children: [
+                  SettingsPage(), // TODO: Move
                   HomePage(),
                   TimelinePage(),
                   StatsPage(),
-                  // TODO #52: SettingsPage()
                 ],
               )
           )
