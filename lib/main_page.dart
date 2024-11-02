@@ -12,7 +12,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverscrollNotificationListener(
         child: DefaultTabController(
-          length: 3,
+          length: 4,
           child: Scaffold(
               appBar: AppBar(
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
