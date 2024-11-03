@@ -25,7 +25,7 @@ class FilterSheet extends StatelessWidget {
       FiltersAdded(
         MoneyEntryFilters(
           minDate: dateRange.startDate,
-          maxDate: dateRange.endDate
+          maxDate: dateRange.endDate.add(const Duration(days: 1))
         )
       )
     );

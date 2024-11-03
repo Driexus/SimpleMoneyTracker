@@ -61,8 +61,8 @@ class MoneyEntryFilters {
           _WhereCondition()..and('createdAt <= ?')
       );
 
-      // Filter until the start of the next day
-      DateTime maxFilterDay = DateTime(maxDate!.year, maxDate!.month, maxDate!.day).add(const Duration(days: 1));
+      // Filter until the start of the given day
+      DateTime maxFilterDay = DateTime(maxDate!.year, maxDate!.month, maxDate!.day);
       whereArgsBuilder.addInt(maxFilterDay.millisecondsSinceEpoch);
     }
 
