@@ -1,13 +1,10 @@
 part of '../blocs/stats_bloc.dart';
 
-sealed class StatsState extends Equatable {
+sealed class StatsState {
   const StatsState(this.totals, this.subtotals);
 
   final Map<MoneyType, int> totals;
   final Map<MoneyType, List<Subtotal>> subtotals;
-
-  @override
-  List<Object?> get props => [totals, subtotals];
 
   int get totalExpenses => totals[MoneyType.expense]!;
   int get totalIncome => totals[MoneyType.income]!;
@@ -21,9 +18,6 @@ sealed class StatsState extends Equatable {
 
   int get netTotal => totalIncome - totalExpenses;
   int get netSettlements => totalCredit - totalDebt;
-
-  DateTime? get startDate;
-  DateTime? get endDate;
 }
 
 final class EmptyStatsState extends StatsState {
@@ -41,47 +35,11 @@ final class EmptyStatsState extends StatsState {
         MoneyType.credit: []
       }
   );
-
-  @override
-  DateTime? get startDate => null;
-
-  @override
-  DateTime? get endDate => null;
 }
 
-final class CustomStatsState extends StatsState {
-  const CustomStatsState(
-      this.startDate,
-      this.endDate,
+final class NonEmptyStatsState extends StatsState {
+  const NonEmptyStatsState(
       super.totals,
       super.subtotals
   );
-
-  @override
-  final DateTime? startDate;
-
-  @override
-  final DateTime? endDate;
-
-  @override
-  List<Object?> get props => [
-    ...super.props,
-    startDate,
-    endDate
-  ];
-}
-
-final class MonthStatsState extends StatsState {
-  const MonthStatsState(this.month, super.totals, super.subtotals);
-
-  final DateTime month;
-
-  @override
-  List<Object?> get props => [...super.props, month];
-
-  @override
-  DateTime? get startDate => month.startOfMonth();
-
-  @override
-  DateTime? get endDate => month.startOfNextMonth();
 }

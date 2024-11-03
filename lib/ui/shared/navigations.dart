@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simplemoneytracker/blocs/date_span_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
@@ -23,12 +24,13 @@ class Navigations {
 
   static toBreakdownPage(BuildContext context, MoneyType moneyType) {
     final state = Provider.of<StatsBloc>(context, listen: false).state;
+    final String title = Provider.of<DateSpanBloc>(context, listen: false).state.getHeader();
     if (state.subtotals[moneyType].isEmptyOrNull()) {
       return;
     }
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => BreakdownPage(statsState: state, moneyType: moneyType))
+        MaterialPageRoute(builder: (_) => BreakdownPage(statsState: state, moneyType: moneyType, title: title))
     );
   }
 

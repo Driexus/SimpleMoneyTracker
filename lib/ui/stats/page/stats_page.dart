@@ -1,38 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/date_span_bloc.dart';
 import 'package:simplemoneytracker/blocs/stats_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/ui/stats/widget/total_money_bar_container.dart';
-import 'package:simplemoneytracker/utils/extensions.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
 
   static const _iconsSize = 26.0;
 
-  void _previousMonth(StatsBloc statsBloc, DateTime currentMonth) {
-    final DateTime month = DateTime(currentMonth.year, currentMonth.month - 1);
-    statsBloc.add(MonthUpdated(month));
-  }
-
-  void _nextMonth(StatsBloc statsBloc, DateTime currentMonth) {
-    final DateTime month = DateTime(currentMonth.year, currentMonth.month + 1);
-    statsBloc.add(MonthUpdated(month));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (blocContext) {
-        final statsBloc = blocContext.watch<StatsBloc>();
-        late final MonthStatsState state;
+        final dateSpanBloc = blocContext.watch<DateSpanBloc>();
+        final StatsState state = blocContext.watch<StatsBloc>().state;
 
-        if (statsBloc.state.runtimeType == MonthStatsState) {
-          state = statsBloc.state as MonthStatsState;
-        }
-        else {
-          return const Stack(); // TODO: Handle more states
+        if (dateSpanBloc.state.runtimeType != MonthSpanState) {
+          throw UnimplementedError("Only month span state is implemented");
         }
 
         return SingleChildScrollableWidget(
@@ -49,10 +36,10 @@ class StatsPage extends StatelessWidget {
                         IconButton(
                           iconSize: _iconsSize,
                           icon: const Icon(Icons.chevron_left),
-                          onPressed: () => _previousMonth(statsBloc, state.month),
+                          onPressed: () => dateSpanBloc.add(const PreviousMonth()),
                         ),
                         Text(
-                          state.month.toMonthYearFull(),
+                          dateSpanBloc.state.getHeader(),
                           style: const TextStyle(
                             fontSize: 22,
                             color: Colors.black54,
@@ -61,7 +48,7 @@ class StatsPage extends StatelessWidget {
                         IconButton(
                           iconSize: _iconsSize,
                           icon: const Icon(Icons.chevron_right),
-                          onPressed:  () => _nextMonth(statsBloc, state.month),
+                          onPressed:  () => dateSpanBloc.add(const NextMonth()),
                         ),
                       ],
                     ),
