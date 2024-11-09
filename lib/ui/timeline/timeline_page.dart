@@ -3,16 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
 import 'package:simplemoneytracker/ui/timeline/filter_sheet.dart';
 import 'package:simplemoneytracker/ui/timeline/entries_container.dart';
-import 'package:simplemoneytracker/utils/extensions.dart';
 import '../../repos/money_entry_repo.dart';
 import 'money_type_toggles.dart';
 
 class TimelinePage extends StatelessWidget {
   const TimelinePage({super.key});
-
-  static final String _defaultDateHeader = DateTime.now().toMonthYearFull();
 
   void _onToggle(TimelineBloc entriesBloc, List<MoneyType> allowedTypes) {
     entriesBloc.add(FiltersAdded(
@@ -25,39 +23,25 @@ class TimelinePage extends StatelessWidget {
     return Builder(
         builder: (blocContext) {
           final entriesBloc = blocContext.watch<TimelineBloc>();
-          late final String dateHeader;
-
-          switch (entriesBloc.state.runtimeType) {
-            case EmptyEntries:
-              dateHeader = _defaultDateHeader;
-            case ValidEntries:
-              dateHeader = (entriesBloc.state as ValidEntries).firstEntry.createdAt.toMonthYearFull();
-          }
 
           return Stack(
             children: [
               Positioned(
                   left: 0,
                   right: 0,
-                  top: 15,
+                  top: 5,
                   bottom: 60,
                   child: Column(
                     children: [
-                      Text(
-                        dateHeader,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const Divider(height: 26, thickness: 1, indent: 15, endIndent: 15),
+                      MonthScroller(),
+                      const Divider(height: 10, indent: 15, endIndent: 15, thickness: 1),
                     ],
                   )
               ),
               const Positioned(
                   left: 0,
                   right: 0,
-                  top: 75,
+                  top: 77,
                   bottom: 60,
                   child: EntriesContainer()
               ),

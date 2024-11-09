@@ -22,10 +22,12 @@ class MyApp extends StatelessWidget {
   final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
   late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
   late final DateSpanBloc _dateSpanBloc = DateSpanBloc.monthFromDateTime(DateTime.now());
-  late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit)..add(
+  late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit, _dateSpanBloc)..add(
       FiltersUpdated(
           MoneyEntryFilters(
-              allowedTypes: [MoneyType.expense, MoneyType.income, MoneyType.debt, MoneyType.credit]
+            allowedTypes: [MoneyType.expense, MoneyType.income, MoneyType.debt, MoneyType.credit],
+            minDate: _dateSpanBloc.state.startDate,
+            maxDate: _dateSpanBloc.state.endDate,
           )
       )
   );
