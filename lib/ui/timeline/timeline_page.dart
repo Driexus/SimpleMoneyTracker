@@ -20,53 +20,49 @@ class TimelinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-        builder: (blocContext) {
-          final entriesBloc = blocContext.watch<TimelineBloc>();
+      final entriesBloc = context.watch<TimelineBloc>();
 
-          return Stack(
-            children: [
-              Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 5,
-                  bottom: 60,
-                  child: Column(
-                    children: [
-                      MonthScroller(),
-                      const Divider(height: 10, indent: 15, endIndent: 15, thickness: 1),
-                    ],
+      return Stack(
+        children: [
+          Positioned(
+              left: 0,
+              right: 0,
+              top: 5,
+              bottom: 60,
+              child: Column(
+                children: [
+                  MonthScroller(),
+                  const Divider(height: 10, indent: 15, endIndent: 15, thickness: 1),
+                ],
+              )
+          ),
+          const Positioned(
+              left: 0,
+              right: 0,
+              top: 77,
+              bottom: 60,
+              child: EntriesContainer()
+          ),
+          Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: MoneyTypeToggles(
+                selectionMode: SelectionMode.multi,
+                defaultSelected: entriesBloc.state.filters.allowedTypes ?? const [MoneyType.expense, MoneyType.credit, MoneyType.debt, MoneyType.income],
+                middleIcon: Symbols.instant_mix,
+                onToggle: (toggledTypes) => _onToggle(entriesBloc, toggledTypes),
+                onMiddlePressed: () => {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return FilterSheet(entriesBloc: entriesBloc);
+                    }
                   )
-              ),
-              const Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 77,
-                  bottom: 60,
-                  child: EntriesContainer()
-              ),
-              Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: MoneyTypeToggles(
-                    selectionMode: SelectionMode.multi,
-                    defaultSelected: entriesBloc.state.filters.allowedTypes ?? const [MoneyType.expense, MoneyType.credit, MoneyType.debt, MoneyType.income],
-                    middleIcon: Symbols.instant_mix,
-                    onToggle: (toggledTypes) => _onToggle(entriesBloc, toggledTypes),
-                    onMiddlePressed: () => {
-                      showModalBottomSheet<void>(
-                        context: blocContext,
-                        builder: (BuildContext context) {
-                          return FilterSheet(entriesBloc: entriesBloc);
-                        }
-                      )
-                    },
-                  )
-              ),
-            ],
-          );
-        }
-    );
+                },
+              )
+          ),
+        ],
+      );
   }
 }
