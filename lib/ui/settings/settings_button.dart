@@ -44,9 +44,12 @@ class SettingsButton extends StatelessWidget {
     // Build button
     return InkWell(
         onTap: onPress,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: columnChildren,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: columnChildren,
+          )
         )
     );
   }
