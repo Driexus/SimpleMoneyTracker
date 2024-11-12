@@ -7,7 +7,6 @@ class MoneyEntry {
   final DateTime createdAt;
   final int amount;
   final MoneyType type;
-  final int currencyId;
   final String comment;
   final MoneyActivity activity;
 
@@ -16,7 +15,6 @@ class MoneyEntry {
     required this.createdAt,
     required this.amount,
     required this.type,
-    required this.currencyId,
     required this.comment,
     required this.activity
   });
@@ -26,7 +24,6 @@ class MoneyEntry {
     createdAtMillis: dbMap['createdAt'] as int,
     amount: dbMap['amount'] as int,
     typeName: dbMap['type'] as String,
-    currencyId: dbMap['currencyId'] as int,
     comment: dbMap['comment'] as String,
     activity: MoneyActivity.fromDBMap(dbMap),
   );
@@ -36,7 +33,6 @@ class MoneyEntry {
     required int createdAtMillis,
     required this.amount,
     required String typeName,
-    required this.currencyId,
     required this.comment,
     required this.activity
   }) :  createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtMillis),
@@ -48,7 +44,6 @@ class MoneyEntry {
       'createdAt': createdAt.millisecondsSinceEpoch,
       'amount': amount,
       'type': type.name,
-      'currencyId': currencyId,
       'comment': comment,
       'activityId': activity.id
     };
@@ -56,7 +51,7 @@ class MoneyEntry {
 
   @override
   String toString() {
-    return 'MoneyEntry{ id: $id, createdAt: $createdAt, amount: $amount, type: $type, currencyId: $currencyId, comment: $comment, activity: $activity }';
+    return 'MoneyEntry{ id: $id, createdAt: $createdAt, amount: $amount, type: $type, comment: $comment, activity: $activity }';
   }
 }
 

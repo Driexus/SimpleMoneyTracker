@@ -23,6 +23,7 @@ class SqliteService {
       return _db!;
     }
 
+    // TODO: Upgrade database -> drop currencyId
     // Open db if it is not cached
     final db = await openDatabase(
       join(await getDatabasesPath(), 'simple_money_tracker.db'),
@@ -60,7 +61,6 @@ class SqliteService {
         'createdAt INTEGER NOT NULL,'
         'amount INTEGER NOT NULL,'
         'type TEXT NOT NULL,'
-        'currencyId INTEGER,'
         'comment TEXT,'
         'activityId INTEGER NOT NULL,'
         'FOREIGN KEY(activityId) REFERENCES money_activities(activityId) ON DELETE CASCADE'

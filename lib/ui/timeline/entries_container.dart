@@ -5,7 +5,7 @@ import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
-import 'package:simplemoneytracker/utils/currencies.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../utils/toast_helper.dart';

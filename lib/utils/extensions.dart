@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
-import 'package:simplemoneytracker/utils/currencies.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 
 extension EmptyOrNullList on Iterable<dynamic>? {
   bool isEmptyOrNull() => this?.isEmpty ?? true;

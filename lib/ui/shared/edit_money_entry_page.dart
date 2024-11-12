@@ -8,7 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../blocs/money_entry_bloc.dart';
 import '../../model/money_entry.dart';
-import '../../utils/currencies.dart';
+import '../../model/currency.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
 import 'money_entry_bar.dart';

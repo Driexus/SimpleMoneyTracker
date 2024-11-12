@@ -165,7 +165,6 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
         createdAt: state.date,
         amount: state.getDBAmount(),
         type: state.moneyType,
-        currencyId: 1, // TODO: Add more currencies
         comment: "",
         activity: state.moneyActivity!
     );
