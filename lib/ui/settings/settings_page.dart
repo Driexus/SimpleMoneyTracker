@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/settings/csv_exporter.dart';
+import 'package:simplemoneytracker/ui/settings/elevated_material.dart';
 import 'package:simplemoneytracker/ui/settings/settings_button.dart';
+import 'package:simplemoneytracker/ui/settings/settings_divider.dart';
 import 'package:simplemoneytracker/ui/settings/settings_panel.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
+import 'package:simplemoneytracker/ui/shared/text/description_text.dart';
+import 'package:simplemoneytracker/ui/shared/text/header_text.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -24,8 +28,31 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
         child: Column(
           children: [
+            SettingsPanel(
+                buttons: [
+                  SettingsButton(
+                    title: "Currency",
+                    description: "Pick your preferred currency. This is a visual only feature and does not convert already saved entries.",
+                    iconData: Icons.monetization_on_outlined,
+                    iconColor: Colors.blueAccent,
+                    onPress: () => (),
+                  )
+                ]
+            ),
+            const SizedBox(height: 15),
+            SettingsPanel(
+                buttons: [
+                  SettingsButton(
+                    title: "Export",
+                    description: "Export your data to a csv file.",
+                    iconData: Icons.receipt_outlined,
+                    iconColor: Colors.lightGreen,
+                    onPress: () => _exportCsv(moneyEntryRepo),
+                  )
+                ]
+            ),
+            const SizedBox(height: 15),
             // TODO: Add about
-            // TODO: Add special thanks
             SettingsPanel(
                 buttons: [
                   SettingsButton(
@@ -55,16 +82,25 @@ class SettingsPage extends StatelessWidget {
                 ]
             ),
             const SizedBox(height: 15),
-            SettingsPanel(
-              buttons: [
-                SettingsButton(
-                  title: "Export",
-                  description: "Export your data to a csv file.",
-                  iconData: Icons.receipt_outlined,
-                  iconColor: Colors.lightGreen,
-                  onPress: () => _exportCsv(moneyEntryRepo),
-                )
-              ]
+            const ElevatedMaterial(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: HeaderText(data: "Special Thanks"),
+                  ),
+                  SettingsDivider(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: DescriptionText(data: "Stelios Antonogiannakis"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: DescriptionText(data: "Myrto Topali")
+                  ),
+                ],
+              ),
             )
           ],
         )

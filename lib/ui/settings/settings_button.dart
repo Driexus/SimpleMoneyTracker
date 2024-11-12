@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../shared/text/description_text.dart';
+import '../shared/text/header_text.dart';
+
 class SettingsButton extends StatelessWidget {
   const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress});
 
@@ -18,27 +21,14 @@ class SettingsButton extends StatelessWidget {
       rowChildren.add(const SizedBox(width: 7));
     }
 
-    rowChildren.add(Text(
-        title,
-        style: const TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        )
-    ));
+    rowChildren.add(HeaderText(data: title));
     Row row = Row(children: rowChildren);
 
     // Create column children
     List<Widget> columnChildren = [row];
     if (description != null) {
       columnChildren.add(const SizedBox(height: 2));
-      columnChildren.add(Text(
-          description!,
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 15,
-          ))
-      );
+      columnChildren.add(DescriptionText(data: description!));
     }
 
     // Build button
@@ -60,7 +50,6 @@ class SettingsButton extends StatelessWidget {
         width: 26,
         child: Material(
             color: color,
-            elevation: 6,
             borderRadius: BorderRadius.circular(3),
             child: Icon(iconData, size: 19)
         )
