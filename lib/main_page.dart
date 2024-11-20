@@ -28,10 +28,10 @@ class MainPage extends StatelessWidget {
               ),
               body: const TabBarView(
                 children: [
-                  SettingsPage(), // TODO: Move
                   HomePage(),
                   TimelinePage(),
                   StatsPage(),
+                  SettingsPage(),
                 ],
               )
           )

@@ -9,9 +9,10 @@ class DescriptionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
+      textAlign: TextAlign.justify,
       style: const TextStyle(
         color: Colors.black54,
-        fontSize: 15,
+        fontSize: 14,
       )
     );
   }
