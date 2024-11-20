@@ -120,7 +120,7 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
     if (!await _saveEntry()) return;
 
     ToastHelper.showToast("${state.moneyType.displayName} entry saved");
-    emit(_initialState(moneyType: state.moneyType, moneyActivity: state.moneyActivity));
+    emit(_initialState(moneyType: state.moneyType, moneyActivity: state.moneyActivity, date: state.date));
   }
 
   Future<void> _onEntryChanged(EntryChanged event, Emitter<MoneyEntryState> emit) async {
@@ -165,7 +165,6 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
         createdAt: state.date,
         amount: state.getDBAmount(),
         type: state.moneyType,
-        currencyId: 1, // TODO: Add more currencies
         comment: "",
         activity: state.moneyActivity!
     );
@@ -176,6 +175,7 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
 
   static MoneyEntryState _initialState({
     MoneyType moneyType = MoneyType.expense,
-    MoneyActivity? moneyActivity
-  }) => MoneyEntryState(null, false, 0, 0, DateTime.now(), moneyType, moneyActivity);
+    MoneyActivity? moneyActivity,
+    DateTime? date
+  }) => MoneyEntryState(null, false, 0, 0, date ?? DateTime.now(), moneyType, moneyActivity);
 }

@@ -3,6 +3,7 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:simplemoneytracker/blocs/stats_bloc.dart';
 import 'package:simplemoneytracker/ui/shared/bottom_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../../model/money_entry.dart';
@@ -10,10 +11,11 @@ import '../../../repos/money_entry_repo.dart';
 import '../widget/total_money_activity_bar.dart';
 
 class BreakdownPage extends StatelessWidget {
-  const BreakdownPage({super.key, required this.statsState, required this.moneyType});
+  const BreakdownPage({super.key, required this.statsState, required this.moneyType, required this.title});
 
   final StatsState statsState;
   final MoneyType moneyType;
+  final String title;
 
   int get total => statsState.totals[moneyType]!;
   List<Subtotal> get subtotals => statsState.subtotals[moneyType]!;
@@ -32,14 +34,6 @@ class BreakdownPage extends StatelessWidget {
 
   List<Color> get _colorList => subtotals.map((e) => e.moneyActivity.color.toColor()).toList();
 
-  String get _title {
-    if (statsState.runtimeType == MonthStatsState) {
-      return (statsState as MonthStatsState).month.toMonthYearFull();
-    }
-
-    return ""; // TODO: Handle more states
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +44,7 @@ class BreakdownPage extends StatelessWidget {
               right: 0,
               left: 0,
               child: Text(
-                _title,
+                title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 22,
@@ -67,7 +61,7 @@ class BreakdownPage extends StatelessWidget {
                 colorList: _colorList,
                 chartType: ChartType.ring,
                 centerWidget: Text(
-                  "Total ${moneyType.displayName}\n${total.toEuros()}",
+                  "Total ${moneyType.displayName}\n${total.toCurrency(currency: Currency.euro)}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,

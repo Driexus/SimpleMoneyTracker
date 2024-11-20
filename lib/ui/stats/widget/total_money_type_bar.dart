@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../shared/navigations.dart';
@@ -61,7 +62,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                         bottom: 0,
                         child: Center(
                           child: AutoSizeText(
-                            amount.toEuros(),
+                            amount.toCurrency(currency: Currency.euro),
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: const TextStyle(

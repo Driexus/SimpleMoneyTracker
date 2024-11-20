@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 
 extension EmptyOrNullList on Iterable<dynamic>? {
   bool isEmptyOrNull() => this?.isEmpty ?? true;
@@ -13,19 +14,19 @@ extension FlattenList<T> on Iterable<Iterable<T>> {
 extension WidgetSpacing on Iterable<Widget> {
   List<Widget> addHorizontalSpacing(double space) {
     final box = SizedBox(width: space, height: 1);
-    return _addSizedBox(box);
+    return interpolateWidget(box);
   }
 
   List<Widget> addVerticalSpacing(double space) {
     final box = SizedBox(width: 1, height: space);
-    return _addSizedBox(box);
+    return interpolateWidget(box);
   }
 
-  List<Widget> _addSizedBox(SizedBox box) {
+  List<Widget> interpolateWidget(Widget widget) {
     // Casting because of weird error: https://stackoverflow.com/questions/54943770/type-is-not-a-subtype-of-type-widget
     List<Widget> result = cast<Widget>().toList();
     for (var i = length - 1; i > 0; i --) {
-      result.insert(i, box);
+      result.insert(i, widget);
     }
     return result;
   }
@@ -38,11 +39,12 @@ extension StringOrEmpty on int? {
 }
 
 extension Amounts on int {
-  String toEuros({int decimals = 2, bool isDecimal = false, int ignoreLast = 0}) {
+  String toCurrency({int decimals = 2, bool isDecimal = false, int ignoreLast = 0, Currency? currency}) {
     String remaining = toString().dropLast(ignoreLast);
 
     // Decimals
-    String result = "${remaining.takeLast(decimals)} €";
+    final symbol = currency == null ? "" : " ${currency.symbol} ";
+    String result = "${remaining.takeLast(decimals)}$symbol";
     remaining = remaining.dropLast(decimals);
 
     // If decimal, add comma

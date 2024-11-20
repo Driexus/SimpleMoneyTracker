@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/home/home_page.dart';
+import 'package:simplemoneytracker/ui/settings/settings_page.dart';
 import 'package:simplemoneytracker/ui/shared/overscroll_notification_listener.dart';
 import 'package:simplemoneytracker/ui/stats/page/stats_page.dart';
 import 'package:simplemoneytracker/ui/timeline/timeline_page.dart';
@@ -11,7 +12,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverscrollNotificationListener(
         child: DefaultTabController(
-          length: 3,
+          length: 4,
           child: Scaffold(
               appBar: AppBar(
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -21,7 +22,7 @@ class MainPage extends StatelessWidget {
                     Tab(icon: Icon(Icons.home)),
                     Tab(icon: Icon(Icons.format_list_bulleted)),
                     Tab(icon: Icon(Icons.show_chart)),
-                    // TODO #52: Tab(icon: Icon(Icons.settings)),
+                    Tab(icon: Icon(Icons.settings)),
                   ],
                 ),
               ),
@@ -30,7 +31,7 @@ class MainPage extends StatelessWidget {
                   HomePage(),
                   TimelinePage(),
                   StatsPage(),
-                  // TODO #52: SettingsPage()
+                  SettingsPage(),
                 ],
               )
           )
