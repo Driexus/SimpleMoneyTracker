@@ -14,7 +14,9 @@ class SettingsPanel extends StatelessWidget {
     return ElevatedMaterial(
       child: Column(
           children: buttons.interpolateWidget(
-            const SettingsDivider()
+            const Column(
+              children: [SettingsDivider(), SizedBox(height: 3)],
+            )
           )
       )
     );

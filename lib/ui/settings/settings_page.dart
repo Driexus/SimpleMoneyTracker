@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/settings/csv_exporter.dart';
@@ -36,7 +37,9 @@ class SettingsPage extends StatelessWidget {
                     description: "Pick your preferred currency. This is a visual only feature and does not convert already saved entries.",
                     iconData: Icons.monetization_on_outlined,
                     iconColor: Colors.lightBlueAccent,
-                    onPress: () => (),
+                    options: Currency.values.map((currency) => currency.symbol),
+                    selectedOption: Currency.euro.symbol, // TODO: Get from preferences
+                    onOptionPress: (option) => (),
                   )
                 ]
             ),
@@ -79,10 +82,9 @@ class SettingsPage extends StatelessWidget {
                     description: "Have a suggestion? Found a bug? Want to talk? Write us!",
                     onPress: () => launchUrl(Uri.parse("mailto:toliasdimitris@gmail.com")),
                   ),
-                  SettingsButton(
+                  const SettingsButton(
                     title: "Version",
                     description: "1.1.0", // TODO: Dynamic (not with info plus)
-                    onPress: () => (),
                   ),
                 ]
             ),

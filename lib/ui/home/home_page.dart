@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
     final activitiesCubit = context.watch<ActivitiesCubit>();
     final moneyEntryRepo = context.watch<MoneyEntryRepo>();
 
+    // TODO: This causes #63. Removing it from here and passing it to multi bloc provider does not update the ui correctly
     return BlocProvider(
       create: (_) => MoneyEntryBloc(moneyEntryRepo, activitiesCubit),
       child: const EditMoneyEntryPage(forUpdate: false),
