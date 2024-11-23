@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
-import '../model/money_entry.dart';
-import '../repos/money_entry_repo.dart';
+import '../../model/money_entry.dart';
+import '../../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
 
-import 'date_span_bloc.dart';
+import '../date_span/date_span_bloc.dart';
 
 part 'timeline_event.dart';
 part 'timeline_state.dart';

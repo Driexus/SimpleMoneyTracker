@@ -1,4 +1,4 @@
-part of '../blocs/money_entry_bloc.dart';
+part of 'money_entry_bloc.dart';
 
 final class MoneyEntryState extends Equatable {
   const MoneyEntryState(this.id, this.isDecimal, this.currentDecimals, this.amount, this.date, this.moneyType, this.moneyActivity);

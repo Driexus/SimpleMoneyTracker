@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
-import '../model/money_activity.dart';
-import '../model/money_entry.dart';
+import '../../model/money_activity.dart';
+import '../../model/money_entry.dart';
 import 'package:equatable/equatable.dart';
 
-import '../utils/toast_helper.dart';
+import '../../utils/toast_helper.dart';
 
 part 'money_entry_event.dart';
 part 'money_entry_state.dart';

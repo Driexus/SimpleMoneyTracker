@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
 import 'package:simplemoneytracker/ui/timeline/filter_sheet.dart';

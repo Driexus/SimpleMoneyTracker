@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';

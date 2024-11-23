@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:simplemoneytracker/blocs/date_span_bloc.dart' hide DatesUpdated;
+import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart' hide DatesUpdated;
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
-import 'blocs/timeline_bloc.dart' hide EntriesChanged;
-import 'blocs/stats_bloc.dart';
+import 'blocs/timeline/timeline_bloc.dart' hide EntriesChanged;
+import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
 import 'model/money_entry.dart';

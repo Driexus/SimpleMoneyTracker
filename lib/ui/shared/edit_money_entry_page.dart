@@ -6,7 +6,7 @@ import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../blocs/money_entry_bloc.dart';
+import '../../blocs/money_entry/money_entry_bloc.dart';
 import '../../model/money_entry.dart';
 import '../../model/currency.dart';
 import '../home/activity_button_container.dart';

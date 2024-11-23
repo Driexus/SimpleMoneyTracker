@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/stats_bloc.dart';
+import 'package:simplemoneytracker/blocs/stats/stats_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';

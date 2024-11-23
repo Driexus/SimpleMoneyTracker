@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
-import '../repos/money_entry_repo.dart';
+import '../../repos/money_entry_repo.dart';
 import 'package:equatable/equatable.dart';
 
-import 'date_span_bloc.dart';
+import '../date_span/date_span_bloc.dart';
 
 part 'stats_event.dart';
 part 'stats_state.dart';
