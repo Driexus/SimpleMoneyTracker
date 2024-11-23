@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:simplemoneytracker/ui/settings/option.dart';
 
 import '../shared/text/description_text.dart';
 import '../shared/text/header_text.dart';
 
-class SettingsButton extends StatelessWidget {
+class SettingsButton<T extends Option> extends StatelessWidget {
   const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress, this.options, this.selectedOption, this.onOptionPress});
 
   final String title;
@@ -11,9 +12,9 @@ class SettingsButton extends StatelessWidget {
   final IconData? iconData;
   final Color? iconColor;
   final VoidCallback? onPress;
-  final Iterable<String>? options;
-  final String? selectedOption;
-  final ValueChanged<String?>? onOptionPress;
+  final Iterable<T>? options;
+  final T? selectedOption;
+  final ValueChanged<T?>? onOptionPress;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,8 @@ class SettingsButton extends StatelessWidget {
     if (options != null) {
       rowChildren.add(const Expanded(child: SizedBox()));
       rowChildren.add(
-        DropdownButton<String>(
-          items: options!.map((option) => DropdownMenuItem<String>(value: option, child: Text(option))).toList(),
+        DropdownButton<T>(
+          items: options!.map((option) => DropdownMenuItem<T>(value: option, child: Text(option.optionText))).toList(),
           // TODO: Convert to stateful to change state?
           onChanged: onOptionPress,
           value: selectedOption,

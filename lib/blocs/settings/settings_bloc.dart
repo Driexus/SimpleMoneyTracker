@@ -11,13 +11,15 @@ part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-
-  SettingsBloc._create(this.packageInfo, this.sharedPreferences, this.currency) : super(SettingsState(currency, packageInfo)) {
+  SettingsBloc() : super(const EmptySettingsState()) {
+    on<_Initialized>(_init);
     on<CurrencyUpdated>(_currencyUpdated);
+    add(const _Initialized());
     log("Initialized $runtimeType");
   }
 
-  static Future<SettingsBloc> create() async {
+  /// Hacky way to initialize bloc asynchronously through events
+  Future<void> _init(_Initialized event, Emitter<SettingsState> emit) async {
     // Get dependencies
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -28,15 +30,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         ? Currency.fromCode(currencyCode)
         : Currency.euro;
 
-    return SettingsBloc._create(packageInfo, sharedPreferences, currency);
+    emit(ValidSettingsState(currency, packageInfo));
   }
 
-  final PackageInfo packageInfo;
-  final SharedPreferences sharedPreferences;
-  final Currency currency;
-
   Future<void> _currencyUpdated(CurrencyUpdated event, Emitter<SettingsState> emit) async {
+    // Set currency in prefs
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("currency", event.currency.code);
-    emit(SettingsState(event.currency, packageInfo));
+
+    // Emit state. State should have been initialized already
+    emit(ValidSettingsState(event.currency, (state as ValidSettingsState).packageInfo));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
@@ -24,6 +25,16 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final moneyEntryRepo = context.watch<MoneyEntryRepo>();
+    final settingsBloc = context.watch<SettingsBloc>();
+
+    // Set currency symbol and app version
+    Currency? currency;
+    String appVersion = "";
+    if (settingsBloc.state.runtimeType == ValidSettingsState) {
+      final state = settingsBloc.state as ValidSettingsState;
+      currency = state.currency;
+      appVersion = state.packageInfo.version;
+    }
 
     return SingleChildScrollableWidget(
       child: Padding(
@@ -32,14 +43,16 @@ class SettingsPage extends StatelessWidget {
           children: [
             SettingsPanel(
                 buttons: [
-                  SettingsButton(
+                  SettingsButton<Currency>(
                     title: "Currency",
                     description: "Pick your preferred currency. This is a visual only feature and does not convert already saved entries.",
                     iconData: Icons.monetization_on_outlined,
                     iconColor: Colors.lightBlueAccent,
-                    options: Currency.values.map((currency) => currency.symbol),
-                    selectedOption: Currency.euro.symbol, // TODO: Get from preferences
-                    onOptionPress: (option) => (),
+                    options: Currency.values,
+                    selectedOption: currency,
+                    onOptionPress: (currency) => {
+                      if (currency != null) settingsBloc.add(CurrencyUpdated(currency))
+                    }
                   )
                 ]
             ),
@@ -82,9 +95,9 @@ class SettingsPage extends StatelessWidget {
                     description: "Have a suggestion? Found a bug? Want to talk? Write us!",
                     onPress: () => launchUrl(Uri.parse("mailto:toliasdimitris@gmail.com")),
                   ),
-                  const SettingsButton(
+                  SettingsButton(
                     title: "Version",
-                    description: "1.1.0", // TODO: Dynamic (not with info plus)
+                    description: appVersion,
                   ),
                 ]
             ),

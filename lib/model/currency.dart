@@ -1,4 +1,6 @@
-enum Currency {
+import '../ui/settings/option.dart';
+
+enum Currency implements Option {
   euro("euro", "Euro", "€"),
   dollar("dollar", "USD", "\$"),
   yen("yen", "Yen", "¥");
@@ -8,6 +10,9 @@ enum Currency {
   final String symbol;
 
   const Currency(this.code, this.title, this.symbol);
+
+  @override
+  String get optionText => symbol;
 
   static Currency fromCode(String value) {
     switch(value) {

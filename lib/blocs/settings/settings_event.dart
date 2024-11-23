@@ -16,3 +16,7 @@ final class CurrencyUpdated extends SettingsEvent {
   @override
   List<Object?> get props => [currency];
 }
+
+final class _Initialized extends SettingsEvent {
+  const _Initialized();
+}

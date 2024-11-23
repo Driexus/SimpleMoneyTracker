@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart' hide DatesUpdated;
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
@@ -12,14 +13,15 @@ import 'main_page.dart';
 import 'model/money_entry.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(SimpleMoneyTracker());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class SimpleMoneyTracker extends StatelessWidget {
+  SimpleMoneyTracker({super.key});
 
   final MoneyEntryRepo _moneyEntryRepo = MoneyEntryRepo();
   final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
+  final SettingsBloc _settingsBloc = SettingsBloc();
   late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
   late final DateSpanBloc _dateSpanBloc = DateSpanBloc.monthFromDateTime(DateTime.now());
   late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit, _dateSpanBloc)..add(
@@ -54,6 +56,9 @@ class MyApp extends StatelessWidget {
           ),
           Provider(
             create: (_) => _moneyActivityRepo,
+          ),
+          Provider(
+            create: (_) => _settingsBloc,
           ),
           Provider(
             create: (_) => _dateSpanBloc,
