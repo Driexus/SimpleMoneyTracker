@@ -14,7 +14,7 @@ enum Currency {
       case "euro": return Currency.euro;
       case "dollar": return Currency.dollar;
       case "yen": return Currency.yen;
-      default: throw UnimplementedError();
+      default: throw ArgumentError("Invalid currency code: $value");
     }
   }
 }
