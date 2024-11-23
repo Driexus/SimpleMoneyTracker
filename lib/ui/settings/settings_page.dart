@@ -9,6 +9,7 @@ import 'package:simplemoneytracker/ui/settings/elevated_material.dart';
 import 'package:simplemoneytracker/ui/settings/settings_button.dart';
 import 'package:simplemoneytracker/ui/settings/settings_divider.dart';
 import 'package:simplemoneytracker/ui/settings/settings_panel.dart';
+import 'package:simplemoneytracker/ui/settings/currency_dropdown_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/ui/shared/text/description_text.dart';
 import 'package:simplemoneytracker/ui/shared/text/header_text.dart';
@@ -43,16 +44,17 @@ class SettingsPage extends StatelessWidget {
           children: [
             SettingsPanel(
                 buttons: [
-                  SettingsButton<Currency>(
+                  SettingsButton(
                     title: "Currency",
                     description: "Pick your preferred currency. This is a visual only feature and does not convert already saved entries.",
                     iconData: Icons.monetization_on_outlined,
                     iconColor: Colors.lightBlueAccent,
-                    options: Currency.values,
-                    selectedOption: currency,
-                    onOptionPress: (currency) => {
-                      if (currency != null) settingsBloc.add(CurrencyUpdated(currency))
-                    }
+                    dropdown: CurrencyDropdownButton(
+                        initialCurrency: currency,
+                        onCurrencySelected: (currency) {
+                          if (currency != null) settingsBloc.add(CurrencyUpdated(currency));
+                        }
+                    )
                   )
                 ]
             ),

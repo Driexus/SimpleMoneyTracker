@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/ui/settings/option.dart';
 
 import '../shared/text/description_text.dart';
 import '../shared/text/header_text.dart';
 
-class SettingsButton<T extends Option> extends StatelessWidget {
-  const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress, this.options, this.selectedOption, this.onOptionPress});
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress, this.dropdown});
 
   final String title;
   final String? description;
   final IconData? iconData;
   final Color? iconColor;
   final VoidCallback? onPress;
-  final Iterable<T>? options;
-  final T? selectedOption;
-  final ValueChanged<T?>? onOptionPress;
+  final StatefulWidget? dropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +24,9 @@ class SettingsButton<T extends Option> extends StatelessWidget {
 
     rowChildren.add(HeaderText(data: title));
 
-    if (options != null) {
+    if (dropdown != null) {
       rowChildren.add(const Expanded(child: SizedBox()));
-      rowChildren.add(
-        DropdownButton<T>(
-          items: options!.map((option) => DropdownMenuItem<T>(value: option, child: Text(option.optionText))).toList(),
-          // TODO: Convert to stateful to change state?
-          onChanged: onOptionPress,
-          value: selectedOption,
-        )
-      );
+      rowChildren.add(dropdown!);
       rowChildren.add(const SizedBox(width: 10));
     }
 
