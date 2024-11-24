@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 
+// TODO: Split to different files
 extension EmptyOrNullList on Iterable<dynamic>? {
   bool isEmptyOrNull() => this?.isEmpty ?? true;
 }
@@ -38,6 +40,7 @@ extension StringOrEmpty on int? {
   }
 }
 
+// TODO: Get from shared prefs
 extension Amounts on int {
   String toCurrency({int decimals = 2, bool isDecimal = false, int ignoreLast = 0, Currency? currency}) {
     String remaining = toString().dropLast(ignoreLast);
@@ -68,6 +71,19 @@ extension Amounts on int {
     }
 
     return result;
+  }
+}
+
+extension SharedPrefs on SharedPreferences {
+  Currency? getCurrency() {
+    String? currencyCode = getString("currency");
+    return currencyCode != null
+        ? Currency.fromCode(currencyCode)
+        : null;
+  }
+
+  Future<void> setCurrency(Currency currency) async {
+    setString("currency", currency.code);
   }
 }
 
