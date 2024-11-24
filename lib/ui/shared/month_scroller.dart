@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/date_span_bloc.dart';
+import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart';
 
 class MonthScroller extends StatelessWidget {
   MonthScroller({super.key}); // Const keyword here does not allow context changes

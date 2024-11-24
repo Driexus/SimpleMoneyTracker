@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/shared/money_entry_bar.dart';
@@ -19,7 +20,7 @@ class EntriesContainer extends StatelessWidget {
   static const double _bias = _totalEntryHeight / 3;
 
   // Find the first visible money entry and fire callback
-  bool _onScroll(ScrollUpdateNotification notification, List<MoneyEntry> entries, TimelineBloc entriesBloc) {
+  bool _onScroll(ScrollUpdateNotification notification, List<MoneyEntry> entries, TimelineBloc timelineBloc) {
     if (entries.isEmpty) {
       return true;
     }
@@ -28,18 +29,18 @@ class EntriesContainer extends StatelessWidget {
     final int index = ((currentPos + _bias) / _totalEntryHeight).floor();
     final MoneyEntry firstVisibleEntry = entries[index];
 
-    entriesBloc.add(FirstEntryUpdated(firstVisibleEntry));
+    timelineBloc.add(FirstEntryUpdated(firstVisibleEntry));
     return true;
   }
 
-  void _showDeleteEntryDialog(MoneyEntry moneyEntry, BuildContext context) {
+  void _showDeleteEntryDialog(MoneyEntry moneyEntry, BuildContext context, Currency currency) {
     MoneyEntryRepo moneyEntryRepo = context.read<MoneyEntryRepo>();
 
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text('Delete ${moneyEntry.type.displayName}?'),
-        content: Text('Are you sure you want to delete ${moneyEntry.amount.toCurrency(currency: Currency.euro)} of ${moneyEntry.type.displayName}? This action is not reversible.'),
+        content: Text('Are you sure you want to delete ${moneyEntry.amount.toCurrency(currency: currency)} of ${moneyEntry.type.displayName}? This action is not reversible.'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -63,6 +64,7 @@ class EntriesContainer extends StatelessWidget {
     return Builder(
         builder: (context) {
           final timelineBloc = context.watch<TimelineBloc>();
+          final currency = context.watch<SettingsBloc>().state.currency;
           late final List<MoneyEntry> entries;
 
           switch (timelineBloc.state.runtimeType) {
@@ -81,8 +83,9 @@ class EntriesContainer extends StatelessWidget {
                     children: entries.map((entry) =>
                         MoneyEntryBar.fromEntry(
                           entry: entry,
+                          currency: currency,
                           onPressed: (_) => Navigations.toEditEntryPage(context, entry),
-                          onLongPress: (entry) => _showDeleteEntryDialog(entry!, context),
+                          onLongPress: (entry) => _showDeleteEntryDialog(entry!, context, currency),
                         )
                     ).addVerticalSpacing(_entrySpacing)
                 ),

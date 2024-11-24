@@ -1,4 +1,4 @@
-part of '../blocs/stats_bloc.dart';
+part of 'stats_bloc.dart';
 
 sealed class StatsState {
   const StatsState(this.totals, this.subtotals);

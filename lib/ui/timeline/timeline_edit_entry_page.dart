@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simplemoneytracker/blocs/money_entry_bloc.dart';
+import 'package:simplemoneytracker/blocs/money_entry/money_entry_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';

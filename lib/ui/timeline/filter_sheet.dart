@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/blocs/timeline_bloc.dart';
+import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import '../shared/date_picker.dart';
 import '../shared/money_range.dart';
 
 class FilterSheet extends StatelessWidget {
-  const FilterSheet({super.key, required this.entriesBloc});
+  const FilterSheet({super.key, required this.timelineBloc, required this.currency});
 
-  final TimelineBloc entriesBloc;
+  final TimelineBloc timelineBloc;
+  final Currency currency;
 
   _updateAmountFilters(MoneyRangeValues values) {
-    entriesBloc.add(
+    timelineBloc.add(
         FiltersAdded(
           MoneyEntryFilters(
             minAmount: values.minAmount,
@@ -21,7 +23,7 @@ class FilterSheet extends StatelessWidget {
   }
 
   _updateDateFilters(DateRange dateRange) {
-    entriesBloc.add(
+    timelineBloc.add(
       FiltersAdded(
         MoneyEntryFilters(
           minDate: dateRange.startDate,
@@ -33,12 +35,12 @@ class FilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int minAmount = entriesBloc.state.filters.minAmount ?? 0;
-    int? maxAmount = entriesBloc.state.filters.maxAmount;
+    final int minAmount = timelineBloc.state.filters.minAmount ?? 0;
+    int? maxAmount = timelineBloc.state.filters.maxAmount;
     maxAmount = (maxAmount != null && maxAmount < 0) ? null : maxAmount;
 
-    final DateTime? startDate = entriesBloc.state.filters.minDate;
-    final DateTime? endDate = entriesBloc.state.filters.maxDate;
+    final DateTime? startDate = timelineBloc.state.filters.minDate;
+    final DateTime? endDate = timelineBloc.state.filters.maxDate;
     final DateRange? initialRange = (startDate != null && endDate != null) ?
       DateRange(startDate, endDate) : null;
 
@@ -60,6 +62,7 @@ class FilterSheet extends StatelessWidget {
             right: 10,
             left: 10,
             child: MoneyRange(
+              currency: currency,
               onRange: _updateAmountFilters,
               initialRange: MoneyRangeValues(
                   minAmount,

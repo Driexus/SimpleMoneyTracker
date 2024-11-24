@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
+import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/settings/csv_exporter.dart';
@@ -7,6 +9,7 @@ import 'package:simplemoneytracker/ui/settings/elevated_material.dart';
 import 'package:simplemoneytracker/ui/settings/settings_button.dart';
 import 'package:simplemoneytracker/ui/settings/settings_divider.dart';
 import 'package:simplemoneytracker/ui/settings/settings_panel.dart';
+import 'package:simplemoneytracker/ui/settings/currency_dropdown_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/ui/shared/text/description_text.dart';
 import 'package:simplemoneytracker/ui/shared/text/header_text.dart';
@@ -15,14 +18,23 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
-  void _exportCsv(MoneyEntryRepo moneyEntryRepo) async {
+  void _exportCsv(MoneyEntryRepo moneyEntryRepo, Currency currency) async {
     List<MoneyEntry> entries = await moneyEntryRepo.retrieveSome();
-    CsvExporter.export(entries);
+    CsvExporter.export(entries, currency);
   }
 
   @override
   Widget build(BuildContext context) {
     final moneyEntryRepo = context.watch<MoneyEntryRepo>();
+    final settingsBloc = context.watch<SettingsBloc>();
+
+    // Set currency and app version
+    Currency currency = settingsBloc.state.currency;
+    String appVersion = "";
+    if (settingsBloc.state.runtimeType == ValidSettingsState) {
+      final state = settingsBloc.state as ValidSettingsState;
+      appVersion = state.packageInfo.version;
+    }
 
     return SingleChildScrollableWidget(
       child: Padding(
@@ -36,7 +48,12 @@ class SettingsPage extends StatelessWidget {
                     description: "Pick your preferred currency. This is a visual only feature and does not convert already saved entries.",
                     iconData: Icons.monetization_on_outlined,
                     iconColor: Colors.lightBlueAccent,
-                    onPress: () => (),
+                    dropdown: CurrencyDropdownButton(
+                        initialCurrency: currency,
+                        onCurrencySelected: (currency) {
+                          if (currency != null) settingsBloc.add(CurrencyUpdated(currency));
+                        }
+                    )
                   )
                 ]
             ),
@@ -48,7 +65,7 @@ class SettingsPage extends StatelessWidget {
                     description: "Export your data to a csv file.",
                     iconData: Icons.description_outlined,
                     iconColor: Colors.lightGreen[400],
-                    onPress: () => _exportCsv(moneyEntryRepo),
+                    onPress: () => _exportCsv(moneyEntryRepo, currency),
                   )
                 ]
             ),
@@ -81,8 +98,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsButton(
                     title: "Version",
-                    description: "1.1.0", // TODO: Dynamic (not with info plus)
-                    onPress: () => (),
+                    description: appVersion,
                   ),
                 ]
             ),

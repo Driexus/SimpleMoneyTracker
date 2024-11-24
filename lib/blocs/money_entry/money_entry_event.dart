@@ -1,4 +1,4 @@
-part of '../blocs/money_entry_bloc.dart';
+part of 'money_entry_bloc.dart';
 
 @immutable
 sealed class MoneyEntryEvent extends Equatable {

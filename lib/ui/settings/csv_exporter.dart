@@ -11,11 +11,11 @@ import '../../model/money_entry.dart';
 class CsvExporter {
   const CsvExporter();
 
-  static export(List<MoneyEntry> entries) async {
+  static export(List<MoneyEntry> entries, Currency currency) async {
 
     // Create csv list and convert it to string
-    List<List<dynamic>> csvEntries = entries.map(_toCsvList).toList();
-    csvEntries.insert(0, _headers);
+    List<List<dynamic>> csvEntries = entries.map((entry) => _toCsvList(entry, currency)).toList();
+    csvEntries.insert(0, _headers(currency));
     String csv = const ListToCsvConverter().convert(csvEntries);
 
     // Write file and open it
@@ -33,15 +33,15 @@ class CsvExporter {
     return file.writeAsString(content);
   }
 
-  static final List<String> _headers = [
+  static List<String> _headers(Currency currency) => [
     'Date',
-    'Amount (${Currency.euro.symbol})',
+    'Amount (${currency.symbol})',
     'Type',
     'Activity',
     'Comment',
   ];
 
-  static List<dynamic> _toCsvList(MoneyEntry moneyEntry) => [
+  static List<dynamic> _toCsvList(MoneyEntry moneyEntry, Currency currency) => [
     moneyEntry.createdAt.toDateFull(),
     moneyEntry.amount.toCurrency(),
     moneyEntry.type.name,

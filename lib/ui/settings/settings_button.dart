@@ -4,13 +4,14 @@ import '../shared/text/description_text.dart';
 import '../shared/text/header_text.dart';
 
 class SettingsButton extends StatelessWidget {
-  const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress});
+  const SettingsButton({super.key, required this.title, this.description, this.iconData, this.iconColor, this.onPress, this.dropdown});
 
   final String title;
   final String? description;
   final IconData? iconData;
   final Color? iconColor;
   final VoidCallback? onPress;
+  final StatefulWidget? dropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +23,36 @@ class SettingsButton extends StatelessWidget {
     }
 
     rowChildren.add(HeaderText(data: title));
+
+    if (dropdown != null) {
+      rowChildren.add(const Expanded(child: SizedBox()));
+      rowChildren.add(dropdown!);
+      rowChildren.add(const SizedBox(width: 10));
+    }
+
     Row row = Row(children: rowChildren);
 
     // Create column children
     List<Widget> columnChildren = [row];
     if (description != null) {
-      columnChildren.add(const SizedBox(height: 2));
+      columnChildren.add(const SizedBox(height: 5));
       columnChildren.add(DescriptionText(data: description!));
     }
 
     // Build button
     return InkWell(
-        onTap: onPress,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: columnChildren,
-          )
+      // Disable press colors if onPress is not registered
+      splashColor: onPress == null ? Colors.transparent : null,
+      highlightColor: onPress == null ? Colors.transparent : null,
+      onTap: onPress,
+      canRequestFocus: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: columnChildren,
         )
+      )
     );
   }
 

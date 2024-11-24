@@ -6,9 +6,9 @@ import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../blocs/money_entry_bloc.dart';
+import '../../blocs/money_entry/money_entry_bloc.dart';
+import '../../blocs/settings/settings_bloc.dart';
 import '../../model/money_entry.dart';
-import '../../model/currency.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
 import 'money_entry_bar.dart';
@@ -49,6 +49,7 @@ class EditMoneyEntryPage extends StatelessWidget {
     return Builder(
         builder: (blocContext) {
           final moneyEntryBloc = blocContext.watch<MoneyEntryBloc>();
+          final currency = blocContext.watch<SettingsBloc>().state.currency;
           final state = moneyEntryBloc.state;
 
           // Find only the activities that are ok for this specific MoneyType
@@ -77,10 +78,11 @@ class EditMoneyEntryPage extends StatelessWidget {
                         amount: state.amount.toCurrency(
                             decimals: state.currentDecimals,
                             isDecimal: state.isDecimal,
-                            currency: Currency.euro
+                            currency: currency
                         ),
                         date: state.date,
                         moneyType: state.moneyType,
+                        currency: currency,
                         onPressed: (_) => showModalBottomSheet<void>(
                             context: blocContext,
                             builder: (BuildContext context) {

@@ -1,4 +1,4 @@
-part of '../blocs/timeline_bloc.dart';
+part of 'timeline_bloc.dart';
 
 sealed class TimelineState extends Equatable {
   const TimelineState(this.filters);
