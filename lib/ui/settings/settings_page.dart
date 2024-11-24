@@ -18,9 +18,9 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
-  void _exportCsv(MoneyEntryRepo moneyEntryRepo) async {
+  void _exportCsv(MoneyEntryRepo moneyEntryRepo, Currency currency) async {
     List<MoneyEntry> entries = await moneyEntryRepo.retrieveSome();
-    CsvExporter.export(entries);
+    CsvExporter.export(entries, currency);
   }
 
   @override
@@ -28,12 +28,11 @@ class SettingsPage extends StatelessWidget {
     final moneyEntryRepo = context.watch<MoneyEntryRepo>();
     final settingsBloc = context.watch<SettingsBloc>();
 
-    // Set currency symbol and app version
-    Currency? currency;
+    // Set currency and app version
+    Currency currency = settingsBloc.state.currency;
     String appVersion = "";
     if (settingsBloc.state.runtimeType == ValidSettingsState) {
       final state = settingsBloc.state as ValidSettingsState;
-      currency = state.currency;
       appVersion = state.packageInfo.version;
     }
 
@@ -66,7 +65,7 @@ class SettingsPage extends StatelessWidget {
                     description: "Export your data to a csv file.",
                     iconData: Icons.description_outlined,
                     iconColor: Colors.lightGreen[400],
-                    onPress: () => _exportCsv(moneyEntryRepo),
+                    onPress: () => _exportCsv(moneyEntryRepo, currency),
                   )
                 ]
             ),

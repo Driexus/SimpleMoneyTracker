@@ -4,7 +4,7 @@ import 'package:simplemoneytracker/model/currency.dart';
 class CurrencyDropdownButton extends StatefulWidget {
   const CurrencyDropdownButton({super.key, required this.initialCurrency, required this.onCurrencySelected});
 
-  final Currency? initialCurrency;
+  final Currency initialCurrency;
   final ValueChanged<Currency?> onCurrencySelected;
 
   @override

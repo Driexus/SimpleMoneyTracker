@@ -40,7 +40,6 @@ extension StringOrEmpty on int? {
   }
 }
 
-// TODO: Get from shared prefs
 extension Amounts on int {
   String toCurrency({int decimals = 2, bool isDecimal = false, int ignoreLast = 0, Currency? currency}) {
     String remaining = toString().dropLast(ignoreLast);

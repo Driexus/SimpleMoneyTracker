@@ -9,9 +9,9 @@ import '../../../model/money_activity.dart';
 
 // TODO #49: On press -> go to timeline for specific activity
 class TotalMoneyActivityBar extends StatelessWidget {
-  const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.typeTotalAmount, this.onPressed});
+  const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.typeTotalAmount, required this.currency, this.onPressed});
 
-  TotalMoneyActivityBar.fromSubtotal({super.key, required Subtotal subtotal, required this.typeTotalAmount, this.onPressed}) :
+  TotalMoneyActivityBar.fromSubtotal({super.key, required Subtotal subtotal, required this.typeTotalAmount, required this.currency, this.onPressed}) :
       amount = subtotal.amount,
       moneyActivity = subtotal.moneyActivity;
 
@@ -19,6 +19,7 @@ class TotalMoneyActivityBar extends StatelessWidget {
   final MoneyActivity moneyActivity;
   final int typeTotalAmount;
   final ValueChanged<MoneyEntry?>? onPressed;
+  final Currency currency;
 
   Icon? get _typeIcon => Icon(
       moneyActivity.imageKey.toIconData(),
@@ -74,7 +75,7 @@ class TotalMoneyActivityBar extends StatelessWidget {
                         bottom: 0,
                         child: Center(
                             child: AutoSizeText(
-                              amount.toCurrency(currency: Currency.euro),
+                              amount.toCurrency(currency: currency),
                               maxLines: 1,
                               textAlign: TextAlign.center,
                               style: const TextStyle(

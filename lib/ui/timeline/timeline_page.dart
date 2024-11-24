@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
@@ -20,7 +21,8 @@ class TimelinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final entriesBloc = context.watch<TimelineBloc>();
+      final timelineBloc = context.watch<TimelineBloc>();
+      final settingsBloc = context.watch<SettingsBloc>();
 
       return Stack(
         children: [
@@ -49,14 +51,14 @@ class TimelinePage extends StatelessWidget {
               bottom: 0,
               child: MoneyTypeToggles(
                 selectionMode: SelectionMode.multi,
-                defaultSelected: entriesBloc.state.filters.allowedTypes ?? const [MoneyType.expense, MoneyType.credit, MoneyType.debt, MoneyType.income],
+                defaultSelected: timelineBloc.state.filters.allowedTypes ?? const [MoneyType.expense, MoneyType.credit, MoneyType.debt, MoneyType.income],
                 middleIcon: Symbols.instant_mix,
-                onToggle: (toggledTypes) => _onToggle(entriesBloc, toggledTypes),
+                onToggle: (toggledTypes) => _onToggle(timelineBloc, toggledTypes),
                 onMiddlePressed: () => {
                   showModalBottomSheet<void>(
                     context: context,
                     builder: (BuildContext context) {
-                      return FilterSheet(entriesBloc: entriesBloc);
+                      return FilterSheet(timelineBloc: timelineBloc, currency: settingsBloc.state.currency);
                     }
                   )
                 },

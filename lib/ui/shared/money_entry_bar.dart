@@ -6,11 +6,11 @@ import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class MoneyEntryBar extends StatelessWidget {
-  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType, required this.onPressed, this.onLongPress}) :
+  MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType, required this.currency, required this.onPressed, this.onLongPress}) :
     moneyEntry = null;
 
-  MoneyEntryBar.fromEntry({super.key, required MoneyEntry entry, required this.onPressed, this.onLongPress}) :
-    amount = entry.amount.toCurrency(currency: Currency.euro),
+  MoneyEntryBar.fromEntry({super.key, required MoneyEntry entry, required this.currency, required this.onPressed, this.onLongPress}) :
+    amount = entry.amount.toCurrency(currency: currency),
     date = entry.createdAt,
     moneyType = entry.type,
     color = Color(entry.activity.color),
@@ -27,6 +27,7 @@ class MoneyEntryBar extends StatelessWidget {
   final DateTime date;
   final MoneyType? moneyType;
   final MoneyEntry? moneyEntry;
+  final Currency currency;
   final ValueChanged<MoneyEntry?> onPressed;
   final ValueChanged<MoneyEntry?>? onLongPress;
 

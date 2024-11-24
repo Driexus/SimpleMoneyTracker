@@ -1,7 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
-import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../shared/navigations.dart';
@@ -23,6 +24,8 @@ class TotalMoneyTypeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<SettingsBloc>().state.currency;
+
     return SizedBox(
         height: 55,
         width: 370,
@@ -62,7 +65,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                         bottom: 0,
                         child: Center(
                           child: AutoSizeText(
-                            amount.toCurrency(currency: Currency.euro),
+                            amount.toCurrency(currency: currency),
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
