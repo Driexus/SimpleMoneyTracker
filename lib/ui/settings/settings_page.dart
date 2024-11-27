@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
 
     return SingleChildScrollableWidget(
       child: Padding(
-        padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+        padding: const EdgeInsets.all(15),
         child: Column(
           children: [
             SettingsPanel(

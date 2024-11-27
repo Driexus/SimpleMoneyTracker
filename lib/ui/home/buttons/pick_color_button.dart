@@ -14,10 +14,11 @@ class PickColorButton extends SquareButton {
   void onTap() {
     super.onTap();
     showModalBottomSheet<void>(
-        context: buildContext,
-        builder: (BuildContext context) {
-          return ColorBottomSheet(onColorPicked: onColorTap);
-        }
+      isScrollControlled: true,
+      context: buildContext,
+      builder: (BuildContext context) {
+        return ColorBottomSheet(onColorPicked: onColorTap);
+      }
     );
   }
 }
