@@ -1,10 +1,9 @@
 # Simple Money Tracker
 
-A simple application which tracks your expenses, income, debt and credit. The project's UI is based on another project called [Simple Time Tracker](https://github.com/Razeeman/Android-SimpleTimeTracker). Please check it out.
+[<img height="100" alt="get it on google play" src="https://github.com/user-attachments/assets/693ecb3b-ddad-441e-937e-8516bfcd5389">](https://play.google.com/store/apps/details?id=com.driexus.simplemoneytracker)
+[<img height="88" alt="buy me a coffee" src="https://github.com/user-attachments/assets/c832ca1c-99db-493f-910d-21d333a1d68a">](https://buymeacoffee.com/driexus)
 
-## Release
-
-At some point in time it is to at least be released in the Android AppStore. This project is and will remain open-source without any ads in the spirit of its parent project.
+A simple application which tracks your expenses, income, debt and credit. The project's UI is based on another project called [Simple Time Tracker](https://github.com/Razeeman/Android-SimpleTimeTracker), please check it out. The project will remain open-source without any ads in the spirit of the parent project.
 
 ## Contributions
 
