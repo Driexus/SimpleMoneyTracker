@@ -1,4 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_archive/flutter_archive.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -15,6 +21,31 @@ class SqliteService {
     getDB().then((value) => {
       _db = value
     });
+  }
+
+  // TODO
+  void importDatabase() async {
+    final db = await getDB();
+    await db.close();
+
+  }
+
+  void exportDatabase() async {
+    final db = await getDB();
+    await db.close();
+    _db = null;
+    final databasesDirectory = await getApplicationDocumentsDirectory();
+    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup.zip'));
+
+    try {
+      final dataDir = Directory(await getDatabasesPath());
+      ZipFile.createFromDirectory(
+          sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
+    } catch (e) {
+      log("Failed to create database zip.", error: e);
+    }
+    await getDB();
+    await OpenFile.open(zipFile.path, type: "*/*");
   }
 
   Database? _db;
