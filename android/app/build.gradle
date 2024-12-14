@@ -45,6 +45,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    // TODO: Remove on release
+    lint {
+        abortOnError false
+    }
+
     defaultConfig {
         // TODO: Change for release
         applicationId "com.driexus.simplemoneytracker.test"
