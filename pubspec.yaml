@@ -56,6 +56,9 @@ dependencies:
   url_launcher: ^6.3.1
   package_info_plus: ^8.1.1
   flutter_colorpicker: ^1.1.0
+  flutter_sharing_intent: ^1.1.1
+  flutter_archive: ^6.0.3
+  file_picker: ^8.3.1
 
 dev_dependencies:
   flutter_test:

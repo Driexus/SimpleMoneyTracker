@@ -1,5 +1,13 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_archive/flutter_archive.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -12,21 +20,65 @@ class SqliteService {
 
   // Cache db
   SqliteService._init() {
-    getDB().then((value) => {
-      _db = value
-    });
+    getDB();
+  }
+
+  // Database path
+  Future<String> get _databasePath async => join(await getDatabasesPath(), 'simple_money_tracker.db');
+
+  Future<void> _closeDB() async {
+    final db = await getDB();
+    await db.close();
+    _db = null;
+  }
+
+  void importDatabase() async {
+    // Get source file
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result == null || result.files.single.path == null) return;
+    File sourceFile = File(result.files.single.path!);
+
+    // Assert db file
+    if (!sourceFile.path.endsWith(".db")) {
+      ToastHelper.showToast("Only .db file can be imported.");
+      return;
+    }
+
+    // Close db
+    await _closeDB();
+
+    // Copy file and reopen db
+    sourceFile.copy(await _databasePath);
+    _db = await getDB();
+    ToastHelper.showToast("Database imported successfully!");
+  }
+
+  void exportDatabase() async {
+    await _closeDB();
+    final databasesDirectory = await getApplicationDocumentsDirectory();
+    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup.zip'));
+
+    try {
+      final dataDir = Directory(await getDatabasesPath());
+      ZipFile.createFromDirectory(
+          sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
+    } catch (e) {
+      log("Failed to create database zip.", error: e);
+    }
+    await getDB();
+    await OpenFile.open(zipFile.path, type: "*/*");
+    ToastHelper.showToast("Database backup created");
   }
 
   Database? _db;
   Future<Database> getDB() async {
-    if (_db != null) {
+    if (_db != null && _db!.isOpen) {
       return _db!;
     }
 
-    // TODO: Upgrade database -> drop currencyId
     // Open db if it is not cached
     final db = await openDatabase(
-      join(await getDatabasesPath(), 'simple_money_tracker.db'),
+      await _databasePath,
       onCreate: (db, version) async {
         await _createActivitiesTable(db);
         await _createEntriesTable(db);
@@ -36,6 +88,7 @@ class SqliteService {
     );
 
     await db.execute('PRAGMA foreign_keys=on');
+    _db = db;
     return db;
   }
 

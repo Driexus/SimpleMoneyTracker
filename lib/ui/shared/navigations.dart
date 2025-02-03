@@ -45,7 +45,10 @@ class Navigations {
               value: context.read<MoneyEntryRepo>(),
               child: Provider.value(
                 value: context.read<ActivitiesCubit>(),
-                child: TimelineEditEntryPage(moneyEntry: moneyEntry)
+                child: Provider.value(
+                    value: context.read<SettingsBloc>(),
+                    child: TimelineEditEntryPage(moneyEntry: moneyEntry)
+                )
               )
           )
         )

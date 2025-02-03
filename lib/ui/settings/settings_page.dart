@@ -15,8 +15,12 @@ import 'package:simplemoneytracker/ui/shared/text/description_text.dart';
 import 'package:simplemoneytracker/ui/shared/text/header_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../service/sqlite_service.dart';
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  static final _service = SqliteService();
 
   void _exportCsv(MoneyEntryRepo moneyEntryRepo, Currency currency) async {
     List<MoneyEntry> entries = await moneyEntryRepo.retrieveSome();
@@ -61,12 +65,26 @@ class SettingsPage extends StatelessWidget {
             SettingsPanel(
                 buttons: [
                   SettingsButton(
-                    title: "Export",
+                    title: "Export to csv",
                     description: "Export your data to a csv file.",
                     iconData: Icons.description_outlined,
                     iconColor: Colors.lightGreen[400],
                     onPress: () => _exportCsv(moneyEntryRepo, currency),
-                  )
+                  ),
+                  SettingsButton(
+                    title: "Export database",
+                    description: "Export your database to a zip file. Extract the .db file inside and use it to reimport your data.",
+                    iconData: Icons.upload_file_outlined,
+                    iconColor: Colors.deepPurple[200],
+                    onPress: () => _service.exportDatabase(),
+                  ),
+                  SettingsButton(
+                    title: "Import database",
+                    description: "Import your database from a .db file.",
+                    iconData: Icons.file_download_outlined,
+                    iconColor: Colors.purple[100],
+                    onPress: () => _service.importDatabase(),
+                  ),
                 ]
             ),
             const SizedBox(height: 15),
