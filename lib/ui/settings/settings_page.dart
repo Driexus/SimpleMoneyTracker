@@ -73,8 +73,17 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SettingsButton(
                     title: "Export database",
-                    description: "Export your database to a zip file. Extract the .db file inside and use it to reimport your data. ",
+                    description: "Export your database to a zip file. Extract the .db file inside and use it to reimport your data.",
+                    iconData: Icons.upload_file_outlined,
+                    iconColor: Colors.deepPurple[200],
                     onPress: () => _service.exportDatabase(),
+                  ),
+                  SettingsButton(
+                    title: "Import database",
+                    description: "Import your database from a .db file.",
+                    iconData: Icons.file_download_outlined,
+                    iconColor: Colors.purple[100],
+                    onPress: () => _service.importDatabase(),
                   ),
                 ]
             ),
