@@ -28,7 +28,7 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace "com.driexus.simplemoneytracker"
+    namespace "com.driexus.simplemoneytracker.dev"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
