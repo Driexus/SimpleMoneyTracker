@@ -76,6 +76,11 @@ class ActivityButtonContainer extends StatelessWidget {
               data.insert(newIndex, element);
             });*/
             },
+            onDragUpdate: (key, x, y) {
+              final screenWidth = MediaQuery.of(context).size;
+              log("$key ${x.dx/screenWidth.width} ${x.dy / screenWidth.height}");
+              // TODO: If x.dy / screenWidth.height > 0.9 delete
+            },
             footer: enableAdd
                 ? [
                     AddButton(
@@ -83,40 +88,19 @@ class ActivityButtonContainer extends StatelessWidget {
                         context: context)
                   ]
                 : [],
-/*            children: activities
-                .map((activity) => ActivityButton(
-                      key: ValueKey(activity.title),
-                      imageKey: activity.imageKey,
-                      description: activity.title,
-                      color: Color(activity.color),
-                      onPressed: () => onActivity(activity),
-                      //onLongPress: onActivityLongPress == null ? null : () => onActivityLongPress!(activity),
-                    ) as RectangularButton)
-                .toList(),*/
             children: activities.map((activity) {
-              return LongPressDraggable<MoneyActivity>(
-                key: ValueKey(activity.title),
-                data: activity,
-                feedback: Material(
-                  elevation: 6,
-                  child: ActivityButton(
+              return ActivityButton(
+                    key: ValueKey(activity.title),
                     imageKey: activity.imageKey,
                     description: activity.title,
                     color: Color(activity.color),
-                    onPressed: () => {},
-                  ),
-                ),
-                child: ActivityButton(
-                  imageKey: activity.imageKey,
-                  description: activity.title,
-                  color: Color(activity.color),
-                  onPressed: () => {},
-                ),
-              );
+                    onPressed: () => onActivity(activity),
+                  );
             }).toList(),
           ),
         ),
-    SizedBox(height: 20),
+    // TODO: Remove these
+    const SizedBox(height: 20),
     DragTarget<MoneyActivity>(
       onWillAcceptWithDetails: (activity) {
         log("on will accept");
