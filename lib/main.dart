@@ -27,7 +27,7 @@ class SimpleMoneyTracker extends StatelessWidget {
   late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit, _dateSpanBloc)..add(
       FiltersUpdated(
           MoneyEntryFilters(
-            allowedTypes: [MoneyType.expense, MoneyType.income, MoneyType.debt, MoneyType.credit],
+            allowedTypes: [MoneyType.expense, MoneyType.income],
             minDate: _dateSpanBloc.state.startDate,
             maxDate: _dateSpanBloc.state.endDate,
           )

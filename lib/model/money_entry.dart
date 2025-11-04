@@ -55,11 +55,9 @@ class MoneyEntry {
   }
 }
 
-enum MoneyType{
-  credit("Credit", Icons.redeem, Colors.purple),
+enum MoneyType {
   income("Income", Icons.savings, Colors.lightGreen),
-  expense("Expense", Icons.payments, Colors.blue),
-  debt("Debt", Icons.account_balance, Colors.orange);
+  expense("Expense", Icons.payments, Colors.blue);
 
   final String displayName;
   final IconData icon;

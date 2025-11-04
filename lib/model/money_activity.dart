@@ -8,8 +8,6 @@ class MoneyActivity {
   final String imageKey;
   final bool isIncome;
   final bool isExpense;
-  final bool isCredit;
-  final bool isDebt;
 
   const MoneyActivity({
     this.id,
@@ -18,8 +16,6 @@ class MoneyActivity {
     required this.imageKey,
     required this.isIncome,
     required this.isExpense,
-    required this.isCredit,
-    required this.isDebt
   });
 
   MoneyActivity.fromDBMap(Map<String, dynamic> dbMap) :
@@ -28,9 +24,7 @@ class MoneyActivity {
     color = dbMap['color'] as int,
     imageKey = dbMap['imageKey'] as String,
     isIncome = (dbMap['isIncome'] as int) == 1,
-    isExpense = (dbMap['isExpense'] as int) == 1,
-    isCredit = (dbMap['isCredit'] as int) == 1,
-    isDebt = (dbMap['isDebt'] as int) == 1
+    isExpense = (dbMap['isExpense'] as int) == 1
   ;
 
   Map<String, dynamic> toMap() {
@@ -40,9 +34,7 @@ class MoneyActivity {
       'color': color,
       'imageKey': imageKey,
       'isIncome': isIncome ? 1 : 0,
-      'isExpense': isExpense ? 1 : 0,
-      'isCredit': isCredit ? 1 : 0,
-      'isDebt': isDebt ? 1 : 0
+      'isExpense': isExpense ? 1 : 0
     };
   }
 
@@ -61,9 +53,7 @@ class MoneyActivity {
       color: color ?? this.color,
       imageKey: imageKey ?? this.imageKey,
       isIncome: isIncome ?? this.isIncome,
-      isExpense: isExpense ?? this.isExpense,
-      isCredit: isCredit ?? this.isCredit,
-      isDebt: isDebt ?? this.isDebt
+      isExpense: isExpense ?? this.isExpense
     );
   }
 
@@ -71,8 +61,6 @@ class MoneyActivity {
     switch (type) {
       case MoneyType.income: return isIncome;
       case MoneyType.expense: return isExpense;
-      case MoneyType.credit: return isCredit;
-      case MoneyType.debt: return isDebt;
     }
   }
 

@@ -8,16 +8,11 @@ sealed class StatsState {
 
   int get totalExpenses => totals[MoneyType.expense]!;
   int get totalIncome => totals[MoneyType.income]!;
-  int get totalDebt => totals[MoneyType.debt]!;
-  int get totalCredit => totals[MoneyType.credit]!;
 
   List<Subtotal> get expensesSubtotals => subtotals[MoneyType.expense]!;
   List<Subtotal> get incomeSubtotals => subtotals[MoneyType.income]!;
-  List<Subtotal> get debtSubtotals => subtotals[MoneyType.debt]!;
-  List<Subtotal> get creditSubtotals => subtotals[MoneyType.credit]!;
 
   int get netTotal => totalIncome - totalExpenses;
-  int get netSettlements => totalCredit - totalDebt;
 }
 
 final class EmptyStatsState extends StatsState {
@@ -25,14 +20,10 @@ final class EmptyStatsState extends StatsState {
       const {
         MoneyType.expense: 0,
         MoneyType.income: 0,
-        MoneyType.debt: 0,
-        MoneyType.credit: 0
       },
       const {
         MoneyType.expense: [],
         MoneyType.income: [],
-        MoneyType.debt: [],
-        MoneyType.credit: []
       }
   );
 }

@@ -57,9 +57,7 @@ class EditMoneyEntryPage extends StatelessWidget {
           final activities = activitiesCubit.state.values.where((activity) {
             switch (state.moneyType) {
               case MoneyType.income: return activity.isIncome;
-              case MoneyType.credit: return activity.isCredit;
               case MoneyType.expense: return activity.isExpense;
-              case MoneyType.debt: return activity.isDebt;
             }
           }).toList();
 

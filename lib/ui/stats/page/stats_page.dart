@@ -30,10 +30,6 @@ class StatsPage extends StatelessWidget {
                 TotalMoneyBarContainer(amount: state.totalExpenses, moneyType: MoneyType.expense, subtotals: state.expensesSubtotals, currency: currency),
                 const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
                 TotalMoneyBarContainer(amount: state.totalIncome, moneyType: MoneyType.income, subtotals: state.incomeSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.totalDebt, moneyType: MoneyType.debt, subtotals: state.debtSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.totalCredit, moneyType: MoneyType.credit, subtotals: state.creditSubtotals, currency: currency),
               ],
             ),
           )
