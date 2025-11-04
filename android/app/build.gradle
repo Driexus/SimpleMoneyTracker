@@ -28,7 +28,7 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace "com.driexus.simplemoneytracker.dev"
+    namespace "com.driexus.simplemoneytracker"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -72,6 +72,16 @@ android {
         release {
             signingConfig signingConfigs.release
             //crunchPngs false
+        }
+        debug {
+            // This line makes it a different app ID so it won’t overwrite your Play Store install
+            applicationIdSuffix ".debug"
+
+            // Optional — makes the version name show "-debug"
+            versionNameSuffix "-debug"
+
+            // Use the default debug keystore
+            signingConfig signingConfigs.debug
         }
     }
 }
