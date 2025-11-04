@@ -59,6 +59,7 @@ dependencies:
   flutter_sharing_intent: ^1.1.1
   flutter_archive: ^6.0.3
   file_picker: ^8.3.1
+  reorderable_grid_view: ^2.2.8
 
 dev_dependencies:
   flutter_test:

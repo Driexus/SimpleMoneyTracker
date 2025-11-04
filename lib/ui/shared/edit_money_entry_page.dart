@@ -9,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../blocs/money_entry/money_entry_bloc.dart';
 import '../../blocs/settings/settings_bloc.dart';
 import '../../model/money_entry.dart';
+import '../ReordableGridExample.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
 import 'money_entry_bar.dart';
@@ -109,6 +110,11 @@ class EditMoneyEntryPage extends StatelessWidget {
                   left: 0,
                   right: 0,
                   top: 115,
+         /*         child: SizedBox(
+                    height: 350,
+                    width: 300,
+                    child: ReorderableGridExample()
+                  )*/
                   child: ActivityButtonContainer(
                     activities: activities,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
