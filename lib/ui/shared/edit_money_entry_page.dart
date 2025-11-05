@@ -9,7 +9,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../blocs/money_entry/money_entry_bloc.dart';
 import '../../blocs/settings/settings_bloc.dart';
 import '../../model/money_entry.dart';
-import '../ReordableGridExample.dart';
 import '../home/activity_button_container.dart';
 import '../home/numpad.dart';
 import 'money_entry_bar.dart';
@@ -93,7 +92,7 @@ class EditMoneyEntryPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 1, height: 5),
                       const Text(
-                        "Click on card to change date",
+                        "Click on card to change date. Double tap to edit",
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black38,
@@ -119,7 +118,7 @@ class EditMoneyEntryPage extends StatelessWidget {
                     activities: activities,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
                     // Disable activity edit if the entry is being edited
-                    onActivityLongPress: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),
+                    onActivityDoubleTap: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),
                     enableAdd: !forUpdate,
                   )
               ),
