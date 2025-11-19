@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -84,14 +82,12 @@ class SqliteService {
         await _createActivitiesTable(db);
         await _createEntriesTable(db);
         await _createDefaultActivities(db);
+        await _addActivityOrders(db);
       },
       version: 2,
       onUpgrade: (database, oldVersion, newVersion) async {
         if (oldVersion < 2) {
-          _addActivityOrder('incomeActivityOrder', 'isIncome', database);
-          _addActivityOrder('expenseActivityOrder', 'isExpense', database);
-          _addActivityOrder('creditActivityOrder', 'isCredit', database);
-          _addActivityOrder('debtActivityOrder', 'isDebt', database);
+          await _addActivityOrders(database);
         }
       }
     );
@@ -99,6 +95,15 @@ class SqliteService {
     await db.execute('PRAGMA foreign_keys=on');
     _db = db;
     return db;
+  }
+
+  Future<void> _addActivityOrders(Database database) async {
+    await Future.wait([
+        _addActivityOrder('incomeActivityOrder', 'isIncome', database),
+        _addActivityOrder('expenseActivityOrder', 'isExpense', database),
+        _addActivityOrder('creditActivityOrder', 'isCredit', database),
+        _addActivityOrder('debtActivityOrder', 'isDebt', database)
+    ]);
   }
 
   Future<void> _addActivityOrder(String columnName, String isTypeColumn, Database database) async {
@@ -148,18 +153,18 @@ class SqliteService {
 
   Future<void> _createDefaultActivities(Database db) {
     final batch = db.batch();
-    final activities = [
-      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
+    final activityMaps = [
+      {"title": "Food", "color": Colors.green.value, "imageKey": "restaurant_menu", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Car", "color": Colors.deepPurple.value, "imageKey": "local_gas_station", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Leisure", "color": Colors.deepOrange.value, "imageKey": "wine_bar", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Work", "color": Colors.blueGrey.value, "imageKey": "work", "isIncome": true, "isExpense": false, "isCredit": true, "isDebt": true },
+      {"title": "Shopping", "color": Colors.purple.value, "imageKey": "local_mall", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Payments", "color": Colors.blueAccent.value, "imageKey": "receipt", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true },
+      {"title": "Vacation", "color": Colors.orangeAccent.value, "imageKey": "beach_access", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true }
     ];
 
-    for (MoneyActivity activity in activities) {
-      batch.insert('money_activities', activity.toMap());
+    for (Map<String, Object> activityMap in activityMaps) {
+      batch.insert('money_activities', activityMap);
     }
 
     return batch.commit(noResult: true);
