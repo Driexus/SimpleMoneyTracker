@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart' hide DatesUpdated;
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
+import 'package:simplemoneytracker/main_initializer.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 
@@ -11,8 +12,11 @@ import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
 import 'model/money_entry.dart';
+import 'notifications.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initNotifications();
   runApp(SimpleMoneyTracker());
 }
 
@@ -39,41 +43,43 @@ class SimpleMoneyTracker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Simple Time Tracker',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent), // blue, blueAccent
-        useMaterial3: true,
-        splashFactory: InkSplash.splashFactory,
-        sliderTheme: const SliderThemeData(
-          showValueIndicator: ShowValueIndicator.always
+    return MainInitializer(
+      child: MaterialApp(
+        title: 'Simple Time Tracker',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent), // blue, blueAccent
+          useMaterial3: true,
+          splashFactory: InkSplash.splashFactory,
+          sliderTheme: const SliderThemeData(
+            showValueIndicator: ShowValueIndicator.always
+          )
+        ),
+        home: MultiBlocProvider(
+          providers: [
+            Provider(
+              create: (_) => _moneyEntryRepo,
+            ),
+            Provider(
+              create: (_) => _moneyActivityRepo,
+            ),
+            Provider(
+              create: (_) => _settingsBloc,
+            ),
+            Provider(
+              create: (_) => _dateSpanBloc,
+            ),
+            BlocProvider(
+              create: (_) => _entriesBloc,
+            ),
+            BlocProvider(
+              create: (_) => _statsBloc,
+            ),
+            BlocProvider(
+              create: (_) => _activitiesCubit,
+            ),
+          ],
+          child: const MainPage()
         )
-      ),
-      home: MultiBlocProvider(
-        providers: [
-          Provider(
-            create: (_) => _moneyEntryRepo,
-          ),
-          Provider(
-            create: (_) => _moneyActivityRepo,
-          ),
-          Provider(
-            create: (_) => _settingsBloc,
-          ),
-          Provider(
-            create: (_) => _dateSpanBloc,
-          ),
-          BlocProvider(
-            create: (_) => _entriesBloc,
-          ),
-          BlocProvider(
-            create: (_) => _statsBloc,
-          ),
-          BlocProvider(
-            create: (_) => _activitiesCubit,
-          ),
-        ],
-        child: const MainPage()
       )
     );
   }

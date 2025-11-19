@@ -60,6 +60,9 @@ dependencies:
   flutter_archive: ^6.0.3
   file_picker: ^8.3.1
   reorderable_grid_view: ^2.2.8
+  flutter_local_notifications: ^19.5.0
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
 
 dev_dependencies:
   flutter_test:
