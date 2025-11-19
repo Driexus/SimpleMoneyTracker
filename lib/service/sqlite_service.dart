@@ -84,7 +84,23 @@ class SqliteService {
         await _createEntriesTable(db);
         await _createDefaultActivities(db);
       },
-      version: 1,
+      version: 2,
+      onUpgrade: (database, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Add activityOrder and update old entries to match row numbers
+          await database.execute('ALTER TABLE money_activities ADD COLUMN activityOrder INTEGER');
+          await database.rawUpdate('''
+            UPDATE money_activities
+            SET activityOrder = (
+              SELECT rn - 1 FROM (
+                SELECT activityId, ROW_NUMBER() OVER (ORDER BY activityId) AS rn
+                FROM money_activities
+              ) AS t
+              WHERE t.activityId = money_activities.activityId
+            )
+          ''');
+        }
+      }
     );
 
     await db.execute('PRAGMA foreign_keys=on');

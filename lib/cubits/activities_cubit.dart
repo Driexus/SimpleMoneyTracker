@@ -14,15 +14,19 @@ class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
 
   void saveActivity(MoneyActivity activity) {
     if (activity.id == null) {
-      _repo.create(activity).then((value) => refreshActivities());
+      _repo.create(activity).whenComplete(refreshActivities);
     }
     else {
-      _repo.update(activity).then((value) => refreshActivities());
+      _repo.update(activity).whenComplete(refreshActivities);
     }
   }
 
   void deleteActivity(MoneyActivity activity) {
-    _repo.delete(activity).then((value) => refreshActivities());
+    _repo.delete(activity).whenComplete(refreshActivities);
+  }
+
+  void reorderActivity(MoneyActivity activity, int newOrder) {
+    _repo.reorder(activity.id!, newOrder).whenComplete(refreshActivities);
   }
 
   void refreshActivities() {

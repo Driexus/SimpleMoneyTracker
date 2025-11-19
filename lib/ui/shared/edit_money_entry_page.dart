@@ -109,16 +109,12 @@ class EditMoneyEntryPage extends StatelessWidget {
                   left: 0,
                   right: 0,
                   top: 115,
-         /*         child: SizedBox(
-                    height: 350,
-                    width: 300,
-                    child: ReorderableGridExample()
-                  )*/
                   child: ActivityButtonContainer(
                     activities: activities,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
                     // Disable activity edit if the entry is being edited
                     onActivityDoubleTap: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),
+                    onReorder: activitiesCubit.reorderActivity,
                     enableAdd: !forUpdate,
                   )
               ),

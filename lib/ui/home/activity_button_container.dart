@@ -4,18 +4,23 @@ import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
 
+typedef OnReorder = void Function(MoneyActivity activity, int newIndex);
+
 class ActivityButtonContainer extends StatelessWidget {
-  const ActivityButtonContainer(
-      {super.key,
-      required this.activities,
-      required this.onActivity,
-      this.onActivityDoubleTap,
-      required this.enableAdd});
+  const ActivityButtonContainer({
+    super.key,
+    required this.activities,
+    required this.onActivity,
+    this.onActivityDoubleTap,
+    required this.enableAdd,
+    required this.onReorder
+  });
 
   final List<MoneyActivity> activities;
   final ValueChanged<MoneyActivity> onActivity;
   final ValueChanged<MoneyActivity>? onActivityDoubleTap;
   final bool enableAdd;
+  final OnReorder onReorder;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -28,11 +33,8 @@ class ActivityButtonContainer extends StatelessWidget {
         crossAxisCount: 5,
         childAspectRatio: 65 / 85,
         onReorder: (oldIndex, newIndex) {
-          // TODO
-/*            setState(() {
-          final element = data.removeAt(oldIndex);
-          data.insert(newIndex, element);
-        });*/
+          MoneyActivity activity = activities[oldIndex];
+          onReorder(activity, newIndex);
         },
         footer: enableAdd
             ? [

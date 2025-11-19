@@ -10,6 +10,7 @@ class MoneyActivity {
   final bool isExpense;
   final bool isCredit;
   final bool isDebt;
+  final int? activityOrder;
 
   const MoneyActivity({
     this.id,
@@ -19,7 +20,8 @@ class MoneyActivity {
     required this.isIncome,
     required this.isExpense,
     required this.isCredit,
-    required this.isDebt
+    required this.isDebt,
+    this.activityOrder
   });
 
   MoneyActivity.fromDBMap(Map<String, dynamic> dbMap) :
@@ -30,7 +32,8 @@ class MoneyActivity {
     isIncome = (dbMap['isIncome'] as int) == 1,
     isExpense = (dbMap['isExpense'] as int) == 1,
     isCredit = (dbMap['isCredit'] as int) == 1,
-    isDebt = (dbMap['isDebt'] as int) == 1
+    isDebt = (dbMap['isDebt'] as int) == 1,
+    activityOrder = (dbMap['activityOrder'] as int?)
   ;
 
   Map<String, dynamic> toMap() {
@@ -42,7 +45,8 @@ class MoneyActivity {
       'isIncome': isIncome ? 1 : 0,
       'isExpense': isExpense ? 1 : 0,
       'isCredit': isCredit ? 1 : 0,
-      'isDebt': isDebt ? 1 : 0
+      'isDebt': isDebt ? 1 : 0,
+      'activityOrder': activityOrder
     };
   }
 
@@ -53,7 +57,8 @@ class MoneyActivity {
     bool? isIncome,
     bool? isExpense,
     bool? isCredit,
-    bool? isDebt
+    bool? isDebt,
+    int? activityOrder
   }) {
     return MoneyActivity(
       id: id,
@@ -63,7 +68,8 @@ class MoneyActivity {
       isIncome: isIncome ?? this.isIncome,
       isExpense: isExpense ?? this.isExpense,
       isCredit: isCredit ?? this.isCredit,
-      isDebt: isDebt ?? this.isDebt
+      isDebt: isDebt ?? this.isDebt,
+      activityOrder: activityOrder ?? this.activityOrder,
     );
   }
 
