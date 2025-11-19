@@ -40,8 +40,11 @@ class MoneyActivityRepo {
     log("Reordering activity with id $activityId to position $index");
     List<MoneyActivity> activities = await retrieveAll();
 
-    // Find previous index to remove afterwards
+    // Check if need to reorder
     int previousIndex = activities.indexWhere((a) => a.id == activityId);
+    if (index == previousIndex) return;
+
+    // Find previous activity to remove afterwards
     MoneyActivity activity = activities[previousIndex];
     if (previousIndex >= index) previousIndex ++;
     else index ++;

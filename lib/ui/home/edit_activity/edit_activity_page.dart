@@ -79,7 +79,8 @@ class _EditActivityPageState extends State<EditActivityPage> {
           isIncome: _isIncome,
           isExpense: _isExpense,
           isCredit: _isCredit,
-          isDebt: _isDebt
+          isDebt: _isDebt,
+          activityOrder: widget.cubit.state.length
       ) :
       widget.moneyActivity!.copy(
           title: _title,

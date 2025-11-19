@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import '../repos/money_activity_repo.dart';
 
-class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
-  ActivitiesCubit(this._repo) : super({}) {
+class ActivitiesCubit extends Cubit<List<MoneyActivity>> {
+  ActivitiesCubit(this._repo) : super([]) {
     refreshActivities();
     log("Created Activities Cubit");
   }
@@ -30,8 +30,6 @@ class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
   }
 
   void refreshActivities() {
-    _repo.retrieveAll().then((activities) => {
-      emit({ for (var activity in activities) activity.id! : activity })
-    });
+    _repo.retrieveAll().then(emit);
   }
 }

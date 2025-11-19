@@ -54,7 +54,7 @@ class EditMoneyEntryPage extends StatelessWidget {
 
           // Find only the activities that are ok for this specific MoneyType
           final activitiesCubit = blocContext.watch<ActivitiesCubit>();
-          final activities = activitiesCubit.state.values.where((activity) {
+          final activities = activitiesCubit.state.where((activity) {
             switch (state.moneyType) {
               case MoneyType.income: return activity.isIncome;
               case MoneyType.credit: return activity.isCredit;

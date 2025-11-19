@@ -140,13 +140,13 @@ class SqliteService {
   Future<void> _createDefaultActivities(Database db) {
     final batch = db.batch();
     final activities = [
-      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
+      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 0),
+      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 1),
+      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 2),
+      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true, activityOrder: 3),
+      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 4),
+      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true, activityOrder: 5),
+      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true, activityOrder: 6),
     ];
 
     for (MoneyActivity activity in activities) {
