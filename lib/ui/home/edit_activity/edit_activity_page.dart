@@ -7,6 +7,7 @@ import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 
+import '../../../model/money_entry.dart';
 import '../../shared/bottom_button.dart';
 
 class EditActivityPage extends StatefulWidget {
@@ -79,7 +80,11 @@ class _EditActivityPageState extends State<EditActivityPage> {
           isIncome: _isIncome,
           isExpense: _isExpense,
           isCredit: _isCredit,
-          isDebt: _isDebt
+          isDebt: _isDebt,
+          incomeActivityOrder: _isIncome ? widget.cubit.orderedByType(MoneyType.income).length : null,
+          expenseActivityOrder: _isExpense ? widget.cubit.orderedByType(MoneyType.expense).length : null,
+          creditActivityOrder: _isCredit ? widget.cubit.orderedByType(MoneyType.credit).length : null,
+          debtActivityOrder: _isDebt ? widget.cubit.orderedByType(MoneyType.debt).length : null,
       ) :
       widget.moneyActivity!.copy(
           title: _title,

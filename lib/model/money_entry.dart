@@ -56,14 +56,16 @@ class MoneyEntry {
 }
 
 enum MoneyType{
-  credit("Credit", Icons.redeem, Colors.purple),
-  income("Income", Icons.savings, Colors.lightGreen),
-  expense("Expense", Icons.payments, Colors.blue),
-  debt("Debt", Icons.account_balance, Colors.orange);
+  credit("Credit", Icons.redeem, Colors.purple, "isCredit", "creditActivityOrder"),
+  income("Income", Icons.savings, Colors.lightGreen, "isIncome", "incomeActivityOrder"),
+  expense("Expense", Icons.payments, Colors.blue, "isExpense", "expenseActivityOrder"),
+  debt("Debt", Icons.account_balance, Colors.orange, "isDebt", "debtActivityOrder");
 
   final String displayName;
   final IconData icon;
   final Color color;
+  final String isTypeColumnName;
+  final String typeOrderColumnName;
 
-  const MoneyType(this.displayName, this.icon, this.color);
+  const MoneyType(this.displayName, this.icon, this.color, this.isTypeColumnName, this.typeOrderColumnName);
 }

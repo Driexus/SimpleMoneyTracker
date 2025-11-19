@@ -1,61 +1,70 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
-import 'package:simplemoneytracker/utils/extensions.dart';
 
-import '../shared/single_child_scrollable_widget.dart';
-import 'buttons/rectangular_button.dart';
+typedef OnReorder = void Function(MoneyActivity activity, MoneyType currentType, int newIndex);
 
 class ActivityButtonContainer extends StatelessWidget {
-  const ActivityButtonContainer({super.key, required this.activities, required this.onActivity, this.onActivityLongPress, required this.enableAdd});
+  const ActivityButtonContainer({
+    super.key,
+    required this.activities,
+    required this.moneyType,
+    required this.onActivity,
+    this.onActivityDoubleTap,
+    required this.enableAdd,
+    required this.onReorder
+  });
 
   final List<MoneyActivity> activities;
+  final MoneyType moneyType;
   final ValueChanged<MoneyActivity> onActivity;
-  final ValueChanged<MoneyActivity>? onActivityLongPress;
+  final ValueChanged<MoneyActivity>? onActivityDoubleTap;
   final bool enableAdd;
-
-  /// Slice the buttons into chunks, add spacing between them, and return them as a list of rows with spacing between them
-  List<Widget> _createRows(BuildContext context) {
-    return _createButtons(context).slices(5).map((slicedButtons) {
-      List<Widget> buttons = List.from(slicedButtons);
-      buttons = buttons.addHorizontalSpacing(10);
-
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: buttons,
-      );
-    }).addVerticalSpacing(15);
-  }
-
-  /// Create new buttons from the activities and add an AddButton at the end.
-  List<Widget> _createButtons(BuildContext context) {
-    // Bad type system - do not remove casting
-    List<Widget> buttons = activities.map((activity) => ActivityButton(
-      imageKey: activity.imageKey,
-      description: activity.title,
-      color: Color(activity.color),
-      onPressed: () => onActivity(activity),
-      onLongPress: onActivityLongPress == null ? null : () => onActivityLongPress!(activity),
-    ) as RectangularButton).toList();
-
-    // The AddButton must be recreated in every build in order pass the correct BuildContext
-    if (enableAdd) {
-      buttons.add(AddButton(context: context));
-    }
-    return buttons;
-  }
+  final OnReorder onReorder;
 
   @override
-  Widget build(BuildContext context) =>
-    SizedBox(
+  Widget build(BuildContext context) => Center(
+    child: SizedBox(
       height: 350,
-      child: SingleChildScrollableWidget(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _createRows(context),
-        ),
+      width: 370,
+      child: ReorderableGridView.count(
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 15,
+        crossAxisCount: 5,
+        childAspectRatio: 65 / 85,
+        onReorder: (oldIndex, newIndex) {
+          MoneyActivity activity = activities[oldIndex];
+          onReorder(activity, moneyType, newIndex);
+        },
+        footer: enableAdd
+            ? [
+                AddButton(
+                    key: const ValueKey("zhgLk30SzzH1XrhrE4RB4ivWuBgMYd"),
+                    context: context)
+              ]
+            : [],
+        // Remove background
+        dragWidgetBuilder: (index, child) {
+          return Material(
+            elevation: 6,
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            child: child,
+          );
+        },
+        children: activities.map((activity) {
+          return ActivityButton(
+            key: ValueKey(activity.title),
+            imageKey: activity.imageKey,
+            description: activity.title,
+            color: Color(activity.color),
+            onTap: () => onActivity(activity),
+            onDoubleTap: () => onActivityDoubleTap!(activity),
+          );
+        }).toList(),
       ),
-    );
+    ));
 }

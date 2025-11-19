@@ -7,6 +7,7 @@ import 'package:flutter_archive/flutter_archive.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -84,12 +85,36 @@ class SqliteService {
         await _createEntriesTable(db);
         await _createDefaultActivities(db);
       },
-      version: 1,
+      version: 2,
+      onUpgrade: (database, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          _addActivityOrder('incomeActivityOrder', 'isIncome', database);
+          _addActivityOrder('expenseActivityOrder', 'isExpense', database);
+          _addActivityOrder('creditActivityOrder', 'isCredit', database);
+          _addActivityOrder('debtActivityOrder', 'isDebt', database);
+        }
+      }
     );
 
     await db.execute('PRAGMA foreign_keys=on');
     _db = db;
     return db;
+  }
+
+  Future<void> _addActivityOrder(String columnName, String isTypeColumn, Database database) async {
+    // Add activityOrder and update old entries to match row numbers
+    await database.execute('ALTER TABLE money_activities ADD COLUMN $columnName INTEGER');
+    await database.rawUpdate('''
+      UPDATE money_activities
+      SET $columnName = (
+        SELECT rn - 1 FROM (
+          SELECT activityId, ROW_NUMBER() OVER (ORDER BY activityId) AS rn
+          FROM money_activities
+          WHERE $isTypeColumn = true 
+        ) AS t
+        WHERE t.activityId = money_activities.activityId
+      )
+    ''');
   }
 
   Future<void> _createActivitiesTable(Database db) {
