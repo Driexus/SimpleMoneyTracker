@@ -51,17 +51,7 @@ class EditMoneyEntryPage extends StatelessWidget {
           final moneyEntryBloc = blocContext.watch<MoneyEntryBloc>();
           final currency = blocContext.watch<SettingsBloc>().state.currency;
           final state = moneyEntryBloc.state;
-
-          // Find only the activities that are ok for this specific MoneyType
           final activitiesCubit = blocContext.watch<ActivitiesCubit>();
-          final activities = activitiesCubit.state.where((activity) {
-            switch (state.moneyType) {
-              case MoneyType.income: return activity.isIncome;
-              case MoneyType.credit: return activity.isCredit;
-              case MoneyType.expense: return activity.isExpense;
-              case MoneyType.debt: return activity.isDebt;
-            }
-          }).toList();
 
           return Stack(
             children: [
@@ -110,7 +100,8 @@ class EditMoneyEntryPage extends StatelessWidget {
                   right: 0,
                   top: 115,
                   child: ActivityButtonContainer(
-                    activities: activities,
+                    activities: activitiesCubit.orderedByType(state.moneyType),
+                    moneyType: state.moneyType,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
                     // Disable activity edit if the entry is being edited
                     onActivityDoubleTap: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),

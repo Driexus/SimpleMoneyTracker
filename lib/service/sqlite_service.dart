@@ -7,6 +7,7 @@ import 'package:flutter_archive/flutter_archive.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -87,18 +88,10 @@ class SqliteService {
       version: 2,
       onUpgrade: (database, oldVersion, newVersion) async {
         if (oldVersion < 2) {
-          // Add activityOrder and update old entries to match row numbers
-          await database.execute('ALTER TABLE money_activities ADD COLUMN activityOrder INTEGER');
-          await database.rawUpdate('''
-            UPDATE money_activities
-            SET activityOrder = (
-              SELECT rn - 1 FROM (
-                SELECT activityId, ROW_NUMBER() OVER (ORDER BY activityId) AS rn
-                FROM money_activities
-              ) AS t
-              WHERE t.activityId = money_activities.activityId
-            )
-          ''');
+          _addActivityOrder('incomeActivityOrder', 'isIncome', database);
+          _addActivityOrder('expenseActivityOrder', 'isExpense', database);
+          _addActivityOrder('creditActivityOrder', 'isCredit', database);
+          _addActivityOrder('debtActivityOrder', 'isDebt', database);
         }
       }
     );
@@ -106,6 +99,22 @@ class SqliteService {
     await db.execute('PRAGMA foreign_keys=on');
     _db = db;
     return db;
+  }
+
+  Future<void> _addActivityOrder(String columnName, String isTypeColumn, Database database) async {
+    // Add activityOrder and update old entries to match row numbers
+    await database.execute('ALTER TABLE money_activities ADD COLUMN $columnName INTEGER');
+    await database.rawUpdate('''
+      UPDATE money_activities
+      SET $columnName = (
+        SELECT rn - 1 FROM (
+          SELECT activityId, ROW_NUMBER() OVER (ORDER BY activityId) AS rn
+          FROM money_activities
+          WHERE $isTypeColumn = true 
+        ) AS t
+        WHERE t.activityId = money_activities.activityId
+      )
+    ''');
   }
 
   Future<void> _createActivitiesTable(Database db) {
@@ -140,13 +149,13 @@ class SqliteService {
   Future<void> _createDefaultActivities(Database db) {
     final batch = db.batch();
     final activities = [
-      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 0),
-      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 1),
-      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 2),
-      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true, activityOrder: 3),
-      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false, activityOrder: 4),
-      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true, activityOrder: 5),
-      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true, activityOrder: 6),
+      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
+      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
+      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
+      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true),
+      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
+      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
+      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
     ];
 
     for (MoneyActivity activity in activities) {

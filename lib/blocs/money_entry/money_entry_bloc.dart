@@ -131,13 +131,13 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
   }
 
   /// Called when the activities cubit is refreshed in order to update the activity saved in the state
-  void _onActivitiesRefreshed(List<MoneyActivity>? activities) {
+  void _onActivitiesRefreshed(Map<int, MoneyActivity>? activityMap) {
     final currentActivityId = state.moneyActivity?.id;
     if (currentActivityId == null) {
       return;
     }
 
-    final updatedActivity = activities?.firstWhere((activity) => activity.id == currentActivityId);
+    final updatedActivity = activityMap?[currentActivityId];
     if (updatedActivity == null) {
       return;
     }

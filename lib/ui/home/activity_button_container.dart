@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
 
-typedef OnReorder = void Function(MoneyActivity activity, int newIndex);
+typedef OnReorder = void Function(MoneyActivity activity, MoneyType currentType, int newIndex);
 
 class ActivityButtonContainer extends StatelessWidget {
   const ActivityButtonContainer({
     super.key,
     required this.activities,
+    required this.moneyType,
     required this.onActivity,
     this.onActivityDoubleTap,
     required this.enableAdd,
@@ -17,6 +19,7 @@ class ActivityButtonContainer extends StatelessWidget {
   });
 
   final List<MoneyActivity> activities;
+  final MoneyType moneyType;
   final ValueChanged<MoneyActivity> onActivity;
   final ValueChanged<MoneyActivity>? onActivityDoubleTap;
   final bool enableAdd;
@@ -34,7 +37,7 @@ class ActivityButtonContainer extends StatelessWidget {
         childAspectRatio: 65 / 85,
         onReorder: (oldIndex, newIndex) {
           MoneyActivity activity = activities[oldIndex];
-          onReorder(activity, newIndex);
+          onReorder(activity, moneyType, newIndex);
         },
         footer: enableAdd
             ? [
