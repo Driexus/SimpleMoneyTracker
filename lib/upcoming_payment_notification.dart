@@ -30,7 +30,7 @@ void callbackDispatcher() {
     final paymentTitle = entries.length == 1 ? "payment" : "payments";
     final title = 'You have ${entries.length} upcoming $paymentTitle due tomorrow';
     final description = entries
-        .map((entry) => "• Upcoming ${entry.activity.title} payment of ${entry.amount.toCurrency(currency: currency)}")
+        .map((entry) => "• Upcoming ${entry.activity.title.toLowerCase()} payment of ${entry.amount.toCurrency(currency: currency)}")
         .reduce((acc, current) => "$acc\n$current");
 
     // Card style
