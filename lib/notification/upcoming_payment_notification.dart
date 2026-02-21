@@ -5,7 +5,7 @@ import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:workmanager/workmanager.dart';
 
-import 'model/currency.dart';
+import '../model/currency.dart';
 import 'notifications.dart';
 
 // This should be more general if different notifications are required in the future
@@ -60,10 +60,4 @@ void callbackDispatcher() {
 
     return Future.value(true);
   });
-}
-
-@pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
-  // handle action
-  print('Notification tapped in background with payload: ${notificationResponse.payload}');
 }

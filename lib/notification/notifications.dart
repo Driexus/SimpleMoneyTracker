@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:simplemoneytracker/upcoming_payment_notification.dart';
+import 'package:simplemoneytracker/notification/upcoming_payment_notification.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:timezone/timezone.dart';
 import 'package:workmanager/workmanager.dart';
@@ -28,7 +28,7 @@ Future<void> initNotifications() async {
 Future<FlutterLocalNotificationsPlugin> initNotificationsPlugin() async {
   final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
   const androidInit = AndroidInitializationSettings('notification_icon');
-  await notificationsPlugin.initialize(const InitializationSettings(android: androidInit));
+  await notificationsPlugin.initialize(const InitializationSettings(android: androidInit)); // TODO: Add callback on notification tap
   return notificationsPlugin;
 }
 

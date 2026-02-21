@@ -10,7 +10,7 @@ import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
 import 'model/money_entry.dart';
-import 'notifications.dart';
+import 'notification/notifications.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
