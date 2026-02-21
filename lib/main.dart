@@ -5,9 +5,6 @@ import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart' hide Dat
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
-import 'package:workmanager/workmanager.dart';
-
-import 'background_notifications.dart';
 import 'blocs/timeline/timeline_bloc.dart' hide EntriesChanged;
 import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
@@ -18,43 +15,7 @@ import 'notifications.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initNotifications();
-
-  // Initialize and schedule Workmanager
-  await Workmanager().initialize(
-      callbackDispatcher,
-      isInDebugMode: true // Set to false for release
-  );
-  await scheduleTask();
-
   runApp(SimpleMoneyTracker());
-}
-
-// TODO: Move elsewhere
-Future<void> scheduleTask() async {
-  DateTime now = DateTime.now();
-  DateTime firstRun = DateTime(now.year, now.month, now.day, 11, 0).add(const Duration(days: 1)); // Tomorrow at 11 AM
-
-  // TODO: Change for release
-  Duration initialDelay = const Duration(seconds: 5);
-  // Duration initialDelay = firstRun.difference(now);
-
-  await Workmanager().registerPeriodicTask(
-    "daily-future-payments-task",
-    "futurePaymentsTask",
-    // TODO: Change for release
-    frequency: const Duration(minutes: 15),
-    // TODO: Change for release
-    //existingWorkPolicy: ExistingWorkPolicy.keep,
-    existingWorkPolicy: ExistingWorkPolicy.replace,
-    //frequency: const Duration(hours: 24),
-    initialDelay: initialDelay,
-  );
-
-  await Workmanager().registerOneOffTask(
-    "one-time-future-payments-task",
-    "futurePaymentsTask",
-    initialDelay: initialDelay,
-  );
 }
 
 class SimpleMoneyTracker extends StatelessWidget {
