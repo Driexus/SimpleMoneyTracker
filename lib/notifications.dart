@@ -5,110 +5,6 @@ import 'package:timezone/timezone.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-Future<void> scheduleDailyNotification() async {
-  // Notification details
-  const androidDetails = AndroidNotificationDetails(
-    'daily_channel_id',
-    'Daily Notifications',
-    channelDescription: 'Daily notification at specific time',
-    importance: Importance.max,
-    priority: Priority.high,
-  );
-
-  const notificationDetails = NotificationDetails(android: androidDetails);
-
-  // Target time: 11:00 AM local time
-  final now = TZDateTime.now(local);
-  //var scheduled = TZDateTime(local, now.year, now.month, now.day, 11, 0);
-  var scheduled = now.add(const Duration(seconds: 15));
-
-  if (scheduled.isBefore(now)) {
-    scheduled = scheduled.add(const Duration(days: 1));
-  }
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled,
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: 0)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: 1)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: 2)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: 3)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: -1)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    scheduled.add(const Duration(hours: -2)),
-    notificationDetails,
-    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    matchDateTimeComponents: DateTimeComponents.time, // repeat daily
-  );
-
-/*  await flutterLocalNotificationsPlugin.show(
-    0,
-    'Good morning!',
-    'Here is your daily notification',
-    notificationDetails,
-  );*/
-
-  final List<PendingNotificationRequest> pendingNotifications =
-  await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-
-  int a = 3;
-}
-
 Future<void> initNotifications() async {
   initializeTimeZones();
   final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
@@ -120,7 +16,23 @@ Future<void> initNotifications() async {
   );
 
   // Request permission (Android 13+ only)
-  await flutterLocalNotificationsPlugin.initialize(initSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+    // THIS IS THE CRITICAL PART
+    onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
+      //Handle the notification tap here.
+      // For now, just printing is enough to confirm it works.
+      print('Notification tapped with payload: ${notificationResponse.payload}');
+    },
+    // This one is for older versions but good to have
+    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+  );
   AndroidFlutterLocalNotificationsPlugin? androidPlugin = flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
   await androidPlugin?.requestNotificationsPermission();
+}
+
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  // handle action
+  print('Notification tapped in background withpayload: ${notificationResponse.payload}');
 }
