@@ -19,7 +19,7 @@ class CsvExporter {
     String csv = const ListToCsvConverter().convert(csvEntries);
 
     // Write file and open it
-    File file = await writeFile(csv, 'SimpleMoneyTracker.csv');
+    File file = await writeFile(csv, 'SimpleMoneyTracker_${DateTime.now().toExactReadable()}.csv');
     await OpenFile.open(file.path);
   }
 

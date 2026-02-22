@@ -106,6 +106,10 @@ extension DateString on DateTime {
   String toDateFull() {
     return DateFormat("yMMMd").format(this);
   }
+
+  String toExactReadable() {
+    return DateFormat("yyyy_MM_dd_HHmmss").format(this);
+  }
 }
 
 extension Months on DateTime {

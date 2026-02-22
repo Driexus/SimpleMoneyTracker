@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -55,7 +56,7 @@ class SqliteService {
   void exportDatabase() async {
     await _closeDB();
     final databasesDirectory = await getApplicationDocumentsDirectory();
-    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup.zip'));
+    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup_${DateTime.now().toExactReadable()}.zip'));
 
     try {
       final dataDir = Directory(await getDatabasesPath());
