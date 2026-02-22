@@ -47,6 +47,16 @@ class MoneyEntryBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final decoration = date.isAfter(DateTime.now()) ?
+      BoxDecoration(
+        borderRadius: borderRadius,
+        image: const DecorationImage(
+          image: AssetImage("assets/images/noise.png"),
+          opacity: 0.45,
+          repeat: ImageRepeat.repeat,
+        ),
+      ) : null;
+
     return SizedBox(
       height: height,
       width: 370,
@@ -59,67 +69,70 @@ class MoneyEntryBar extends StatelessWidget {
           borderRadius: borderRadius,
           onTap: () => onPressed(moneyEntry),
           onLongPress: onLongPress == null ? null : () => onLongPress!(moneyEntry),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 10,
-                top: 0,
-                bottom: 0,
-                child: Container(child: activityIcon)
-              ),
-              Positioned(
-                left: 40,
-                top: 5,
-                child: Text(
-                  description ?? "",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                )
-              ),
-              Positioned(
-                left: 40,
-                bottom: 5,
-                child: Text(
-                  date.toDayMonth(),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                )
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: AutoSizeText(
-                  amount,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 23,
-                    color: Colors.white,
-                  ),
-                )
-              ),
-              Positioned(
-                right: 10,
-                top: 5,
-                child: Container(child: typeIcon)
-              ),
-              Positioned(
-                right: 10,
-                bottom: 5,
-                child: AutoSizeText(
-                  moneyType?.displayName ?? "",
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                )
-              ),
-            ],
+          child: Ink(
+            decoration: decoration,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 10,
+                  top: 0,
+                  bottom: 0,
+                  child: Container(child: activityIcon)
+                ),
+                Positioned(
+                  left: 40,
+                  top: 5,
+                  child: Text(
+                    description ?? "",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  )
+                ),
+                Positioned(
+                  left: 40,
+                  bottom: 5,
+                  child: Text(
+                    date.toDayMonth(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  )
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: AutoSizeText(
+                    amount,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 23,
+                      color: Colors.white,
+                    ),
+                  )
+                ),
+                Positioned(
+                  right: 10,
+                  top: 5,
+                  child: Container(child: typeIcon)
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 5,
+                  child: AutoSizeText(
+                    moneyType?.displayName ?? "",
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  )
+                ),
+              ],
+            )
           )
         )
       )
