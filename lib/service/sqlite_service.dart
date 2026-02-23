@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
@@ -66,7 +66,7 @@ class SqliteService {
       log("Failed to create database zip.", error: e);
     }
     await getDB();
-    await OpenFile.open(zipFile.path, type: "*/*");
+    await OpenFilex.open(zipFile.path, type: "*/*");
     ToastHelper.showToast("Database backup created");
   }
 

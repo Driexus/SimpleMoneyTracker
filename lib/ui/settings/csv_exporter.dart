@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:csv/csv.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
@@ -16,11 +16,11 @@ class CsvExporter {
     // Create csv list and convert it to string
     List<List<dynamic>> csvEntries = entries.map((entry) => _toCsvList(entry, currency)).toList();
     csvEntries.insert(0, _headers(currency));
-    String csv = const ListToCsvConverter().convert(csvEntries);
+    String csv = CsvCodec().encoder.convert(csvEntries);
 
     // Write file and open it
     File file = await writeFile(csv, 'SimpleMoneyTracker_${DateTime.now().toExactReadable()}.csv');
-    await OpenFile.open(file.path);
+    await OpenFilex.open(file.path);
   }
 
   static Future<File> writeFile(String content, String fileName) async {

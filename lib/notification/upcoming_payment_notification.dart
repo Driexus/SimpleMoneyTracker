@@ -43,10 +43,10 @@ void callbackDispatcher() {
     // Show notification
     final FlutterLocalNotificationsPlugin notificationsPlugin = await initNotificationsPlugin();
     await notificationsPlugin.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      "Upcoming $paymentTitle",
-      title,
-      NotificationDetails(
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: "Upcoming $paymentTitle",
+      body: title,
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'bg_channel_v4',
           'Background Alerts',

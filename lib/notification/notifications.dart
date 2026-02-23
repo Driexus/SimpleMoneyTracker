@@ -9,7 +9,7 @@ import 'package:workmanager/workmanager.dart';
 Future<void> initNotifications() async {
   // Initialize timezones
   initializeTimeZones();
-  final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+  final String currentTimeZone = (await FlutterTimezone.getLocalTimezone()).identifier;
   setLocalLocation(getLocation(currentTimeZone));
 
   // Request permission (Android 13+ only)
@@ -28,20 +28,20 @@ Future<void> initNotifications() async {
 Future<FlutterLocalNotificationsPlugin> initNotificationsPlugin() async {
   final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
   const androidInit = AndroidInitializationSettings('notification_icon');
-  await notificationsPlugin.initialize(const InitializationSettings(android: androidInit)); // TODO: Add callback on notification tap
+  await notificationsPlugin.initialize(settings: const InitializationSettings(android: androidInit)); // TODO: Add callback on notification tap
   return notificationsPlugin;
 }
 
 Future<void> scheduleTask() async {
   Duration initialDelay;
   Duration frequency;
-  ExistingWorkPolicy existingWorkPolicy;
+  ExistingPeriodicWorkPolicy existingWorkPolicy;
 
   // Debug
   if (kDebugMode) {
     initialDelay = const Duration(seconds: 5);
     frequency = const Duration(minutes: 15);
-    existingWorkPolicy = ExistingWorkPolicy.replace;
+    existingWorkPolicy = ExistingPeriodicWorkPolicy.replace;
 
     print("Scheduled debug payment notification");
     await Workmanager().registerOneOffTask(
@@ -56,7 +56,7 @@ Future<void> scheduleTask() async {
     DateTime firstRun = DateTime(now.year, now.month, now.day, 11, 0).add(const Duration(days: 1)); // Tomorrow at 11 AM
     initialDelay = firstRun.difference(now);
     frequency = const Duration(days: 1);
-    existingWorkPolicy = ExistingWorkPolicy.keep;
+    existingWorkPolicy = ExistingPeriodicWorkPolicy.keep;
   }
 
   // Periodic task
