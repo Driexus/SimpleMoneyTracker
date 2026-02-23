@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
+import 'package:simplemoneytracker/model/BaseMoneyType.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
@@ -24,7 +25,7 @@ class Navigations {
     );
   }
 
-  static toBreakdownPage(BuildContext context, MoneyType moneyType) {
+  static toBreakdownPage(BuildContext context, BaseMoneyType moneyType) {
     final state = Provider.of<StatsBloc>(context, listen: false).state;
     final String title = Provider.of<DateSpanBloc>(context, listen: false).state.getHeader();
     final Currency currency = Provider.of<SettingsBloc>(context, listen: false).state.currency;

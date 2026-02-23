@@ -2,17 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
+import 'package:simplemoneytracker/model/BaseMoneyType.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 import '../../shared/navigations.dart';
 
 class TotalMoneyTypeBar extends StatelessWidget {
-  const TotalMoneyTypeBar({super.key, required this.amount, required this.moneyType, this.onPressed});
+  const TotalMoneyTypeBar({super.key, required this.amount, required this.moneyType});
 
   final int amount;
-  final MoneyType moneyType;
-  final ValueChanged<MoneyEntry?>? onPressed;
+  final BaseMoneyType moneyType;
 
   Icon? get typeIcon => Icon(
       moneyType.icon,
@@ -51,7 +50,7 @@ class TotalMoneyTypeBar extends StatelessWidget {
                         bottom: 0,
                         child: Center(
                           child: Text(
-                            "Total ${moneyType.displayName}",
+                            moneyType.displayName,
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,

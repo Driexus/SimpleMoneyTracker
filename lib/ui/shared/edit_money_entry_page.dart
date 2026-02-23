@@ -82,7 +82,7 @@ class EditMoneyEntryPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 1, height: 5),
                       const Text(
-                        "Click on card to change date. Double tap to edit",
+                        "Tap on card to change date. Double tap an activity to edit",
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black38,

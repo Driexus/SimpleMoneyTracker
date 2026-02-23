@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/blocs/stats/stats_bloc.dart';
+import 'package:simplemoneytracker/model/CompositeMoneyType.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
@@ -31,9 +32,13 @@ class StatsPage extends StatelessWidget {
                 const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
                 TotalMoneyBarContainer(amount: state.totalIncome, moneyType: MoneyType.income, subtotals: state.incomeSubtotals, currency: currency),
                 const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
+                TotalMoneyBarContainer(amount: state.netIncome, moneyType: CompositeMoneyType.netIncome, subtotals: state.netIncomeSubtotals, currency: currency),
+                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
                 TotalMoneyBarContainer(amount: state.totalDebt, moneyType: MoneyType.debt, subtotals: state.debtSubtotals, currency: currency),
                 const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
                 TotalMoneyBarContainer(amount: state.totalCredit, moneyType: MoneyType.credit, subtotals: state.creditSubtotals, currency: currency),
+                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
+                TotalMoneyBarContainer(amount: state.netCredit, moneyType: CompositeMoneyType.netCredit, subtotals: state.netCreditSubtotals, currency: currency),
               ],
             ),
           )
