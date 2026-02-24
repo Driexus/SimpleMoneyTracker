@@ -28,14 +28,16 @@ final class EmptyStatsState extends StatsState {
         MoneyType.income: 0,
         MoneyType.debt: 0,
         MoneyType.credit: 0,
-        CompositeMoneyType.netIncome: 0
+        CompositeMoneyType.netIncome: 0,
+        CompositeMoneyType.netCredit: 0
       },
       const {
         MoneyType.expense: [],
         MoneyType.income: [],
         MoneyType.debt: [],
         MoneyType.credit: [],
-        CompositeMoneyType.netIncome: []
+        CompositeMoneyType.netIncome: [],
+        CompositeMoneyType.netCredit: []
       }
   );
 }

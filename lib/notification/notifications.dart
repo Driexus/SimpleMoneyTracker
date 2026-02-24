@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -19,8 +21,7 @@ Future<void> initNotifications() async {
 
   // Initialize WorkManager and task
   await Workmanager().initialize(
-      callbackDispatcher,
-      isInDebugMode: kDebugMode
+      callbackDispatcher
   );
   await scheduleTask();
 }
@@ -43,7 +44,7 @@ Future<void> scheduleTask() async {
     frequency = const Duration(minutes: 15);
     existingWorkPolicy = ExistingPeriodicWorkPolicy.replace;
 
-    print("Scheduled debug payment notification");
+    log("Scheduled debug payment notification");
     await Workmanager().registerOneOffTask(
       "one-time-future-payments-task",
       "futurePaymentsTask",

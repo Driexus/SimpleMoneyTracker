@@ -28,15 +28,18 @@
             </intent-filter>
         </activity>
         <service
-            android:name="be.tramckas.workmanager.WorkmanagerCallReceiver"
+            android:name="be.tramckas.workmanager.WorkmanagerCallHandler"
             android:permission="android.permission.BIND_JOB_SERVICE"
+            android:foregroundServiceType="specialUse"
             android:exported="false" />
         <receiver
-            android:name="be.tramckas.workmanager.WorkmanagerStarter"
-            android:exported="false">
+            android:name="be.tramckas.workmanager.WorkmanagerBootReceiver"
+            android:exported="false"
+            android:directBootAware="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <!-- Don't delete the meta-data below.
