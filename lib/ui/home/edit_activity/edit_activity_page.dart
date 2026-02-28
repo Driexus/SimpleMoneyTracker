@@ -93,7 +93,12 @@ class _EditActivityPageState extends State<EditActivityPage> {
           isIncome: _isIncome,
           isExpense: _isExpense,
           isCredit: _isCredit,
-          isDebt: _isDebt
+          isDebt: _isDebt,
+          // Order is either existing order, length or null depending whether the activity is registered as the specific type
+          incomeActivityOrder: _isIncome ? (widget.moneyActivity?.incomeActivityOrder ?? widget.cubit.orderedByType(MoneyType.income).length ) : null,
+          expenseActivityOrder: _isExpense ? (widget.moneyActivity?.expenseActivityOrder ?? widget.cubit.orderedByType(MoneyType.expense).length ) : null,
+          creditActivityOrder: _isCredit ? (widget.moneyActivity?.creditActivityOrder ?? widget.cubit.orderedByType(MoneyType.credit).length ) : null,
+          debtActivityOrder: _isDebt ? (widget.moneyActivity?.debtActivityOrder ?? widget.cubit.orderedByType(MoneyType.debt).length ) : null,
       );
 
     widget.cubit.saveActivity(finalActivity);
