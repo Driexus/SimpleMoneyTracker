@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simplemoneytracker/notification/upcoming_payment_notification.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:timezone/data/latest.dart';
 import 'package:timezone/timezone.dart';
 import 'package:workmanager/workmanager.dart';
@@ -14,10 +16,23 @@ Future<void> initNotifications() async {
   final String currentTimeZone = (await FlutterTimezone.getLocalTimezone()).identifier;
   setLocalLocation(getLocation(currentTimeZone));
 
-  // Request permission (Android 13+ only)
+  // Initialize plugin
   FlutterLocalNotificationsPlugin notificationsPlugin = await initNotificationsPlugin();
   AndroidFlutterLocalNotificationsPlugin? androidPlugin = notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-  await androidPlugin?.requestNotificationsPermission();
+
+  // If we have already requested permission and notifications are disabled, respect user's choice
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  bool notificationsEnabled = await androidPlugin?.areNotificationsEnabled() ?? false;
+  if (sharedPreferences.hasRequestedNotificationPermission() && !notificationsEnabled) {
+    return;
+  }
+
+  // Request permission (Android 13+ only)
+  notificationsEnabled = await androidPlugin?.requestNotificationsPermission() ?? false;
+  await sharedPreferences.requestedNotificationPermission();
+  if (!notificationsEnabled) {
+    return;
+  }
 
   // Initialize WorkManager and task
   await Workmanager().initialize(

@@ -84,6 +84,14 @@ extension SharedPrefs on SharedPreferences {
   Future<void> setCurrency(Currency currency) async {
     setString("currency", currency.code);
   }
+
+  bool hasRequestedNotificationPermission() {
+    return getBool("has_requested_notification_permission") ?? false;
+  }
+
+  Future<void> requestedNotificationPermission() async {
+    setBool("has_requested_notification_permission", true);
+  }
 }
 
 extension IntColors on int {
