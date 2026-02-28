@@ -5,7 +5,7 @@ import 'package:simplemoneytracker/ui/home/buttons/pick_color_button.dart';
 import '../../shared/overscroll_notification_listener.dart';
 
 class ColorsList extends StatelessWidget {
-  const ColorsList({super.key, this.onColor = _onColorDefault});
+  const ColorsList({super.key, required this.initialColor, this.onColor = _onColorDefault});
 
   static const _colors = [
     Colors.cyan,
@@ -23,6 +23,7 @@ class ColorsList extends StatelessWidget {
     Colors.black12,
   ];
 
+  final Color initialColor;
   final ValueChanged<Color> onColor;
   static void _onColorDefault(Color color) {}
 
@@ -43,7 +44,7 @@ class ColorsList extends StatelessWidget {
               color: _colors[index],
               onColorTap: onColor
             )
-            : PickColorButton(buildContext: context, onColorTap: onColor);
+            : PickColorButton(buildContext: context, onColorTap: onColor, initialColor: initialColor);
           },
         )
     );

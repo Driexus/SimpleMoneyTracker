@@ -75,7 +75,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
     final MoneyActivity finalActivity = widget.moneyActivity == null ?
       MoneyActivity(
           title: _title,
-          color: _color.value,
+          color: _color.toARGB32(),
           imageKey: _imageKey!,
           isIncome: _isIncome,
           isExpense: _isExpense,
@@ -88,7 +88,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
       ) :
       widget.moneyActivity!.copy(
           title: _title,
-          color: _color.value,
+          color: _color.toARGB32(),
           imageKey: _imageKey!,
           isIncome: _isIncome,
           isExpense: _isExpense,
@@ -112,19 +112,16 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
   ButtonType? _activeListType;
 
-  late final _colorsList = ColorsList(
-    onColor: _updateColor,
-  );
-
-  AllIconsList get _iconsList => AllIconsList(
-    color: _color,
-    onIcon: _updateIcon,
-  );
-
   Widget get _activeList {
     switch (_activeListType) {
-      case ButtonType.color:  return _colorsList;
-      case ButtonType.icon:   return _iconsList;
+      case ButtonType.color:  return ColorsList(
+        onColor: _updateColor,
+        initialColor: _color,
+      );
+      case ButtonType.icon:   return AllIconsList(
+        color: _color,
+        onIcon: _updateIcon,
+      );
       case null:              return const SizedBox();
     }
   }

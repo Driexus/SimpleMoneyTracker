@@ -155,13 +155,13 @@ class SqliteService {
   Future<void> _createDefaultActivities(Database db) {
     final batch = db.batch();
     final activityMaps = [
-      {"title": "Food", "color": Colors.green.value, "imageKey": "restaurant_menu", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
-      {"title": "Car", "color": Colors.deepPurple.value, "imageKey": "local_gas_station", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
-      {"title": "Leisure", "color": Colors.deepOrange.value, "imageKey": "wine_bar", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
-      {"title": "Work", "color": Colors.blueGrey.value, "imageKey": "work", "isIncome": true, "isExpense": false, "isCredit": true, "isDebt": true },
-      {"title": "Shopping", "color": Colors.purple.value, "imageKey": "local_mall", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
-      {"title": "Payments", "color": Colors.blueAccent.value, "imageKey": "receipt", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true },
-      {"title": "Vacation", "color": Colors.orangeAccent.value, "imageKey": "beach_access", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true }
+      {"title": "Food", "color": Colors.green.toARGB32(), "imageKey": "restaurant_menu", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Car", "color": Colors.deepPurple.toARGB32(), "imageKey": "local_gas_station", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Leisure", "color": Colors.deepOrange.toARGB32(), "imageKey": "wine_bar", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Work", "color": Colors.blueGrey.toARGB32(), "imageKey": "work", "isIncome": true, "isExpense": false, "isCredit": true, "isDebt": true },
+      {"title": "Shopping", "color": Colors.purple.toARGB32(), "imageKey": "local_mall", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Payments", "color": Colors.blueAccent.toARGB32(), "imageKey": "receipt", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true },
+      {"title": "Vacation", "color": Colors.orangeAccent.toARGB32(), "imageKey": "beach_access", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true }
     ];
 
     for (Map<String, Object> activityMap in activityMaps) {
