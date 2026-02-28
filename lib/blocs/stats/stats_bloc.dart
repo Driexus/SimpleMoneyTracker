@@ -110,7 +110,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     // Convert the map back into a List of Subtotal objects
     return totalsMap.entries
         .map((entry) => Subtotal(moneyActivityMap[entry.key]!, entry.value))
-        .sorted((o1, o2) => o2.amount.compareTo(o1.amount))
+        .sorted((o1, o2) => o2.amount.abs().compareTo(o1.amount.abs()))
         .toList();
   }
 }

@@ -28,7 +28,7 @@ class TotalMoneyActivityBar extends StatelessWidget {
   );
 
   String get _amountPercentage {
-    final percentage = ((amount / typeTotalAmount) * 100).round();
+    final percentage = ((amount / typeTotalAmount.abs()) * 100).round();
     return percentage == 0 ? "<1%" : "$percentage%";
   }
 
