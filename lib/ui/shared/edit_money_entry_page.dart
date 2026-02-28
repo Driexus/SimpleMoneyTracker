@@ -81,8 +81,11 @@ class EditMoneyEntryPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 1, height: 5),
-                      const Text(
-                        "Tap on card to change date. Double tap an activity to edit",
+                      Text(
+                        forUpdate
+                          ? "Tap on card to change date"
+                          : "Tap on card to change date. Double tap an activity to edit"
+                        ,
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.black38,
@@ -104,7 +107,7 @@ class EditMoneyEntryPage extends StatelessWidget {
                     moneyType: state.moneyType,
                     onActivity: (activity) => moneyEntryBloc.add(MoneyActivityUpdated(activity)),
                     // Disable activity edit if the entry is being edited
-                    onActivityDoubleTap: forUpdate ? null : (activity) => Navigations.toEditActivity(context, activity),
+                    onActivityDoubleTap: forUpdate ? (_) => {} : (activity) => Navigations.toEditActivity(context, activity),
                     onReorder: activitiesCubit.reorderActivity,
                     enableAdd: !forUpdate,
                   )
