@@ -32,6 +32,7 @@ class _CurrencyDropdownButtonState extends State<CurrencyDropdownButton> {
         });
       },
       value: _selectedOption,
+      menuMaxHeight: MediaQuery.of(context).size.height * 0.5
     );
   }
 }
