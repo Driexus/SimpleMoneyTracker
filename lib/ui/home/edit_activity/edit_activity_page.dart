@@ -7,6 +7,7 @@ import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 
+import '../../../model/money_entry.dart';
 import '../../shared/bottom_button.dart';
 
 class EditActivityPage extends StatefulWidget {
@@ -74,21 +75,30 @@ class _EditActivityPageState extends State<EditActivityPage> {
     final MoneyActivity finalActivity = widget.moneyActivity == null ?
       MoneyActivity(
           title: _title,
-          color: _color.value,
+          color: _color.toARGB32(),
           imageKey: _imageKey!,
           isIncome: _isIncome,
           isExpense: _isExpense,
           isCredit: _isCredit,
-          isDebt: _isDebt
+          isDebt: _isDebt,
+          incomeActivityOrder: _isIncome ? widget.cubit.orderedByType(MoneyType.income).length : null,
+          expenseActivityOrder: _isExpense ? widget.cubit.orderedByType(MoneyType.expense).length : null,
+          creditActivityOrder: _isCredit ? widget.cubit.orderedByType(MoneyType.credit).length : null,
+          debtActivityOrder: _isDebt ? widget.cubit.orderedByType(MoneyType.debt).length : null,
       ) :
       widget.moneyActivity!.copy(
           title: _title,
-          color: _color.value,
+          color: _color.toARGB32(),
           imageKey: _imageKey!,
           isIncome: _isIncome,
           isExpense: _isExpense,
           isCredit: _isCredit,
-          isDebt: _isDebt
+          isDebt: _isDebt,
+          // Order is either existing order, length or null depending whether the activity is registered as the specific type
+          incomeActivityOrder: _isIncome ? (widget.moneyActivity?.incomeActivityOrder ?? widget.cubit.orderedByType(MoneyType.income).length ) : null,
+          expenseActivityOrder: _isExpense ? (widget.moneyActivity?.expenseActivityOrder ?? widget.cubit.orderedByType(MoneyType.expense).length ) : null,
+          creditActivityOrder: _isCredit ? (widget.moneyActivity?.creditActivityOrder ?? widget.cubit.orderedByType(MoneyType.credit).length ) : null,
+          debtActivityOrder: _isDebt ? (widget.moneyActivity?.debtActivityOrder ?? widget.cubit.orderedByType(MoneyType.debt).length ) : null,
       );
 
     widget.cubit.saveActivity(finalActivity);
@@ -102,19 +112,16 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
   ButtonType? _activeListType;
 
-  late final _colorsList = ColorsList(
-    onColor: _updateColor,
-  );
-
-  AllIconsList get _iconsList => AllIconsList(
-    color: _color,
-    onIcon: _updateIcon,
-  );
-
   Widget get _activeList {
     switch (_activeListType) {
-      case ButtonType.color:  return _colorsList;
-      case ButtonType.icon:   return _iconsList;
+      case ButtonType.color:  return ColorsList(
+        onColor: _updateColor,
+        initialColor: _color,
+      );
+      case ButtonType.icon:   return AllIconsList(
+        color: _color,
+        onIcon: _updateIcon,
+      );
       case null:              return const SizedBox();
     }
   }

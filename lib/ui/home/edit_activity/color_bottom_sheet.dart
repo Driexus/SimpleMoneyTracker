@@ -3,8 +3,9 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:simplemoneytracker/ui/shared/round_divider.dart';
 
 class ColorBottomSheet extends StatelessWidget {
-  const ColorBottomSheet({super.key, required this.onColorPicked});
+  const ColorBottomSheet({super.key, required this.onColorPicked, required this.initialColor});
 
+  final Color initialColor;
   final ValueChanged<Color> onColorPicked;
 
   @override
@@ -18,7 +19,7 @@ class ColorBottomSheet extends StatelessWidget {
         const SizedBox(height: 30),
         ColorPicker(
           enableAlpha: false,
-          pickerColor: Colors.cyan,
+          pickerColor: initialColor,
           onColorChanged: onColorPicked,
         )
       ],

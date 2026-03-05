@@ -1,12 +1,11 @@
-import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 
 class RectangularButton extends StatelessWidget {
-  const RectangularButton({super.key, this.iconData, required this.description, required this.color, this.hasRipple = true, this.onLongPress});
+  const RectangularButton({super.key, this.iconData, required this.description, required this.color, this.hasRipple = true, this.onTap, this.onDoubleTap, this.onLongPress});
 
-  RectangularButton.fromImageKey({super.key, String? imageKey, required this.description, required this.color, this.hasRipple = true, this.onLongPress}) :
+  RectangularButton.fromImageKey({super.key, String? imageKey, required this.description, required this.color, this.hasRipple = true, this.onTap, this.onDoubleTap, this.onLongPress}) :
     iconData = imageKey != null ? IconsHelper.getIcon(imageKey) : null;
 
   final IconData? iconData;
@@ -22,14 +21,16 @@ class RectangularButton extends StatelessWidget {
 
   BorderRadius get borderRadius => BorderRadius.circular(8.0);
 
-  void onTap() {
-    log("Clicked on $description");
-  }
-
+  final VoidCallback? onTap;
+  final VoidCallback? onDoubleTap;
   final VoidCallback? onLongPress;
+
+  final _doubleTapThreshold = 150; // In milliseconds
 
   @override
   Widget build(BuildContext context) {
+    int millis = DateTime.now().millisecondsSinceEpoch;
+
     return SizedBox(
       height: 85.0,
       width: 65.0,
@@ -37,8 +38,22 @@ class RectangularButton extends StatelessWidget {
         color: color,
         elevation: 6,
         borderRadius: borderRadius,
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: onTap,
+          onTap: () {
+            // Replace millis
+            final oldMillis = millis;
+            millis = DateTime.now().millisecondsSinceEpoch;
+
+            // Decide tap
+            if (millis - oldMillis < _doubleTapThreshold) {
+              onDoubleTap?.call();
+            }
+            else {
+              onTap?.call();
+            }
+          },
+          onDoubleTap: onDoubleTap,
           onLongPress: onLongPress,
           splashColor: Colors.transparent,
           highlightColor: hasRipple ? Colors.black26 : Colors.transparent,

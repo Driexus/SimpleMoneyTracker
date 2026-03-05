@@ -10,6 +10,10 @@ class MoneyActivity {
   final bool isExpense;
   final bool isCredit;
   final bool isDebt;
+  final int? incomeActivityOrder;
+  final int? expenseActivityOrder;
+  final int? creditActivityOrder;
+  final int? debtActivityOrder;
 
   const MoneyActivity({
     this.id,
@@ -19,7 +23,11 @@ class MoneyActivity {
     required this.isIncome,
     required this.isExpense,
     required this.isCredit,
-    required this.isDebt
+    required this.isDebt,
+    this.incomeActivityOrder,
+    this.expenseActivityOrder,
+    this.creditActivityOrder,
+    this.debtActivityOrder,
   });
 
   MoneyActivity.fromDBMap(Map<String, dynamic> dbMap) :
@@ -30,7 +38,11 @@ class MoneyActivity {
     isIncome = (dbMap['isIncome'] as int) == 1,
     isExpense = (dbMap['isExpense'] as int) == 1,
     isCredit = (dbMap['isCredit'] as int) == 1,
-    isDebt = (dbMap['isDebt'] as int) == 1
+    isDebt = (dbMap['isDebt'] as int) == 1,
+    incomeActivityOrder = (dbMap['incomeActivityOrder'] as int?),
+    expenseActivityOrder = (dbMap['expenseActivityOrder'] as int?),
+    creditActivityOrder = (dbMap['creditActivityOrder'] as int?),
+    debtActivityOrder = (dbMap['debtActivityOrder'] as int?)
   ;
 
   Map<String, dynamic> toMap() {
@@ -42,7 +54,11 @@ class MoneyActivity {
       'isIncome': isIncome ? 1 : 0,
       'isExpense': isExpense ? 1 : 0,
       'isCredit': isCredit ? 1 : 0,
-      'isDebt': isDebt ? 1 : 0
+      'isDebt': isDebt ? 1 : 0,
+      'incomeActivityOrder': incomeActivityOrder,
+      'expenseActivityOrder': expenseActivityOrder,
+      'creditActivityOrder': creditActivityOrder,
+      'debtActivityOrder': debtActivityOrder,
     };
   }
 
@@ -53,7 +69,11 @@ class MoneyActivity {
     bool? isIncome,
     bool? isExpense,
     bool? isCredit,
-    bool? isDebt
+    bool? isDebt,
+    int? incomeActivityOrder,
+    int? expenseActivityOrder,
+    int? creditActivityOrder,
+    int? debtActivityOrder,
   }) {
     return MoneyActivity(
       id: id,
@@ -63,7 +83,11 @@ class MoneyActivity {
       isIncome: isIncome ?? this.isIncome,
       isExpense: isExpense ?? this.isExpense,
       isCredit: isCredit ?? this.isCredit,
-      isDebt: isDebt ?? this.isDebt
+      isDebt: isDebt ?? this.isDebt,
+      incomeActivityOrder: incomeActivityOrder ?? this.incomeActivityOrder,
+      expenseActivityOrder: expenseActivityOrder ?? this.expenseActivityOrder,
+      creditActivityOrder: creditActivityOrder ?? this.creditActivityOrder,
+      debtActivityOrder: debtActivityOrder ?? this.debtActivityOrder,
     );
   }
 
@@ -73,6 +97,15 @@ class MoneyActivity {
       case MoneyType.expense: return isExpense;
       case MoneyType.credit: return isCredit;
       case MoneyType.debt: return isDebt;
+    }
+  }
+
+  int? order(MoneyType type) {
+    switch (type) {
+      case MoneyType.income: return incomeActivityOrder;
+      case MoneyType.expense: return expenseActivityOrder;
+      case MoneyType.credit: return creditActivityOrder;
+      case MoneyType.debt: return debtActivityOrder;
     }
   }
 

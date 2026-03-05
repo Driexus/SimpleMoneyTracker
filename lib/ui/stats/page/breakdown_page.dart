@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:simplemoneytracker/blocs/stats/stats_bloc.dart';
+import 'package:simplemoneytracker/model/BaseMoneyType.dart';
 import 'package:simplemoneytracker/ui/shared/bottom_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
-import '../../../model/money_entry.dart';
 import '../../../repos/money_entry_repo.dart';
 import '../widget/total_money_activity_bar.dart';
 
@@ -14,7 +14,7 @@ class BreakdownPage extends StatelessWidget {
   const BreakdownPage({super.key, required this.statsState, required this.moneyType, required this.title, required this.currency});
 
   final StatsState statsState;
-  final MoneyType moneyType;
+  final BaseMoneyType moneyType;
   final String title;
   final Currency currency;
 
@@ -62,7 +62,7 @@ class BreakdownPage extends StatelessWidget {
                 colorList: _colorList,
                 chartType: ChartType.ring,
                 centerWidget: Text(
-                  "Total ${moneyType.displayName}\n${total.toCurrency(currency: currency)}",
+                  "${moneyType.displayName}\n${total.toCurrency(currency: currency)}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,

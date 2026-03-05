@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -56,7 +56,7 @@ class SqliteService {
   void exportDatabase() async {
     await _closeDB();
     final databasesDirectory = await getApplicationDocumentsDirectory();
-    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup.zip'));
+    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup_${DateTime.now().toExactReadable()}.zip'));
 
     try {
       final dataDir = Directory(await getDatabasesPath());
@@ -66,7 +66,7 @@ class SqliteService {
       log("Failed to create database zip.", error: e);
     }
     await getDB();
-    await OpenFile.open(zipFile.path, type: "*/*");
+    await OpenFilex.open(zipFile.path, type: "*/*");
     ToastHelper.showToast("Database backup created");
   }
 
@@ -83,13 +83,44 @@ class SqliteService {
         await _createActivitiesTable(db);
         await _createEntriesTable(db);
         await _createDefaultActivities(db);
+        await _addActivityOrders(db);
       },
-      version: 1,
+      version: 2,
+      onUpgrade: (database, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await _addActivityOrders(database);
+        }
+      }
     );
 
     await db.execute('PRAGMA foreign_keys=on');
     _db = db;
     return db;
+  }
+
+  Future<void> _addActivityOrders(Database database) async {
+    await Future.wait([
+        _addActivityOrder('incomeActivityOrder', 'isIncome', database),
+        _addActivityOrder('expenseActivityOrder', 'isExpense', database),
+        _addActivityOrder('creditActivityOrder', 'isCredit', database),
+        _addActivityOrder('debtActivityOrder', 'isDebt', database)
+    ]);
+  }
+
+  Future<void> _addActivityOrder(String columnName, String isTypeColumn, Database database) async {
+    // Add activityOrder and update old entries to match row numbers
+    await database.execute('ALTER TABLE money_activities ADD COLUMN $columnName INTEGER');
+    await database.rawUpdate('''
+      UPDATE money_activities
+      SET $columnName = (
+        SELECT rn - 1 FROM (
+          SELECT activityId, ROW_NUMBER() OVER (ORDER BY activityId) AS rn
+          FROM money_activities
+          WHERE $isTypeColumn = true 
+        ) AS t
+        WHERE t.activityId = money_activities.activityId
+      )
+    ''');
   }
 
   Future<void> _createActivitiesTable(Database db) {
@@ -123,18 +154,18 @@ class SqliteService {
 
   Future<void> _createDefaultActivities(Database db) {
     final batch = db.batch();
-    final activities = [
-      MoneyActivity(title: "Food", color: Colors.green.value, imageKey: 'restaurant_menu', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Car", color: Colors.deepPurple.value, imageKey: 'local_gas_station', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Leisure", color: Colors.deepOrange.value, imageKey: 'wine_bar', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Work", color: Colors.blueGrey.value, imageKey: 'work', isIncome: true, isExpense: false, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Shopping", color: Colors.purple.value, imageKey: 'local_mall', isIncome: false, isExpense: true, isCredit: false, isDebt: false),
-      MoneyActivity(title: "Payments", color: Colors.blueAccent.value, imageKey: 'receipt', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
-      MoneyActivity(title: "Vacation", color: Colors.orangeAccent.value, imageKey: 'beach_access', isIncome: false, isExpense: true, isCredit: true, isDebt: true),
+    final activityMaps = [
+      {"title": "Food", "color": Colors.green.toARGB32(), "imageKey": "restaurant_menu", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Car", "color": Colors.deepPurple.toARGB32(), "imageKey": "local_gas_station", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Leisure", "color": Colors.deepOrange.toARGB32(), "imageKey": "wine_bar", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Work", "color": Colors.blueGrey.toARGB32(), "imageKey": "work", "isIncome": true, "isExpense": false, "isCredit": true, "isDebt": true },
+      {"title": "Shopping", "color": Colors.purple.toARGB32(), "imageKey": "local_mall", "isIncome": false, "isExpense": true, "isCredit": false, "isDebt": false },
+      {"title": "Payments", "color": Colors.blueAccent.toARGB32(), "imageKey": "receipt", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true },
+      {"title": "Vacation", "color": Colors.orangeAccent.toARGB32(), "imageKey": "beach_access", "isIncome": false, "isExpense": true, "isCredit": true, "isDebt": true }
     ];
 
-    for (MoneyActivity activity in activities) {
-      batch.insert('money_activities', activity.toMap());
+    for (Map<String, Object> activityMap in activityMaps) {
+      batch.insert('money_activities', activityMap);
     }
 
     return batch.commit(noResult: true);

@@ -5,14 +5,17 @@ import 'package:simplemoneytracker/blocs/date_span/date_span_bloc.dart' hide Dat
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/repos/money_activity_repo.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
-
+import 'blocs/money_entry/money_entry_bloc.dart';
 import 'blocs/timeline/timeline_bloc.dart' hide EntriesChanged;
 import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
 import 'model/money_entry.dart';
+import 'notification/notifications.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initNotifications();
   runApp(SimpleMoneyTracker());
 }
 
@@ -24,6 +27,7 @@ class SimpleMoneyTracker extends StatelessWidget {
   final SettingsBloc _settingsBloc = SettingsBloc();
   late final ActivitiesCubit _activitiesCubit = ActivitiesCubit(_moneyActivityRepo);
   late final DateSpanBloc _dateSpanBloc = DateSpanBloc.monthFromDateTime(DateTime.now());
+  late final MoneyEntryBloc _moneyEntryBloc = MoneyEntryBloc(_moneyEntryRepo, _activitiesCubit);
   late final TimelineBloc _entriesBloc = TimelineBloc(_moneyEntryRepo, _activitiesCubit, _dateSpanBloc)..add(
       FiltersUpdated(
           MoneyEntryFilters(
@@ -62,6 +66,9 @@ class SimpleMoneyTracker extends StatelessWidget {
           ),
           Provider(
             create: (_) => _dateSpanBloc,
+          ),
+          BlocProvider(
+            create: (_) => _moneyEntryBloc,
           ),
           BlocProvider(
             create: (_) => _entriesBloc,

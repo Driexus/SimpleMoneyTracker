@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    // TODO: Remove this when filepicker supports it
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -33,12 +34,15 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
     }
 
     sourceSets {
@@ -53,7 +57,7 @@ android {
         applicationId "com.driexus.simplemoneytracker"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -73,6 +77,16 @@ android {
             signingConfig signingConfigs.release
             //crunchPngs false
         }
+        debug {
+            // This line makes it a different app ID so it won’t overwrite your Play Store install
+            applicationIdSuffix ".debug"
+
+            // Optional — makes the version name show "-debug"
+            versionNameSuffix "-debug"
+
+            // Use the default debug keystore
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
@@ -80,4 +94,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+}
