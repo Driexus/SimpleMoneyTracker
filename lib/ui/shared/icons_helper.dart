@@ -1,9 +1,68 @@
 import 'package:flutter/material.dart';
 
 class IconsHelper {
-  static List<String> iconKeyList = iconMap.keys.toList();
+  // Access all categories
+  static List<String> get categories => categorizedIcons.keys.toList();
 
-  // Icons: https://fonts.google.com/icons?icon.category=maps&icon.set=Material+Icons
+  // Get icons for a specific category
+  static List<String>? getIconsByCategory(String category) => categorizedIcons[category];
+
+  static Map<String, List<String>> categorizedIcons = {
+    'Transportation': [
+      'agriculture', 'airport_shuttle', 'bike_scooter', 'directions_bike',
+      'directions_boat', 'directions_car', 'emoji_transportation', 'flight',
+      'local_airport', 'local_gas_station', 'local_shipping', 'local_taxi',
+      'motorcycle', 'pedal_bike', 'snowmobile', 'taxi_alert', 'traffic',
+      'train', 'tram', 'two_wheeler'
+    ],
+    'Food & Dining': [
+      'bakery_dining', 'blender', 'fastfood', 'flatware', 'free_breakfast',
+      'lunch_dining', 'restaurant', 'restaurant_menu', 'room_service',
+      'set_meal', 'sports_bar', 'tapas', 'wine_bar'
+    ],
+    'Sports & Recreation': [
+      'anchor', 'beach_access', 'downhill_skiing', 'festival', 'fitness_center',
+      'hiking', 'hot_tub', 'ice_skating', 'kayaking', 'kitesurfing', 'pool',
+      'rowing', 'sailing', 'self_improvement', 'skateboarding', 'sledding',
+      'snowboarding', 'snowshoeing', 'sports', 'sports_baseball', 'sports_basketball',
+      'sports_cricket', 'sports_esports', 'sports_football', 'sports_golf',
+      'sports_handball', 'sports_hockey', 'sports_kabaddi', 'sports_motorsports',
+      'sports_rugby', 'sports_soccer', 'sports_tennis', 'sports_volleyball',
+      'surfing', 'theater_comedy'
+    ],
+    'Shopping & Commerce': [
+      'local_grocery_store', 'local_mall', 'receipt', 'receipt_long',
+      'sell', 'shopping_cart', 'store', 'storefront'
+    ],
+    'Work & Tech': [
+      'adb', 'ad_units', 'architecture', 'biotech', 'build', 'engineering',
+      'handyman', 'headphones', 'local_print_shop', 'mouse', 'precision_manufacturing',
+      'science', 'sensors', 'settings_input_component', 'shutter_speed',
+      'smart_toy', 'smartphone', 'straighten', 'tablet_mac', 'timer',
+      'wifi_protected_setup', 'wifi_tethering', 'work', 'workspaces'
+    ],
+    'Nature & Weather': [
+      'ac_unit', 'air', 'eco', 'filter_hdr', 'flash_on', 'flashlight_on',
+      'grass', 'local_florist', 'storm', 'terrain', 'umbrella', 'waves',
+      'wb_cloudy', 'wb_incandescent', 'wb_shade', 'wb_sunny', 'whatshot'
+    ],
+    'People & Health': [
+      'accessibility_new', 'accessible', 'accessible_forward', 'bathtub',
+      'child_care', 'child_friendly', 'family_restroom', 'favorite',
+      'pregnant_woman', 'smoke_free', 'smoking_rooms', 'stroller', 'support', 'support_agent'
+    ],
+    'Social & Feelings': [
+      'sentiment_dissatisfied', 'sentiment_neutral', 'sentiment_satisfied',
+      'sentiment_satisfied_alt', 'sentiment_very_dissatisfied',
+      'sentiment_very_satisfied', 'tag_faces'
+    ],
+    'Places & Misc': [
+      'audiotrack', 'flag', 'follow_the_signs', 'grade', 'hotel',
+      'local_fire_department', 'local_hotel', 'local_see', 'school',
+      'security', 'theaters', 'tour', 'toys', 'track_changes'
+    ],
+  };
+
   static Map<String, IconData> iconMap = {
     'ac_unit': Icons.ac_unit,
     'accessibility_new': Icons.accessibility_new,
@@ -160,7 +219,5 @@ class IconsHelper {
     'receipt_long': Icons.receipt_long,
   };
 
-  static IconData? getIcon(String key) {
-    return iconMap[key];
-  }
+  static IconData? getIcon(String key) => iconMap[key];
 }
