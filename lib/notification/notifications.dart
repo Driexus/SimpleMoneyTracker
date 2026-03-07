@@ -41,6 +41,7 @@ Future<void> initNotifications() async {
   await scheduleTask();
 }
 
+@pragma('vm:entry-point')
 Future<FlutterLocalNotificationsPlugin> initNotificationsPlugin() async {
   final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
   const androidInit = AndroidInitializationSettings('notification_icon');
