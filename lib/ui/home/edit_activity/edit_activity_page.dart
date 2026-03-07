@@ -38,8 +38,8 @@ class _EditActivityPageState extends State<EditActivityPage> {
     _title = widget.moneyActivity?.title ?? "";
     _color = widget.moneyActivity?.color.toColor() ?? Colors.cyan;
     _imageKey = widget.moneyActivity?.imageKey;
-    _isSelected[0] = widget.moneyActivity?.isIncome ?? true;
-    _isSelected[1] = widget.moneyActivity?.isExpense ?? false;
+    _isSelected[0] = widget.moneyActivity?.isIncome ?? false;
+    _isSelected[1] = widget.moneyActivity?.isExpense ?? true;
     _isSelected[2] = widget.moneyActivity?.isDebt ?? false;
   }
 
@@ -142,7 +142,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
   //region Toggle handling
 
-  final List<bool> _isSelected = [true, false, false];
+  final List<bool> _isSelected = List.filled(3, false);
 
   void _onToggle(int index) => setState(() {
     _isSelected[index] = !_isSelected[index];

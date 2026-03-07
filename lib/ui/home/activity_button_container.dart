@@ -57,12 +57,12 @@ class ActivityButtonContainer extends StatelessWidget {
         },
         children: activities.map((activity) {
           return ActivityButton(
-            key: ValueKey(activity.title),
+            key: ValueKey(activity.id),
             imageKey: activity.imageKey,
             description: activity.title,
             color: Color(activity.color),
             onTap: () => onActivity(activity),
-            onDoubleTap: () => onActivityDoubleTap!(activity),
+            onDoubleTap: () => onActivityDoubleTap?.call(activity),
           );
         }).toList(),
       ),
