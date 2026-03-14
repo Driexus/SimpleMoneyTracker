@@ -185,98 +185,100 @@ class _EditActivityPageState extends State<EditActivityPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned(
-              top: 35,
-              right: 10,
-              child: Container(child: _deleteButton(context))
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
+      child: SafeArea(
+        child: Scaffold(
+            body: Stack(
                 children: [
-                  const SizedBox(height: 60),
-                  RectangularButton.fromImageKey(
-                    imageKey: _imageKey,
-                    description: _title,
-                    color: _color,
-                    hasRipple: false,
+                  Positioned(
+                      top: 35,
+                      right: 10,
+                      child: Container(child: _deleteButton(context))
                   ),
-                  const SizedBox(height: 30),
-                  TextFormField(
-                      initialValue: _title,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Title',
-                      ),
-                      onChanged: _updateTitle
-                  ),
-                  const SizedBox(height: 15),
-                  ToggleButtons(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    borderColor: Colors.black54,
-                    selectedBorderColor: Colors.black54,
-                    constraints: const BoxConstraints(
-                      minHeight: 40.0,
-                      minWidth: 119.5,
-                    ),
-                    onPressed: _onToggle,
-                    isSelected: _isSelected,
-                    children: const [
-                      Text("Income"),
-                      Text("Expense"),
-                      Text("Credit / Debt")
-                    ]
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => _onListButtonTap(ButtonType.color),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text("Color"),
-                              _getButtonIcon(ButtonType.color)
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => _onListButtonTap(ButtonType.icon),
-                            child: Row(
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                          children: [
+                            const SizedBox(height: 60),
+                            RectangularButton.fromImageKey(
+                              imageKey: _imageKey,
+                              description: _title,
+                              color: _color,
+                              hasRipple: false,
+                            ),
+                            const SizedBox(height: 30),
+                            TextFormField(
+                                initialValue: _title,
+                                maxLines: 1,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Title',
+                                ),
+                                onChanged: _updateTitle
+                            ),
+                            const SizedBox(height: 15),
+                            ToggleButtons(
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                borderColor: Colors.black54,
+                                selectedBorderColor: Colors.black54,
+                                constraints: const BoxConstraints(
+                                  minHeight: 40.0,
+                                  minWidth: 119.5,
+                                ),
+                                onPressed: _onToggle,
+                                isSelected: _isSelected,
+                                children: const [
+                                  Text("Income"),
+                                  Text("Expense"),
+                                  Text("Credit / Debt")
+                                ]
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text("Icon"),
-                                _getButtonIcon(ButtonType.icon)
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () => _onListButtonTap(ButtonType.color),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("Color"),
+                                        _getButtonIcon(ButtonType.color)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () => _onListButtonTap(ButtonType.icon),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text("Icon"),
+                                          _getButtonIcon(ButtonType.icon)
+                                        ],
+                                      ),
+                                    )
+                                )
                               ],
-                            ),
-                          )
+                            )
+                          ]
                       )
-                    ],
-                  )
+                  ),
+                  Positioned(
+                      bottom: 55,
+                      top: 365,
+                      right: 0,
+                      left: 0,
+                      child: _activeList
+                  ),
+                  BottomButton(
+                      text: "SAVE",
+                      onTap: () => _submit(context)
+                  ),
                 ]
-              )
-            ),
-            Positioned(
-              bottom: 55,
-              top: 365,
-              right: 0,
-              left: 0,
-              child: _activeList
-            ),
-            BottomButton(
-                text: "SAVE",
-                onTap: () => _submit(context)
-            ),
-          ]
+            )
         )
       )
     );

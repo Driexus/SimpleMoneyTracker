@@ -58,7 +58,9 @@ class TimelinePage extends StatelessWidget {
                   showModalBottomSheet<void>(
                     context: context,
                     builder: (BuildContext context) {
-                      return FilterSheet(timelineBloc: timelineBloc, currency: settingsBloc.state.currency);
+                      return SafeArea(
+                          child: FilterSheet(timelineBloc: timelineBloc, currency: settingsBloc.state.currency)
+                      );
                     }
                   )
                 },

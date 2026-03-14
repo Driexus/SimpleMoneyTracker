@@ -37,61 +37,63 @@ class BreakdownPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-          children: [
-            Positioned(
-              top: 45,
-              right: 0,
-              left: 0,
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Colors.black54,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 115,
-              right: 0,
-              left: 0,
-              child: PieChart(
-                dataMap: _dataMap,
-                colorList: _colorList,
-                chartType: ChartType.ring,
-                centerWidget: Text(
-                  "${moneyType.displayName}\n${total.toCurrency(currency: currency)}",
+    return SafeArea(
+      child: Scaffold(
+          body: Stack(
+            children: [
+              Positioned(
+                top: 45,
+                right: 0,
+                left: 0,
+                child: Text(
+                  title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 22,
                     color: Colors.black54,
                   ),
                 ),
-                chartRadius: MediaQuery.of(context).size.width / 2.0,
-                ringStrokeWidth: 35,
-                legendOptions: const LegendOptions(showLegends: false),
-                chartValuesOptions: const ChartValuesOptions(showChartValues: false),
+              ),
+              Positioned(
+                  top: 115,
+                  right: 0,
+                  left: 0,
+                  child: PieChart(
+                    dataMap: _dataMap,
+                    colorList: _colorList,
+                    chartType: ChartType.ring,
+                    centerWidget: Text(
+                      "${moneyType.displayName}\n${total.toCurrency(currency: currency)}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    chartRadius: MediaQuery.of(context).size.width / 2.0,
+                    ringStrokeWidth: 35,
+                    legendOptions: const LegendOptions(showLegends: false),
+                    chartValuesOptions: const ChartValuesOptions(showChartValues: false),
+                  )
+              ),
+              Positioned(
+                  top: 380,
+                  bottom: 65,
+                  right: 0,
+                  left: 0,
+                  child: SingleChildScrollableWidget(
+                      child: Column(
+                          children: _totalMoneyActivityBars.addVerticalSpacing(10)
+                      )
+                  )
+              ),
+              BottomButton(
+                  text: "OK",
+                  onTap: () => Navigator.pop(context)
               )
-            ),
-            Positioned(
-              top: 380,
-              bottom: 65,
-              right: 0,
-              left: 0,
-              child: SingleChildScrollableWidget(
-                child: Column(
-                  children: _totalMoneyActivityBars.addVerticalSpacing(10)
-                )
-              )
-            ),
-            BottomButton(
-              text: "OK",
-              onTap: () => Navigator.pop(context)
-            )
-          ],
-        )
+            ],
+          )
+      )
     );
   }
 }
