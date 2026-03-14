@@ -25,7 +25,7 @@ class RectangularButton extends StatelessWidget {
   final VoidCallback? onDoubleTap;
   final VoidCallback? onLongPress;
 
-  final _doubleTapThreshold = 150; // In milliseconds
+  final _doubleTapThreshold = 70; // In milliseconds
 
   @override
   Widget build(BuildContext context) {
