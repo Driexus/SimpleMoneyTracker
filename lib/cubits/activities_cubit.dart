@@ -28,7 +28,35 @@ class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
   }
 
   void reorderActivity(MoneyActivity activity, MoneyType currentType, int newOrder) {
+    // Optimistic update to avoid flicker
+    final typeActivities = orderedByType(currentType);
+    final oldOrder = typeActivities.indexWhere((a) => a.id == activity.id);
+
+    if (oldOrder != -1 && oldOrder != newOrder) {
+      final List<MoneyActivity> newList = List.from(typeActivities);
+      final movedActivity = newList.removeAt(oldOrder);
+      newList.insert(newOrder, movedActivity);
+
+      // Update the specific type order inside all the activities
+      final Map<int, MoneyActivity> newState = Map.from(state);
+      for (int i = 0; i < newList.length; i++) {
+        final a = newList[i];
+        final updatedA = _updateActivityOrder(a, currentType, i);
+        newState[updatedA.id!] = updatedA;
+      }
+      emit(newState);
+    }
+
     _repo.reorder(activity.id!, currentType, newOrder).whenComplete(refreshActivities);
+  }
+
+  MoneyActivity _updateActivityOrder(MoneyActivity activity, MoneyType type, int order) {
+    switch (type) {
+      case MoneyType.income: return activity.copy(incomeActivityOrder: order);
+      case MoneyType.expense: return activity.copy(expenseActivityOrder: order);
+      case MoneyType.credit: return activity.copy(creditActivityOrder: order);
+      case MoneyType.debt: return activity.copy(debtActivityOrder: order);
+    }
   }
 
   void refreshActivities() {

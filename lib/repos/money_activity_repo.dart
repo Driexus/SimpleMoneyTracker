@@ -45,14 +45,9 @@ class MoneyActivityRepo {
     int previousIndex = activities.indexWhere((a) => a.id == activityId);
     if (index == previousIndex) return;
 
-    // Find previous activity to remove afterwards
-    MoneyActivity activity = activities[previousIndex];
-    if (previousIndex >= index) previousIndex ++;
-    else index ++;
-
-    // Insert new element and remove old
-    activities.insert(index, activity);
-    activities.removeAt(previousIndex);
+    // Swap activities
+    final movedActivity = activities.removeAt(previousIndex);
+    activities.insert(index, movedActivity);
 
     Iterable<Future<void>> futures = activities.mapIndexed((i, a) => _updateOrder(a.id!, currentType, i));
     await Future.wait(futures);
