@@ -13,27 +13,29 @@ class MainPage extends StatelessWidget {
     return OverscrollNotificationListener(
         child: DefaultTabController(
           length: 4,
-          child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                toolbarHeight: 0, // Remove extra space on top of tabs
-                bottom: const TabBar(
-                  tabs: [
-                    Tab(icon: Icon(Icons.home)),
-                    Tab(icon: Icon(Icons.format_list_bulleted)),
-                    Tab(icon: Icon(Icons.show_chart)),
-                    Tab(icon: Icon(Icons.settings)),
-                  ],
+          child: SafeArea(
+            child:Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  toolbarHeight: 0, // Remove extra space on top of tabs
+                  bottom: const TabBar(
+                    tabs: [
+                      Tab(icon: Icon(Icons.home)),
+                      Tab(icon: Icon(Icons.format_list_bulleted)),
+                      Tab(icon: Icon(Icons.show_chart)),
+                      Tab(icon: Icon(Icons.settings)),
+                    ],
+                  ),
                 ),
-              ),
-              body: const TabBarView(
-                children: [
-                  HomePage(),
-                  TimelinePage(),
-                  StatsPage(),
-                  SettingsPage(),
-                ],
-              )
+                body: const TabBarView(
+                  children: [
+                    HomePage(),
+                    TimelinePage(),
+                    StatsPage(),
+                    SettingsPage(),
+                  ],
+                )
+            )
           )
         )
     );
