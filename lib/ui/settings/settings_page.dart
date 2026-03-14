@@ -60,12 +60,12 @@ class SettingsPage extends StatelessWidget {
                         }
                     )
                   ),
-                  const SettingsButton(
+                  SettingsButton(
                       title: "Monthly Stats",
                       description: "Choose what to display in the monthly stats page.",
                       iconData: Icons.show_chart,
-                      iconColor: Colors.blueGrey,
-                      dropdown: MonthlyStatsSelection()
+                      iconColor: Colors.lime,
+                      onPress: () =>  MonthlyStatsSelection.showSelectionDialog(context, settingsBloc, settingsBloc.state.visibleStats)
                   )
                 ]
             ),

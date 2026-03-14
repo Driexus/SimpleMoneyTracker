@@ -1,28 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/model/base_money_type.dart';
 
-class MonthlyStatsSelection extends StatefulWidget {
-  const MonthlyStatsSelection({super.key});
-
-  @override
-  State<MonthlyStatsSelection> createState() => _MonthlyStatsSelectionState();
-}
-
-class _MonthlyStatsSelectionState extends State<MonthlyStatsSelection> {
-  @override
-  Widget build(BuildContext context) {
-    final settingsBloc = context.watch<SettingsBloc>();
-    final visibleStats = settingsBloc.state.visibleStats;
-
-    return IconButton(
-      icon: const Icon(Icons.settings_outlined),
-      onPressed: () => _showSelectionDialog(context, settingsBloc, visibleStats),
-    );
-  }
-
-  void _showSelectionDialog(BuildContext context, SettingsBloc bloc, List<String> visibleStats) {
+class MonthlyStatsSelection {
+  static void showSelectionDialog(BuildContext context, SettingsBloc bloc, List<String> visibleStats) {
     showDialog(
       context: context,
       builder: (context) {
@@ -53,7 +34,6 @@ class _MonthlyStatsSelectionState extends State<MonthlyStatsSelection> {
                         setDialogState(() {
                           visibleStats = newList;
                         });
-                        setState(() {});
                       },
                     );
                   }).toList(),
@@ -62,7 +42,7 @@ class _MonthlyStatsSelectionState extends State<MonthlyStatsSelection> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("Ok"),
+                  child: const Text("OK"),
                 ),
               ],
             );
