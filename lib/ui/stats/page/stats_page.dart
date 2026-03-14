@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/blocs/stats/stats_bloc.dart';
-import 'package:simplemoneytracker/model/CompositeMoneyType.dart';
+import 'package:simplemoneytracker/model/base_money_type.dart';
 import 'package:simplemoneytracker/model/currency.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/ui/stats/widget/total_money_bar_container.dart';
@@ -14,8 +13,10 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StatsState state = context.watch<StatsBloc>().state;
-    final Currency currency = context.watch<SettingsBloc>().state.currency;
+    final StatsState statsState = context.watch<StatsBloc>().state;
+    final SettingsState settingsState = context.watch<SettingsBloc>().state;
+    final Currency currency = settingsState.currency;
+    final List<String> visibleStats = settingsState.visibleStats;
 
     return SingleChildScrollableWidget(
       child: Stack(
@@ -28,22 +29,33 @@ class StatsPage extends StatelessWidget {
                 MonthScroller(),
                 const Divider(height: 10, indent: 15, endIndent: 15, thickness: 1),
                 const SizedBox(height: 15),
-                TotalMoneyBarContainer(amount: state.totalExpenses, moneyType: MoneyType.expense, subtotals: state.expensesSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.totalIncome, moneyType: MoneyType.income, subtotals: state.incomeSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.netIncome, moneyType: CompositeMoneyType.netIncome, subtotals: state.netIncomeSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.totalDebt, moneyType: MoneyType.debt, subtotals: state.debtSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.totalCredit, moneyType: MoneyType.credit, subtotals: state.creditSubtotals, currency: currency),
-                const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1),
-                TotalMoneyBarContainer(amount: state.netCredit, moneyType: CompositeMoneyType.netCredit, subtotals: state.netCreditSubtotals, currency: currency),
+                ..._buildVisibleStats(statsState, visibleStats, currency),
               ],
             ),
           )
         ],
       )
     );
+  }
+
+  List<Widget> _buildVisibleStats(StatsState state, List<String> visibleStats, Currency currency) {
+    final List<Widget> widgets = [];
+
+    for (var type in allMoneyTypes()) {
+      final String name = (type is MoneyType) ? type.name : (type as CompositeMoneyType).name;
+      if (visibleStats.contains(name)) {
+        if (widgets.isNotEmpty) {
+          widgets.add(const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1));
+        }
+        widgets.add(TotalMoneyBarContainer(
+          amount: state.totals[type]!,
+          moneyType: type,
+          subtotals: state.subtotals[type]!,
+          currency: currency,
+        ));
+      }
+    }
+
+    return widgets;
   }
 }

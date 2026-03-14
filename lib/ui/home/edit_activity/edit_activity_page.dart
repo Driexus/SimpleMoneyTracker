@@ -7,7 +7,7 @@ import 'package:simplemoneytracker/ui/home/edit_activity/colors_list.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
 
-import '../../../model/money_entry.dart';
+import '../../../model/base_money_type.dart';
 import '../../shared/bottom_button.dart';
 
 class EditActivityPage extends StatefulWidget {

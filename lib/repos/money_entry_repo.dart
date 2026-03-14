@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
+import '../model/base_money_type.dart';
 import '../model/money_entry.dart';
 
 part 'money_entry_filters.dart';

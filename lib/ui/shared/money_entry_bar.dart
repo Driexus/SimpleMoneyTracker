@@ -5,6 +5,8 @@ import 'package:simplemoneytracker/ui/shared/icons_helper.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
+import '../../model/base_money_type.dart';
+
 class MoneyEntryBar extends StatelessWidget {
   MoneyEntryBar({super.key, this.imageKey, this.description, required this.color, required this.amount, required this.date, this.moneyType, required this.currency, required this.onPressed, this.onLongPress}) :
     moneyEntry = null;

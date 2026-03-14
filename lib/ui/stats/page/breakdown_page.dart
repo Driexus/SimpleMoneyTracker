@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:simplemoneytracker/blocs/stats/stats_bloc.dart';
-import 'package:simplemoneytracker/model/BaseMoneyType.dart';
+import 'package:simplemoneytracker/model/base_money_type.dart';
 import 'package:simplemoneytracker/ui/shared/bottom_button.dart';
 import 'package:simplemoneytracker/ui/shared/single_child_scrollable_widget.dart';
 import 'package:simplemoneytracker/model/currency.dart';

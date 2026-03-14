@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
+import '../../model/base_money_type.dart';
 import '../../model/money_activity.dart';
 import '../../model/money_entry.dart';
 import 'package:equatable/equatable.dart';

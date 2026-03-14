@@ -17,6 +17,15 @@ final class CurrencyUpdated extends SettingsEvent {
   List<Object?> get props => [currency];
 }
 
+final class VisibleStatsUpdated extends SettingsEvent {
+  const VisibleStatsUpdated(this.visibleStats);
+
+  final List<String> visibleStats;
+
+  @override
+  List<Object?> get props => [visibleStats];
+}
+
 final class _Initialized extends SettingsEvent {
   const _Initialized();
 }

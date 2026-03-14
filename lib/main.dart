@@ -10,7 +10,7 @@ import 'blocs/timeline/timeline_bloc.dart' hide EntriesChanged;
 import 'blocs/stats/stats_bloc.dart';
 import 'cubits/activities_cubit.dart';
 import 'main_page.dart';
-import 'model/money_entry.dart';
+import 'model/base_money_type.dart';
 import 'notification/notifications.dart';
 
 Future<void> main() async {

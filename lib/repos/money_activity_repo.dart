@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/service/sqlite_service.dart';
+
+import '../model/base_money_type.dart';
 
 class MoneyActivityRepo {
   const MoneyActivityRepo();
