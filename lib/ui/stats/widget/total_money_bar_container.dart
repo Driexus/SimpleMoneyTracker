@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:simplemoneytracker/model/BaseMoneyType.dart';
+import 'package:simplemoneytracker/model/base_money_type.dart';
 import 'package:simplemoneytracker/model/currency.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/ui/stats/widget/total_money_activity_bar.dart';

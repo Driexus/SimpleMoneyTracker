@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:simplemoneytracker/blocs/settings/settings_bloc.dart';
 import 'package:simplemoneytracker/blocs/timeline/timeline_bloc.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/shared/month_scroller.dart';
 import 'package:simplemoneytracker/ui/timeline/filter_sheet.dart';
 import 'package:simplemoneytracker/ui/timeline/entries_container.dart';
+import '../../model/base_money_type.dart';
 import '../../repos/money_entry_repo.dart';
 import 'money_type_toggles.dart';
 
@@ -58,7 +58,9 @@ class TimelinePage extends StatelessWidget {
                   showModalBottomSheet<void>(
                     context: context,
                     builder: (BuildContext context) {
-                      return FilterSheet(timelineBloc: timelineBloc, currency: settingsBloc.state.currency);
+                      return SafeArea(
+                          child: FilterSheet(timelineBloc: timelineBloc, currency: settingsBloc.state.currency)
+                      );
                     }
                   )
                 },

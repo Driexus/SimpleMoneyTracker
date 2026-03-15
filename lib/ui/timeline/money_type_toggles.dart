@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import '../../model/money_entry.dart';
+import '../../model/base_money_type.dart';
 
 /// A [MoneyType] toggle widget. At any time at least one toggle is active.
 class MoneyTypeToggles extends StatefulWidget {

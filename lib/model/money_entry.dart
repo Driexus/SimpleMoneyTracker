@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simplemoneytracker/model/BaseMoneyType.dart';
+import 'package:simplemoneytracker/model/base_money_type.dart';
 
 import 'money_activity.dart';
 
@@ -54,25 +54,4 @@ class MoneyEntry {
   String toString() {
     return 'MoneyEntry{ id: $id, createdAt: $createdAt, amount: $amount, type: $type, comment: $comment, activity: $activity }';
   }
-}
-
-enum MoneyType implements BaseMoneyType {
-  credit("Credit", Icons.redeem, Colors.purple, "isCredit", "creditActivityOrder"),
-  income("Income", Icons.savings, Colors.lightGreen, "isIncome", "incomeActivityOrder"),
-  expense("Expense", Icons.payments, Colors.blue, "isExpense", "expenseActivityOrder"),
-  debt("Debt", Icons.account_balance, Colors.orange, "isDebt", "debtActivityOrder");
-
-  @override
-  final String displayName;
-
-  @override
-  final IconData icon;
-
-  @override
-  final Color color;
-
-  final String isTypeColumnName;
-  final String typeOrderColumnName;
-
-  const MoneyType(this.displayName, this.icon, this.color, this.isTypeColumnName, this.typeOrderColumnName);
 }

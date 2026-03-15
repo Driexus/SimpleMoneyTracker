@@ -16,6 +16,7 @@ import 'package:simplemoneytracker/ui/shared/text/header_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../service/sqlite_service.dart';
+import 'monthly_stats_selection.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -35,7 +36,7 @@ class SettingsPage extends StatelessWidget {
     // Set currency and app version
     Currency currency = settingsBloc.state.currency;
     String appVersion = "";
-    if (settingsBloc.state.runtimeType == ValidSettingsState) {
+    if (settingsBloc.state is ValidSettingsState) {
       final state = settingsBloc.state as ValidSettingsState;
       appVersion = state.packageInfo.version;
     }
@@ -58,6 +59,13 @@ class SettingsPage extends StatelessWidget {
                           if (currency != null) settingsBloc.add(CurrencyUpdated(currency));
                         }
                     )
+                  ),
+                  SettingsButton(
+                      title: "Monthly Stats",
+                      description: "Choose what to display in the monthly stats page.",
+                      iconData: Icons.show_chart,
+                      iconColor: Colors.lime,
+                      onPress: () =>  MonthlyStatsSelection.showSelectionDialog(context, settingsBloc, settingsBloc.state.visibleStats)
                   )
                 ]
             ),

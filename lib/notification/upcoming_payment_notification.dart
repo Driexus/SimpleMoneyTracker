@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../model/base_money_type.dart';
 import '../model/currency.dart';
 import 'notifications.dart';
 

@@ -8,6 +8,8 @@ import 'package:equatable/equatable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
+import '../../model/base_money_type.dart';
+
 part 'settings_event.dart';
 part 'settings_state.dart';
 
@@ -15,6 +17,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc() : super(const EmptySettingsState()) {
     on<_Initialized>(_init);
     on<CurrencyUpdated>(_currencyUpdated);
+    on<VisibleStatsUpdated>(_visibleStatsUpdated);
     add(const _Initialized());
     log("Initialized $runtimeType");
   }
@@ -26,7 +29,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Currency currency = sharedPreferences.getCurrency() ?? Currency.euro;
-    emit(ValidSettingsState(currency, packageInfo));
+    List<String> visibleStats = sharedPreferences.getStringList("visible_stats") ?? allMoneyTypes().map((e) => e.enumName).toList();
+
+    emit(ValidSettingsState(currency, visibleStats, packageInfo));
   }
 
   Future<void> _currencyUpdated(CurrencyUpdated event, Emitter<SettingsState> emit) async {
@@ -35,6 +40,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     sharedPreferences.setCurrency(event.currency);
 
     // Emit state. State should have been initialized already
-    emit(ValidSettingsState(event.currency, (state as ValidSettingsState).packageInfo));
+    final currentState = state as ValidSettingsState;
+    emit(ValidSettingsState(event.currency, currentState.visibleStats, currentState.packageInfo));
+  }
+
+  Future<void> _visibleStatsUpdated(VisibleStatsUpdated event, Emitter<SettingsState> emit) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setStringList("visible_stats", event.visibleStats);
+
+    final currentState = state as ValidSettingsState;
+    emit(ValidSettingsState(currentState.currency, event.visibleStats, currentState.packageInfo));
   }
 }

@@ -1,4 +1,4 @@
-import 'package:simplemoneytracker/model/money_entry.dart';
+import 'base_money_type.dart';
 
 class MoneyActivity {
 

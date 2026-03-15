@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
-import 'package:simplemoneytracker/model/money_entry.dart';
 import 'package:simplemoneytracker/ui/home/buttons/activity_button.dart';
 import 'package:simplemoneytracker/ui/home/buttons/add_button.dart';
+
+import '../../model/base_money_type.dart';
 
 typedef OnReorder = void Function(MoneyActivity activity, MoneyType currentType, int newIndex);
 
