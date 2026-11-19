@@ -9,15 +9,15 @@ import '../../../model/money_activity.dart';
 
 // TODO #49: On press -> go to timeline for specific activity
 class TotalMoneyActivityBar extends StatelessWidget {
-  const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.typeTotalAmount, required this.currency, this.onPressed});
+  const TotalMoneyActivityBar({super.key, required this.amount, required this.moneyActivity, required this.percentageBase, required this.currency, this.onPressed});
 
-  TotalMoneyActivityBar.fromSubtotal({super.key, required Subtotal subtotal, required this.typeTotalAmount, required this.currency, this.onPressed}) :
+  TotalMoneyActivityBar.fromSubtotal({super.key, required Subtotal subtotal, required this.percentageBase, required this.currency, this.onPressed}) :
       amount = subtotal.amount,
       moneyActivity = subtotal.moneyActivity;
 
   final int amount;
   final MoneyActivity moneyActivity;
-  final int typeTotalAmount;
+  final int percentageBase;
   final ValueChanged<MoneyEntry?>? onPressed;
   final Currency currency;
 
@@ -28,7 +28,10 @@ class TotalMoneyActivityBar extends StatelessWidget {
   );
 
   String get _amountPercentage {
-    final percentage = ((amount / typeTotalAmount.abs()) * 100).round();
+    if (percentageBase == 0) {
+      return "N/A";
+    }
+    final percentage = ((amount / percentageBase.abs()) * 100).round();
     return percentage == 0 ? "<1%" : "$percentage%";
   }
 

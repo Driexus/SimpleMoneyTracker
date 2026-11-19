@@ -21,8 +21,17 @@ class BreakdownPage extends StatelessWidget {
   int get total => statsState.totals[moneyType]!;
   List<Subtotal> get subtotals => statsState.subtotals[moneyType]!;
 
+  int get percentageBase {
+    if (moneyType == CompositeMoneyType.netIncome) {
+      return statsState.totals[MoneyType.income]!;
+    } else if (moneyType == CompositeMoneyType.netCredit) {
+      return statsState.totals[MoneyType.credit]!;
+    }
+    return total;
+  }
+
   List<Widget> get _totalMoneyActivityBars => subtotals.map((e) =>
-      TotalMoneyActivityBar.fromSubtotal(subtotal: e, typeTotalAmount: total, currency: currency)
+      TotalMoneyActivityBar.fromSubtotal(subtotal: e, percentageBase: percentageBase, currency: currency)
   ).toList();
 
   Map<String, double> get _dataMap {

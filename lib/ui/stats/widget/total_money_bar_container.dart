@@ -7,17 +7,18 @@ import 'package:simplemoneytracker/ui/stats/widget/total_money_type_bar.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 
 class TotalMoneyBarContainer extends StatelessWidget {
-  const TotalMoneyBarContainer({super.key, required this.amount, required this.moneyType, required this.subtotals, required this.currency});
+  const TotalMoneyBarContainer({super.key, required this.amount, required this.moneyType, required this.subtotals, required this.currency, required this.percentageBase});
 
   final int amount;
   final BaseMoneyType moneyType;
   final List<Subtotal> subtotals;
   final Currency currency;
+  final int percentageBase;
 
   List<Widget> get _totalMoneyActivityBars {
     int end = subtotals.length < 3 ? subtotals.length : 3;
     final firstSubtotals = subtotals.sublist(0, end);
-    return firstSubtotals.map((e) => TotalMoneyActivityBar.fromSubtotal(subtotal: e, typeTotalAmount: amount, currency: currency)).toList();
+    return firstSubtotals.map((e) => TotalMoneyActivityBar.fromSubtotal(subtotal: e, percentageBase: percentageBase, currency: currency)).toList();
   }
 
   @override

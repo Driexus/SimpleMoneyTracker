@@ -47,11 +47,20 @@ class StatsPage extends StatelessWidget {
         if (widgets.isNotEmpty) {
           widgets.add(const Divider(height: 35, indent: 15, endIndent: 15, thickness: 1));
         }
+
+        int percentageBase = state.totals[type]!;
+        if (type == CompositeMoneyType.netIncome) {
+          percentageBase = state.totals[MoneyType.income]!;
+        } else if (type == CompositeMoneyType.netCredit) {
+          percentageBase = state.totals[MoneyType.credit]!;
+        }
+
         widgets.add(TotalMoneyBarContainer(
           amount: state.totals[type]!,
           moneyType: type,
           subtotals: state.subtotals[type]!,
           currency: currency,
+          percentageBase: percentageBase,
         ));
       }
     }
