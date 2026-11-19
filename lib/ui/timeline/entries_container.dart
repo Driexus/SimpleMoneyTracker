@@ -50,7 +50,7 @@ class EntriesContainer extends StatelessWidget {
             onPressed: () {
               moneyEntryRepo.delete(moneyEntry);
               Navigator.pop(context);
-              ToastHelper.showToast("Money entry deleted");
+              ToastHelper.showToastWithAppIcon("Money entry deleted");
             },
             child: const Text('OK'),
           ),

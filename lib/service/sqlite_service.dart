@@ -40,7 +40,7 @@ class SqliteService {
 
     // Assert db file
     if (!sourceFile.path.endsWith(".db")) {
-      ToastHelper.showToast("Only .db file can be imported.");
+      ToastHelper.showToastWithAppIcon("Only .db file can be imported.");
       return;
     }
 
@@ -50,7 +50,7 @@ class SqliteService {
     // Copy file and reopen db
     sourceFile.copy(await _databasePath);
     _db = await getDB();
-    ToastHelper.showToast("Database imported successfully!");
+    ToastHelper.showToastWithAppIcon("Database imported successfully!");
   }
 
   void exportDatabase() async {
@@ -67,7 +67,7 @@ class SqliteService {
     }
     await getDB();
     await OpenFilex.open(zipFile.path, type: "*/*");
-    ToastHelper.showToast("Database backup created");
+    ToastHelper.showToastWithAppIcon("Database backup created");
   }
 
   Database? _db;

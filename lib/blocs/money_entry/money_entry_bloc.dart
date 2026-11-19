@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/cubits/activities_cubit.dart';
 import 'package:simplemoneytracker/repos/money_entry_repo.dart';
@@ -120,14 +120,14 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
   Future<void> _onEntrySubmitted(EntrySubmitted event, Emitter<MoneyEntryState> emit) async {
     if (!await _saveEntry()) return;
 
-    ToastHelper.showToast("${state.moneyType.displayName} entry saved");
+    ToastHelper.showToastWithAppIcon("${state.moneyType.displayName} entry saved");
     emit(_initialState(moneyType: state.moneyType, moneyActivity: state.moneyActivity, date: state.date));
   }
 
   Future<void> _onEntryChanged(EntryChanged event, Emitter<MoneyEntryState> emit) async {
     if (!await _saveEntry()) return;
 
-    ToastHelper.showToast("${state.moneyType.displayName} entry edited");
+    ToastHelper.showToastWithAppIcon("${state.moneyType.displayName} entry edited");
     if (event.context.mounted) Navigator.pop(event.context);
   }
 
@@ -153,10 +153,10 @@ class MoneyEntryBloc extends Bloc<MoneyEntryEvent, MoneyEntryState> {
   Future<bool> _saveEntry() async {
     if (!state.isSubmittable()) {
       if (state.moneyActivity == null) {
-        ToastHelper.showToast("Please select an activity before saving an entry");
+        ToastHelper.showToastWithAppIcon("Please select an activity before saving an entry");
       }
       else if (state.amount == 0) {
-        ToastHelper.showToast("Please add a valid amount before saving an entry");
+        ToastHelper.showToastWithAppIcon("Please add a valid amount before saving an entry");
       }
       return false;
     }

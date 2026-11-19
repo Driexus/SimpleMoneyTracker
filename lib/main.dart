@@ -22,6 +22,9 @@ Future<void> main() async {
 class SimpleMoneyTracker extends StatelessWidget {
   SimpleMoneyTracker({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<ScaffoldMessengerState> snackbarKey = GlobalKey<ScaffoldMessengerState>();
+
   final MoneyEntryRepo _moneyEntryRepo = MoneyEntryRepo();
   final MoneyActivityRepo _moneyActivityRepo = const MoneyActivityRepo();
   final SettingsBloc _settingsBloc = SettingsBloc();
@@ -44,6 +47,8 @@ class SimpleMoneyTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: snackbarKey,
       title: 'Simple Time Tracker',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent), // blue, blueAccent

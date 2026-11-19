@@ -57,17 +57,17 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
   void _submit(BuildContext context) {
     if (_title == "") {
-      ToastHelper.showToast("Cannot save activity without a title");
+      ToastHelper.showToastWithAppIcon("Cannot save activity without a title");
       return;
     }
 
     if (_imageKey == null) {
-      ToastHelper.showToast("Cannot save activity without an icon");
+      ToastHelper.showToastWithAppIcon("Cannot save activity without an icon");
       return;
     }
 
     if (_isSelected.every((element) => element == false)) {
-      ToastHelper.showToast("Cannot save activity without a category");
+      ToastHelper.showToastWithAppIcon("Cannot save activity without a category");
       return;
     }
 
@@ -103,7 +103,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
 
     widget.cubit.saveActivity(finalActivity);
     Navigator.pop(context);
-    ToastHelper.showToast("Activity saved");
+    ToastHelper.showToastWithAppIcon("Activity saved");
   }
 
   //endregion
@@ -171,7 +171,7 @@ class _EditActivityPageState extends State<EditActivityPage> {
                   widget.cubit.deleteActivity(widget.moneyActivity!);
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  ToastHelper.showToast("Activity ${_activityTitle!} deleted");
+                  ToastHelper.showToastWithAppIcon("Activity ${_activityTitle!} deleted");
                 },
                 child: const Text('OK'),
               ),
