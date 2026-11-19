@@ -18,9 +18,9 @@ class TimelineEditEntryPage extends StatelessWidget {
 
     return BlocProvider(
       create: (_) => MoneyEntryBloc.fromMoneyEntry(moneyEntryRepo, activitiesCubit, moneyEntry),
-      child: SafeArea(
-        child: const Scaffold(
-          body: Column (
+      child: const Scaffold(
+        body: SafeArea(
+          child: Column (
             children: [
               SizedBox(height: 40,),
               Expanded(
