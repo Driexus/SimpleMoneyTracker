@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:simplemoneytracker/utils/extensions.dart';
 import 'package:simplemoneytracker/utils/toast_helper.dart';
@@ -55,19 +54,35 @@ class SqliteService {
 
   void exportDatabase() async {
     await _closeDB();
-    final databasesDirectory = await getApplicationDocumentsDirectory();
-    final zipFile = File(join(databasesDirectory.path, 'simple_money_tracker_backup_${DateTime.now().toExactReadable()}.zip'));
+    final tempDir = await getTemporaryDirectory();
+    final fileName = 'simple_money_tracker_backup_${DateTime.now().toExactReadable()}.zip';
+    final zipFile = File(join(tempDir.path, fileName));
 
     try {
       final dataDir = Directory(await getDatabasesPath());
-      ZipFile.createFromDirectory(
+      await ZipFile.createFromDirectory(
           sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
+      
+      // Use FilePicker to save the file to a user-selected location
+      String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: 'Please select where to save your backup',
+        fileName: fileName,
+        bytes: await zipFile.readAsBytes(),
+      );
+
+      if (outputFile != null) {
+        ToastHelper.showToastWithAppIcon("Database backup saved");
+      }
     } catch (e) {
-      log("Failed to create database zip.", error: e);
+      log("Failed to create or save database zip.", error: e);
+      ToastHelper.showToastWithAppIcon("Failed to export database");
+    } finally {
+      // Cleanup temp file
+      if (await zipFile.exists()) {
+        await zipFile.delete();
+      }
+      await getDB();
     }
-    await getDB();
-    await OpenFilex.open(zipFile.path, type: "*/*");
-    ToastHelper.showToastWithAppIcon("Database backup created");
   }
 
   Database? _db;
