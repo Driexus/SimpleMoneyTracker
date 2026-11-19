@@ -22,7 +22,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
     // Refresh entries when the activities change
     activitiesCubit.stream.listen((event) => add(const EntriesChanged()));
 
-    // Refresh entries when an entry is added
+    // Refresh entries when an entry is added or database is imported
     entryRepo.addOnEntriesChangedListener(() => add(const EntriesChanged()));
 
     // Refresh total when dateSpan changes
@@ -77,7 +77,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
 
     await entryRepo.retrieveSome(filters: currentState.filters).then((entries) => {
       if (entries.isEmpty) {
-        emit(EmptyEntries(MoneyEntryFilters.empty))
+        emit(EmptyEntries(currentState.filters))
       }
       else {
         emit(ValidEntries(entries.first, entries, currentState.filters))

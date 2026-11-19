@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplemoneytracker/model/money_activity.dart';
+import 'package:simplemoneytracker/service/sqlite_service.dart';
 import '../model/base_money_type.dart';
 import '../repos/money_activity_repo.dart';
 
 class ActivitiesCubit extends Cubit<Map<int, MoneyActivity>> {
   ActivitiesCubit(this._repo) : super({}) {
     refreshActivities();
+    SqliteService().addOnImportListener(refreshActivities);
     log("Created Activities Cubit");
   }
 

@@ -25,21 +25,65 @@ class SqliteService {
   // Database path
   Future<String> get _databasePath async => join(await getDatabasesPath(), 'simple_money_tracker.db');
 
+  final List<VoidCallback> _onImportListeners = [];
+
+  void addOnImportListener(VoidCallback listener) {
+    _onImportListeners.add(listener);
+  }
+
   Future<void> _closeDB() async {
     final db = await getDB();
     await db.close();
     _db = null;
   }
 
-  void importDatabase() async {
+  Future<void> importDatabase() async {
     // Get source file
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['db', 'zip'],
+    );
     if (result == null || result.files.single.path == null) return;
     File sourceFile = File(result.files.single.path!);
 
-    // Assert db file
-    if (!sourceFile.path.endsWith(".db")) {
-      ToastHelper.showToastWithAppIcon("Only .db file can be imported.");
+    String? dbToImportPath;
+
+    if (sourceFile.path.endsWith(".db")) {
+      dbToImportPath = sourceFile.path;
+    } else if (sourceFile.path.endsWith(".zip")) {
+      final tempDir = await getTemporaryDirectory();
+      final destinationDir = Directory(join(tempDir.path, "extraction"));
+      if (await destinationDir.exists()) {
+        await destinationDir.delete(recursive: true);
+      }
+      await destinationDir.create();
+
+      try {
+        await ZipFile.extractToDirectory(zipFile: sourceFile, destinationDir: destinationDir);
+        // The zip created by exportDatabase contains the contents of getDatabasesPath()
+        // So simple_money_tracker.db should be in destinationDir.
+        final extractedDbFile = File(join(destinationDir.path, 'simple_money_tracker.db'));
+        if (await extractedDbFile.exists()) {
+          dbToImportPath = extractedDbFile.path;
+        } else {
+          // Fallback: try to find any .db file
+          final files = destinationDir.listSync(recursive: true);
+          for (var file in files) {
+            if (file is File && file.path.endsWith(".db")) {
+              dbToImportPath = file.path;
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        log("Failed to extract zip.", error: e);
+        ToastHelper.showToastWithAppIcon("Failed to extract backup zip.");
+        return;
+      }
+    }
+
+    if (dbToImportPath == null) {
+      ToastHelper.showToastWithAppIcon("Only .db or .zip files with a valid database can be imported.");
       return;
     }
 
@@ -47,9 +91,19 @@ class SqliteService {
     await _closeDB();
 
     // Copy file and reopen db
-    sourceFile.copy(await _databasePath);
-    _db = await getDB();
-    ToastHelper.showToastWithAppIcon("Database imported successfully!");
+    try {
+      await File(dbToImportPath).copy(await _databasePath);
+      _db = await getDB();
+      ToastHelper.showToastWithAppIcon("Database imported successfully!");
+      for (var listener in _onImportListeners) {
+        listener();
+      }
+    } catch (e) {
+      log("Failed to copy database file.", error: e);
+      ToastHelper.showToastWithAppIcon("Failed to import database.");
+      // Try to reopen whatever we have left
+      _db = await getDB();
+    }
   }
 
   void exportDatabase() async {

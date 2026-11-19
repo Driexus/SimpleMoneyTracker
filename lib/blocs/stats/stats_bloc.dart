@@ -40,15 +40,17 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
     emit(NonEmptyStatsState(totals[0], totals[1]));
   }
 
-  /// Renew entries and emit the same state as before.
+  /// Renew entries and emit the new state.
   Future<void> _entriesUpdated(EntriesUpdated event, Emitter<StatsState> emit) async {
-    if (state.runtimeType == EmptyStatsState) {
-      emit(const EmptyStatsState());
-      return;
-    }
-
     final totals = await _calculateTotals(dateSpanBloc.state.startDate, dateSpanBloc.state.endDate);
-    emit(NonEmptyStatsState(totals[0], totals[1]));
+    
+    // Check if there's actually any data to show
+    bool hasData = totals[0].values.any((value) => value != 0);
+    if (!hasData) {
+      emit(const EmptyStatsState());
+    } else {
+      emit(NonEmptyStatsState(totals[0], totals[1]));
+    }
   }
 
   Future<List<dynamic>> _calculateTotals(DateTime? startDate, DateTime? endDate) async {

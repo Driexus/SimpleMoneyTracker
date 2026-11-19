@@ -9,7 +9,9 @@ import '../model/money_entry.dart';
 part 'money_entry_filters.dart';
 
 class MoneyEntryRepo {
-  MoneyEntryRepo();
+  MoneyEntryRepo() {
+    _service.addOnImportListener(notifyListeners);
+  }
 
   static final _service = SqliteService();
 
@@ -22,7 +24,7 @@ class MoneyEntryRepo {
     await db.insert(
       'money_entries',
       moneyEntry.toDBMap(),
-    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+    ).then((_) => notifyListeners());
   }
 
   /// Updates an entry
@@ -34,7 +36,7 @@ class MoneyEntryRepo {
       moneyEntry.toDBMap(),
       where: 'entryId = ?',
       whereArgs: [moneyEntry.id]
-    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+    ).then((_) => notifyListeners());
   }
 
   /// Updates an entry or creates a new one if the id is null
@@ -48,7 +50,7 @@ class MoneyEntryRepo {
         'money_entries',
         where: 'entryId = ?',
         whereArgs: [moneyEntry.id]
-    ).then((_) => _entriesChangedListeners.forEach((listener) => listener()));
+    ).then((_) => notifyListeners());
   }
 
   Future<List<MoneyEntry>> retrieveSome({MoneyEntryFilters? filters}) async {
@@ -99,6 +101,12 @@ class MoneyEntryRepo {
 
   void addOnEntriesChangedListener(VoidCallback listener) {
     _entriesChangedListeners.add(listener);
+  }
+
+  void notifyListeners() {
+    for (var listener in _entriesChangedListeners) {
+      listener();
+    }
   }
 }
 
